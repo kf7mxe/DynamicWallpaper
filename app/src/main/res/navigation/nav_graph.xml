@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.HomeFragment"
+        android:label="fragment_home_collection_list"
+        tools:layout="@layout/fragment_home_collection_list" >
+        <action
+            android:id="@+id/action_homeFragment_to_addCollectionFragment"
+            app:destination="@id/addCollectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCollectionFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.AddCollectionFragment"
+        android:label="fragment_add_collection"
+        tools:layout="@layout/fragment_add_collection" >
+        <action
+            android:id="@+id/action_addCollectionFragment_to_selectTriggersFragment"
+            app:destination="@id/selectTriggersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectTriggersFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.SelectTriggersFragment"
+        android:label="fragment_select_triggers"
+        tools:layout="@layout/fragment_select_triggers" >
+        <action
+            android:id="@+id/action_selectTriggersFragment_to_triggerByDateTimeFragment"
+            app:destination="@id/triggerByDateTimeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triggerByDateTimeFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.TriggerByDateTimeFragment"
+        android:label="fragment_trigger_by_date_time"
+        tools:layout="@layout/fragment_trigger_by_date_time" />
+</navigation>

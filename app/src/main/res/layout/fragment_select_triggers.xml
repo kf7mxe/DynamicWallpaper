@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectTriggersFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Select Trigger (Event)"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <RadioButton
+            android:id="@+id/selectTriggersDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date and Time" />
+
+        <RadioButton
+            android:id="@+id/selectLocationTriggerRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location Event" />
+
+        <RadioButton
+            android:id="@+id/selectBySeasonTriggerRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By Season" />
+
+        <RadioButton
+            android:id="@+id/selectCalendarEventTriggerRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calendar Event" />
+
+        <RadioButton
+            android:id="@+id/selectTempretureTriggerRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tempreture" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/goToTriggerSetUpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
