@@ -9,17 +9,51 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="0dp"
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="40dp"
+        android:text="Select Action"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <RadioButton
+            android:id="@+id/selectActionNextInCollectionRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Go to Next Wallpaper in collection / sub-collection" />
+
+        <RadioButton
+            android:id="@+id/selectActionSwitchToDiffSubColRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Switch to new Sub-collection" />
+
+        <RadioButton
+            android:id="@+id/selectActionRandomInCollSubRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Random Wallpaper in collection / sub-collection" />
+        <RadioButton
+            android:id="@+id/selectActionSpecificWallpaperRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Specific Wallpaper" />
+    </RadioGroup>
+
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/saveRuleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -34,7 +68,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/saveRuleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

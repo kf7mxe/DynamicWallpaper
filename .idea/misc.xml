@@ -5,10 +5,11 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.3023255813953488" />
-        <entry key="app/src/main/res/layout/fragment_add_collection.xml" value="0.5349922239502333" />
+        <entry key="app/src/main/res/layout/fragment_add_collection.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_by_season.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.35833333333333334" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19947916666666668" />
-        <entry key="app/src/main/res/layout/fragment_home_collection_list.xml" value="0.184375" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/fragment_home_collection_list.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.184375" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/fragment_select_actions.xml" value="0.33242753623188404" />

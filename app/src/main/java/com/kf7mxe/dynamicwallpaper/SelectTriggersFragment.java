@@ -72,10 +72,27 @@ public class SelectTriggersFragment extends Fragment {
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
         // Inflate the layout for this fragment
-        bindings.goToTriggerSetUpButton.setOnClickListener(new View.OnClickListener() {
+
+
+        bindings.goToTriggerSetUpFromSeasonTriggerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_selectTriggersFragment_to_triggerByDateTimeFragment);
+                int id = bindings.triggersRadioGroup.getCheckedRadioButtonId();
+                switch (id){
+                    case R.id.selectTriggersDateTimeRadio:
+                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerByDateTimeFragment);
+                        break;
+                    case R.id.selectBySeasonTriggerRadio:
+                        navController.navigate(R.id.action_selectTriggersFragment_to_bySeasonFragment);
+                        break;
+                    case R.id.selectLocationTriggerRadio:
+                        break;
+                    case R.id.selectCalendarEventTriggerRadio:
+                        break;
+                    case R.id.selectTempretureTriggerRadio:
+                        break;
+                    default:
+                }
             }
         });
 

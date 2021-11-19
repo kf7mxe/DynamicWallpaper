@@ -24,13 +24,14 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpButton"
+        android:id="@+id/triggersRadioGroup"
+        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpFromSeasonTriggerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <RadioButton
-            android:id="@+id/selectTriggersDateTime"
+            android:id="@+id/selectTriggersDateTimeRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date and Time" />
@@ -57,11 +58,11 @@
             android:id="@+id/selectTempretureTriggerRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tempreture" />
+            android:text="Tempreture / Weather" />
     </RadioGroup>
 
     <Button
-        android:id="@+id/goToTriggerSetUpButton"
+        android:id="@+id/goToTriggerSetUpFromSeasonTriggerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -76,7 +77,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpButton"
+        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpFromSeasonTriggerButton"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

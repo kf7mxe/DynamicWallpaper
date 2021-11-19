@@ -3,10 +3,15 @@ package com.kf7mxe.dynamicwallpaper;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.kf7mxe.dynamicwallpaper.databinding.FragmentSelectActionsBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +29,10 @@ public class SelectActionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private FragmentSelectActionsBinding bindings;
+    private FragmentManager fragmentManager;
+
+    private NavController navController;
     public SelectActionsFragment() {
         // Required empty public constructor
     }
@@ -58,7 +67,17 @@ public class SelectActionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_select_actions, container, false);
+        bindings = FragmentSelectActionsBinding.inflate(getLayoutInflater());
+        fragmentManager = getActivity().getSupportFragmentManager();
+        navController = NavHostFragment.findNavController(this);
+
+        bindings.saveRuleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_selectActionsFragment_to_addCollectionFragment);
+            }
+        });
+
+        return bindings.getRoot();
     }
 }
