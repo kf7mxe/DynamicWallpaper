@@ -4,14 +4,25 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentSelectActionsBinding;
+import com.kf7mxe.dynamicwallpaper.models.Action;
+import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.models.Rule;
+import com.kf7mxe.dynamicwallpaper.models.Trigger;
+import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
+
+import java.io.Serializable;
+import java.util.Deque;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +44,11 @@ public class SelectActionsFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     private NavController navController;
+
+
+    private CollectionViewModel viewModel;
+    private Trigger trigger;
+
     public SelectActionsFragment() {
         // Required empty public constructor
     }
@@ -58,10 +74,14 @@ public class SelectActionsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+         viewModel = new CollectionViewModel(getActivity().getApplication());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            Bundle recievingBundle = getArguments();
+            trigger = (Trigger) recievingBundle.getSerializable("Trigger");
         }
+
     }
 
     @Override
@@ -71,13 +91,79 @@ public class SelectActionsFragment extends Fragment {
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
 
+
+        bindings.actionsRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int checkdActionId = bindings.actionsRadioGroup.getCheckedRadioButtonId();
+                String checkedAction = getResources().getResourceEntryName(checkdActionId);
+                switch (checkedAction){
+                    case "selectActionNextInCollectionRadio":
+                        bindings.selectSubcollectionSelectAction.setVisibility(View.GONE);
+                        bindings.specificWallpaperTextview.setVisibility(View.GONE);
+                        bindings.newSubcollectionTextview.setVisibility(View.GONE);
+                        bindings.selectSpecificWallpaperSelectActionButton.setVisibility(View.GONE);
+                        break;
+                    case "selectActionSwitchToDiffSubColRadio":
+                        bindings.selectSubcollectionSelectAction.setVisibility(View.VISIBLE);
+                        bindings.newSubcollectionTextview.setVisibility(View.VISIBLE);
+                        break;
+                    case "selectActionRandomInCollSubRadio":
+                        bindings.selectSubcollectionSelectAction.setVisibility(View.GONE);
+                        bindings.specificWallpaperTextview.setVisibility(View.GONE);
+                        bindings.newSubcollectionTextview.setVisibility(View.GONE);
+                        bindings.selectSpecificWallpaperSelectActionButton.setVisibility(View.GONE);
+                        break;
+                    case "selectActionSpecificWallpaperRadio":
+                        bindings.selectSpecificWallpaperSelectActionButton.setVisibility(View.VISIBLE);
+                        bindings.specificWallpaperTextview.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        });
+
         bindings.saveRuleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_selectActionsFragment_to_addCollectionFragment);
+                if(bindings.newSubcollectionTextview.getText().toString()=="Selected Subcollection To change to" || bindings.specificWallpaperTextview.getText().toString() =="Selected Specific Wallpaper"){
+                    Snackbar.make(bindings.getRoot(),"Please Select Subcollection or specific wallpaper",Snackbar.LENGTH_LONG).setAnchorView(bindings.divider3).show();
+                    return;
+                }
+
+                Action action = getData();
+                Rule rule = new Rule(trigger,action);
+                Long id = getArguments().getLong("collectionId");
+                Collection collection = viewModel.getSpecificCollection(id);
+                collection.getRules().add(rule);
+                viewModel.saveCollection(collection);
+                navController.navigate(R.id.action_selectActionsFragment_to_addCollectionFragment,getArguments());
+
             }
         });
 
         return bindings.getRoot();
+    }
+
+    public Action getData(){
+        int checkdActionId = bindings.actionsRadioGroup.getCheckedRadioButtonId();
+        String checkedAction = getResources().getResourceEntryName(checkdActionId);
+        switch (checkedAction){
+            case "selectActionNextInCollectionRadio":
+                return new Action("selectActionNextInCollection","n/a","n/a");
+            case "selectActionSwitchToDiffSubColRadio":
+                String changeToSubCollection = bindings.newSubcollectionTextview.getText().toString();
+                return new Action("selectActionSwitchToDiffSubColRadio",changeToSubCollection,"n/a");
+            case "selectActionRandomInCollSubRadio":
+                return new Action("selectActionRandomInCollSubRadio","n/a","n/a");
+            case "selectActionSpecificWallpaperRadio":
+                String changeToSpecificImage = bindings.specificWallpaperTextview.getText().toString();
+                return new Action("selectActionSpecificWallpaperRadio","n/a",changeToSpecificImage);
+            default:
+                return new Action();
+
+        }
     }
 }

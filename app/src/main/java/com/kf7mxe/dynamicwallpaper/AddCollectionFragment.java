@@ -4,9 +4,14 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
 import android.Manifest;
+import android.app.WallpaperManager;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,22 +24,37 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.Environment;
+import android.os.FileUtils;
 import android.provider.DocumentsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.kf7mxe.dynamicwallpaper.database.RoomDB;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentAddCollectionBinding;
+import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.models.Rule;
+import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.view.CropImageView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.room.Room;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,9 +83,22 @@ public class AddCollectionFragment extends Fragment {
 
     private NavController navController;
 
+    private String collectionName;
+
+    private List<Collection> collectionList;
+    private ArrayList<Rule> rules;
+    private ArrayList<String> imageNames;
+
+    private Long collectionId;
+    private Collection collection;
     private Uri selectedImageUri;
     private Uri pickerInitialUri;
 
+    private CollectionViewModel collectionViewModel;
+
+    private SharedPreferences sharedPreferences;
+
+    private WallpaperManager wallpaperManager;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -91,11 +124,22 @@ public class AddCollectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        collectionViewModel =new CollectionViewModel(getActivity().getApplication());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            collectionId = getArguments().getLong("collectionId");
+            List<Collection> test = collectionViewModel.getAllCollections();
+            collection = collectionViewModel.getSpecificCollection(collectionId);
+            int pause =0;
+        } else {
+            collection = new Collection();
+            collectionId = collectionViewModel.saveCollection(collection);
+            collection.setId(collectionId);
         }
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,16 +147,70 @@ public class AddCollectionFragment extends Fragment {
         binding = FragmentAddCollectionBinding.inflate(getLayoutInflater());
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
+        wallpaperManager = WallpaperManager.getInstance(getContext());
+
+        sharedPreferences = getActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
+
+        binding.enterCollectionName.setText(collection.getName());
+
+        List<Collection> test2 = collectionViewModel.getAllCollections();
+
+
+        int pause = 0;
+        binding.enterCollectionName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                collection.setName(s.toString());
+            }
+        });
+
         binding.addRuleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_addCollectionFragment_to_selectTriggersFragment);
+
+                collectionViewModel.saveCollection(collection);
+                Bundle bundle = new Bundle();
+                bundle.putLong("collectionId",collectionId);
+                navController.navigate(R.id.action_addCollectionFragment_to_selectTriggersFragment,bundle);
+            }
+        });
+
+        binding.useSubcollectionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    binding.addSubcollectionButton.setVisibility(View.VISIBLE);
+                }else{
+                    binding.addSubcollectionButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        binding.cancelNewCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
             }
         });
 
         binding.selectImagesFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                collectionName = binding.enterCollectionName.getText().toString();
+                if(binding.enterCollectionName.getText().toString()==null || binding.enterCollectionName.getText().length()==0){
+                    Snackbar.make(binding.getRoot(),"Please Enter Collection name first",Snackbar.LENGTH_LONG).setAnchorView(binding.useSubcollectionCheckbox).show();
+                    return;
+                }
                 openImageSelector();
             }
         });
@@ -155,30 +253,11 @@ public class AddCollectionFragment extends Fragment {
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
 
 
-
-//        Uri test = new Uri()
-
-
-
-//        CropImage.activity()
-//                .setGuidelines(CropImageView.Guidelines.ON)
-//                .start(this);
-//
-//// start cropping activity for pre-acquired image saved on the device
-//        CropImage.activity(imageUri)
-//                .start(this);
-//
-//// for fragment (DO NOT use `getActivity()`)
-//        CropImage.activity()
-//                .start(getContext(), this);
-
     }
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
 
         if (resultCode == getActivity().RESULT_OK) {
 
@@ -197,19 +276,9 @@ public class AddCollectionFragment extends Fragment {
                         cropImage(imageurl);
                     }
 
-
-
                 }
-
-
-
-
-                    selectedImageUri = data.getData();
-                if (null != selectedImageUri) {
-                    cropImage(selectedImageUri);
-                    Toast.makeText(getActivity(), "It worked I grabbed an image", Toast.LENGTH_SHORT).show();
-                    // update the preview image in the layout
-                   // IVPreviewImage.setImageURI(selectedImageUri);
+                else if (data.getData() != null) {
+                    cropImage(data.getData());
                 }
             }
 
@@ -219,6 +288,7 @@ public class AddCollectionFragment extends Fragment {
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             Toast.makeText(getActivity(), "In the call uCrop", Toast.LENGTH_SHORT).show();
             final Uri resultUri = UCrop.getOutput(data);
+            ;
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
             Toast.makeText(getActivity(), "Error calling uCrop", Toast.LENGTH_SHORT).show();
@@ -232,13 +302,16 @@ public class AddCollectionFragment extends Fragment {
 
     private File getImageFile() throws IOException {
         String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        //File file = getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT);
-        File folder = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), "cropedFolder");
-        File folderCollection = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(),"testCollection");
+        File folderCollection = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(),binding.enterCollectionName.getText().toString());
         folderCollection.mkdir();
-        folder.mkdir();
-        File file = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/testCollection/"+imageFileName+".jpg");
+        File file = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
         file.createNewFile();
+
+
+        SharedPreferences.Editor myEditor = sharedPreferences.edit();
+        myEditor.putString("testImage",getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
+        myEditor.commit();
+
         return file;
 
     }
@@ -260,14 +333,57 @@ public class AddCollectionFragment extends Fragment {
 //        Uri uri;
         Uri destinationUri = Uri.fromFile(file);
 
+        Pair screenResolution = getScreenResolution();
+        Pair aspectRatio = getAspectRatio((Integer)screenResolution.first,(Integer)screenResolution.second);
 
         UCrop.of(sourceUri, destinationUri)
-                .withAspectRatio(9, 16)
-                .withMaxResultSize(3000, 6000)
+                .withAspectRatio((Integer)aspectRatio.first, (Integer)aspectRatio.second)
+                .withMaxResultSize((Integer)screenResolution.first, (Integer)screenResolution.second)
                 .start(getActivity());
     }
 
 
+    private Pair getScreenResolution(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getContext().getDisplay().getRealMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+        return new Pair<Integer,Integer>(width,height);
 
+    }
+
+    private Pair getAspectRatio(int width, int height){
+        final int greatestCommonDenominator = greatestCommonDenominator(width, height);
+        return new Pair(width/greatestCommonDenominator,height/greatestCommonDenominator);
+    }
+
+    private int greatestCommonDenominator(int p, int q){
+        if(q==0) {
+            return p;
+        } else {
+            return greatestCommonDenominator(q,p%q);
+        }
+    }
+
+
+public void testImage(String path){
+    File file = new File(path);
+
+    //File file = new File(resultUri.getPath());
+    //Bitmap testBitmap = BitmapFactory.decodeFile( resultUri.getPath());
+    try {
+        InputStream inputStream = new FileInputStream(file);
+        Bitmap bitmap =BitmapFactory.decodeStream(inputStream);
+        if(bitmap!=null){
+            wallpaperManager.setBitmap(bitmap);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+//
 
 }

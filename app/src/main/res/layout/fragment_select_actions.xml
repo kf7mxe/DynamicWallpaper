@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".SelectActionsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -22,6 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
+        android:id="@+id/actionsRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,16 +42,45 @@
             android:layout_height="wrap_content"
             android:text="Switch to new Sub-collection" />
 
+        <Button
+            android:id="@+id/selectSubcollectionSelectAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Subcollection"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/newSubcollectionTextview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selected Subcollection To change to"
+            android:visibility="gone" />
+
         <RadioButton
             android:id="@+id/selectActionRandomInCollSubRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Random Wallpaper in collection / sub-collection" />
+
         <RadioButton
             android:id="@+id/selectActionSpecificWallpaperRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Specific Wallpaper" />
+
+        <Button
+            android:id="@+id/selectSpecificWallpaperSelectActionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Specific Wallpaper"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/specificWallpaperTextview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selected Specific Wallpaper"
+            android:visibility="gone" />
     </RadioGroup>
 
     <Button

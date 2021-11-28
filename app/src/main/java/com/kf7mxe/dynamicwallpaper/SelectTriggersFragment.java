@@ -80,10 +80,10 @@ public class SelectTriggersFragment extends Fragment {
                 int id = bindings.triggersRadioGroup.getCheckedRadioButtonId();
                 switch (id){
                     case R.id.selectTriggersDateTimeRadio:
-                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerByDateTimeFragment);
+                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerByDateTimeFragment,getArguments());
                         break;
                     case R.id.selectBySeasonTriggerRadio:
-                        navController.navigate(R.id.action_selectTriggersFragment_to_bySeasonFragment);
+                        navController.navigate(R.id.action_selectTriggersFragment_to_bySeasonFragment,getArguments());
                         break;
                     case R.id.selectLocationTriggerRadio:
                         break;

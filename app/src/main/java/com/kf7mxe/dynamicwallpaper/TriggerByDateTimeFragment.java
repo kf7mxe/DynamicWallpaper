@@ -1,5 +1,6 @@
 package com.kf7mxe.dynamicwallpaper;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,8 +11,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TimePicker;
 
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentTriggerByDateTimeBinding;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByDateTime;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +33,8 @@ public class TriggerByDateTimeFragment extends Fragment {
 
     private FragmentTriggerByDateTimeBinding bindings;
     private FragmentManager fragmentManager;
+
+    private String timeToTrigger="";
 
     private NavController navController;
     // TODO: Rename and change types of parameters
@@ -72,13 +80,49 @@ public class TriggerByDateTimeFragment extends Fragment {
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
 
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getContext(), R.array.repeat_interval_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        bindings.repeatIntervalTypeSpinner.setAdapter(adapter);
+        bindings.timeToTriggerInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){timePickerListener();}
+
+            }
+        });
+
         bindings.goToActionsFromDateAndTImeTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment);
+                Bundle bundle = getArguments();
+                bundle.putSerializable("Trigger",getInputedDated());
+                navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment,bundle);
             }
         });
 
         return bindings.getRoot();
+    }
+
+    public TriggerByDateTime getInputedDated(){
+        String enteredRepeatIntervalAmountInput = bindings.enterRepeatIntervalAmountInput.getText().toString();
+        String enteredRepeatIntervalTypeSpinner = bindings.repeatIntervalTypeSpinner.getSelectedItem().toString();
+        //timeToTrigger;
+        List<Integer> checkedIds = bindings.repeatDayOfWeekChipGroup.getCheckedChipIds();
+        String daysOfWeeks = "";
+        for(int ids:checkedIds){
+            daysOfWeeks = daysOfWeeks + getResources().getResourceEntryName(ids).replace("Chip","")+",";
+        }
+        return new TriggerByDateTime(enteredRepeatIntervalAmountInput,enteredRepeatIntervalTypeSpinner,timeToTrigger,daysOfWeeks);
+    }
+
+    public void timePickerListener(){
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+                timeToTrigger = hourOfDay+":"+minutes;
+                bindings.timeToTriggerInput.setText(timeToTrigger);
+            }
+        }, 0, 0, false);
+        timePickerDialog.show();
     }
 }
