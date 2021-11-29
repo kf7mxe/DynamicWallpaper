@@ -15,6 +15,14 @@ public class Rule implements Serializable {
         this.action = action;
     }
 
+    public Action getAction() {
+        return this.action;
+    }
+
+    public Trigger getTrigger(){
+        return this.trigger;
+    }
+
     public Rule(String stringToCreate){
         if(stringToCreate == null || stringToCreate.length()==0){return;}
         String[] rulesSplit = stringToCreate.split("~triggersAndActions~");

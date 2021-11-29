@@ -8,6 +8,11 @@ public class Trigger implements Serializable {
     public Trigger(){
 
     }
+
+    public String getTriggerType() {
+        return triggerType;
+    }
+
     public Trigger(String fromString){
 
     }

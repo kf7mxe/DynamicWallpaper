@@ -26,7 +26,10 @@ public class RulesTypeConverter {
         ArrayList<Rule> rules = new ArrayList<>();
         if (splitRules.length==1 && splitRules[0].equals("")){return rules;}
         for(String rule : splitRules){
-            rules.add(new Rule(rule));
+            if(rule.equals("")){}
+            else{
+                rules.add(new Rule(rule));
+            }
         }
         return rules;
     }

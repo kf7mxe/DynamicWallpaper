@@ -42,7 +42,6 @@ public class Collection {
     public void setName(String name) {
         this.name = name;
     }
-
     public void addRule(Rule newRule){
         this.rules.add(newRule);
     }

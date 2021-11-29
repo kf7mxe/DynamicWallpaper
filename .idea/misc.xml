@@ -16,6 +16,10 @@
         <entry key="app/src/main/res/layout/fragment_select_images_for_sub_collection.xml" value="0.33242753623188404" />
         <entry key="app/src/main/res/layout/fragment_select_triggers.xml" value="0.33242753623188404" />
         <entry key="app/src/main/res/layout/fragment_trigger_by_date_time.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/layout/fragment_view_change_photo_order.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/rule_card.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/subcollection_card.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/view_change_collection_photos_card.xml" value="0.5" />
       </map>
     </option>
   </component>

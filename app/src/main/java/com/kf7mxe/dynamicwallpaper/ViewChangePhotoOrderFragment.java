@@ -2,11 +2,22 @@ package com.kf7mxe.dynamicwallpaper;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.ViewChangeCollectionsImagesAdapter;
+import com.kf7mxe.dynamicwallpaper.databinding.FragmentViewChangePhotoOrderBinding;
+import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
+
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +34,13 @@ public class ViewChangePhotoOrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FragmentViewChangePhotoOrderBinding binding;
+
+    private Long collectionId;
+    private Collection collection;
+
+    private CollectionViewModel collectionViewModel;
 
     public ViewChangePhotoOrderFragment() {
         // Required empty public constructor
@@ -49,9 +67,12 @@ public class ViewChangePhotoOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        collectionViewModel =new CollectionViewModel(getActivity().getApplication());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            collectionId = getArguments().getLong("collectionId");
+            collection = collectionViewModel.getSpecificCollection(collectionId);
         }
     }
 
@@ -59,6 +80,35 @@ public class ViewChangePhotoOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_change_photo_order, container, false);
+        binding = FragmentViewChangePhotoOrderBinding.inflate(getLayoutInflater());
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
+        binding.viewCollectionPhotosChangeOrderRecycler.setLayoutManager(gridLayoutManager);
+        ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection);
+        binding.viewCollectionPhotosChangeOrderRecycler.setAdapter(adapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.viewCollectionPhotosChangeOrderRecycler);
+
+        return binding.getRoot();
     }
+
+
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,0) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+            int fromPosition = viewHolder.getLayoutPosition();
+            int toPosition = target.getLayoutPosition();
+
+            Collections.swap(collection.getPhotoNames(),fromPosition,toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition,toPosition);
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
 }

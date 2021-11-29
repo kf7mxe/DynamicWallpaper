@@ -17,6 +17,14 @@ public class Action implements Serializable {
         this.changeToSecificImage = changeToSecificImage;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Action(String fromString){
         String[] fromStringSplit = fromString.split("~actionTypeDeliminator~");
         this.type = fromStringSplit[0];

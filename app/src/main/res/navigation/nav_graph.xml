@@ -24,6 +24,12 @@
         <action
             android:id="@+id/action_addCollectionFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_addCollectionFragment_to_viewChangePhotoOrderFragment"
+            app:destination="@id/viewChangePhotoOrderFragment" />
+        <action
+            android:id="@+id/action_addCollectionFragment_to_selectImagesForSubCollectionFragment"
+            app:destination="@id/selectImagesForSubCollectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectTriggersFragment"
@@ -63,5 +69,23 @@
         <action
             android:id="@+id/action_bySeasonFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewChangePhotoOrderFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.ViewChangePhotoOrderFragment"
+        android:label="fragment_view_change_photo_order"
+        tools:layout="@layout/fragment_view_change_photo_order" >
+        <action
+            android:id="@+id/action_viewChangePhotoOrderFragment_to_addCollectionFragment"
+            app:destination="@id/addCollectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectImagesForSubCollectionFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.SelectImagesForSubCollectionFragment"
+        android:label="fragment_select_images_for_sub_collection"
+        tools:layout="@layout/fragment_select_images_for_sub_collection" >
+        <action
+            android:id="@+id/action_selectImagesForSubCollectionFragment_to_addCollectionFragment"
+            app:destination="@id/addCollectionFragment" />
     </fragment>
 </navigation>

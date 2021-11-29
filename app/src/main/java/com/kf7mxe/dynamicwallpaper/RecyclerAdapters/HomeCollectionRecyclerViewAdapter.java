@@ -1,11 +1,9 @@
-package com.kf7mxe.dynamicwallpaper;
+package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.kf7mxe.dynamicwallpaper.placeholder.PlaceholderContent.PlaceholderItem;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentHomeBinding;

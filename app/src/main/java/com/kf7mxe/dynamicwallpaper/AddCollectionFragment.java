@@ -37,6 +37,8 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.RulesRecyclerAdapter;
+import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.SubcollectionRecyclerViewAdapter;
 import com.kf7mxe.dynamicwallpaper.database.RoomDB;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentAddCollectionBinding;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
@@ -54,6 +56,7 @@ import java.util.List;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.room.Room;
 
 /**
@@ -129,7 +132,6 @@ public class AddCollectionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             collectionId = getArguments().getLong("collectionId");
-            List<Collection> test = collectionViewModel.getAllCollections();
             collection = collectionViewModel.getSpecificCollection(collectionId);
             int pause =0;
         } else {
@@ -153,8 +155,15 @@ public class AddCollectionFragment extends Fragment {
 
         binding.enterCollectionName.setText(collection.getName());
 
-        List<Collection> test2 = collectionViewModel.getAllCollections();
-
+        //binding.rulesRecyclerView.
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManagerForSubCollectionsRecycler = new LinearLayoutManager(getContext());
+        binding.rulesRecyclerView.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
+        RulesRecyclerAdapter adapter = new RulesRecyclerAdapter(getActivity(),collection.getRules());
+        SubcollectionRecyclerViewAdapter subcollectionRecyclerViewAdapter = new SubcollectionRecyclerViewAdapter(getActivity(),collection.getSubCollectionArray());
+        binding.rulesRecyclerView.setAdapter(adapter);
+        binding.subcollectionRecyclerView.setLayoutManager(linearLayoutManagerForSubCollectionsRecycler);
+        binding.subcollectionRecyclerView.setAdapter(subcollectionRecyclerViewAdapter);
 
         int pause = 0;
         binding.enterCollectionName.addTextChangedListener(new TextWatcher() {
@@ -193,6 +202,29 @@ public class AddCollectionFragment extends Fragment {
                 }else{
                     binding.addSubcollectionButton.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+
+        binding.addSubcollectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.addSubcollectionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("collectionId",collectionId);
+                        navController.navigate(R.id.action_addCollectionFragment_to_selectImagesForSubCollectionFragment,bundle);
+                    }
+                });
+            }
+        });
+
+        binding.viewChangeCollectionImagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("collectionId",collectionId);
+                navController.navigate(R.id.action_addCollectionFragment_to_viewChangePhotoOrderFragment,bundle);
             }
         });
 
@@ -307,6 +339,7 @@ public class AddCollectionFragment extends Fragment {
         File file = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
         file.createNewFile();
 
+        collection.getPhotoNames().add(imageFileName+".jpg");
 
         SharedPreferences.Editor myEditor = sharedPreferences.edit();
         myEditor.putString("testImage",getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
@@ -340,6 +373,8 @@ public class AddCollectionFragment extends Fragment {
                 .withAspectRatio((Integer)aspectRatio.first, (Integer)aspectRatio.second)
                 .withMaxResultSize((Integer)screenResolution.first, (Integer)screenResolution.second)
                 .start(getActivity());
+
+        collectionViewModel.saveCollection(collection);
     }
 
 

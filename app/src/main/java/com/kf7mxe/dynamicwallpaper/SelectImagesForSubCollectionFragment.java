@@ -3,10 +3,16 @@ package com.kf7mxe.dynamicwallpaper;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.SelectSubCollectionsImagesAdapter;
+import com.kf7mxe.dynamicwallpaper.databinding.FragmentSelectImagesForSubCollectionBinding;
+import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +29,12 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Long collectionId;
+    private Collection collection;
+    private CollectionViewModel collectionViewModel;
+
+
+    private FragmentSelectImagesForSubCollectionBinding binding;
 
     public SelectImagesForSubCollectionFragment() {
         // Required empty public constructor
@@ -49,16 +61,25 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        collectionViewModel =new CollectionViewModel(getActivity().getApplication());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            collectionId = getArguments().getLong("collectionId");
+            collection = collectionViewModel.getSpecificCollection(collectionId);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_select_images_for_sub_collection, container, false);
+            binding = FragmentSelectImagesForSubCollectionBinding.inflate(getLayoutInflater());
+            GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
+            binding.selectImagesForSubCollectionRecycler.setLayoutManager(gridLayoutManager);
+            SelectSubCollectionsImagesAdapter adapter = new SelectSubCollectionsImagesAdapter(getContext(),collection);
+            binding.selectImagesForSubCollectionRecycler.setAdapter(adapter);
+
+
+        return binding.getRoot();
     }
 }
