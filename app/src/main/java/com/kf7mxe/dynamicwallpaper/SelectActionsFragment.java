@@ -74,7 +74,7 @@ public class SelectActionsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         viewModel = new CollectionViewModel(getActivity().getApplication());
+         viewModel = new CollectionViewModel(getActivity().getApplication(),getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

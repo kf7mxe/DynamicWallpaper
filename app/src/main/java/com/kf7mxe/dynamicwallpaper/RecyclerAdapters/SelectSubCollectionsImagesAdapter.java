@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kf7mxe.dynamicwallpaper.R;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.models.SubCollection;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,9 +25,12 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
     private ArrayList<String> m_data;
     private Context m_context;
     private Collection m_collection;
+    private SubCollection m_subCollection;
 
-    public SelectSubCollectionsImagesAdapter(Context context , Collection collection) {
+
+    public SelectSubCollectionsImagesAdapter(Context context , Collection collection, SubCollection subCollection) {
         m_collection = collection;
+        m_subCollection = subCollection;
         m_context =context;
         m_data = collection.getPhotoNames();
     }
@@ -44,7 +48,15 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
             image = (ImageView) view.findViewById(R.id.collectionViewImagesOrderInCardImageView);
             checkMark = (ImageView) view.findViewById(R.id.checkMarkPhotoCard);
 
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
         }
+
 
         public ImageView getImageView() {
             return image;
@@ -66,6 +78,7 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
     @Override
     public SelectSubCollectionsImagesAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
+
         View view = LayoutInflater.from(m_context).inflate(R.layout.view_change_collection_photos_card,viewGroup,false);
 
         return new SelectSubCollectionsImagesAdapter.ViewHolder(view);
@@ -77,6 +90,8 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
+
+
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.placeholder);
@@ -84,12 +99,21 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
         if(fileGlide.isFile()){
             Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
         }
+        int itemPos = position;
        viewHolder.getImageView().setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               viewHolder.checkMark.setVisibility(View.VISIBLE);
+               if(viewHolder.checkMark.getVisibility()==View.VISIBLE){
+                   viewHolder.checkMark.setVisibility(View.INVISIBLE);
+                   m_subCollection.getFileNames().remove(m_collection.getPhotoNames().get(itemPos));
+               } else {
+                   viewHolder.checkMark.setVisibility(View.VISIBLE);
+                   m_subCollection.getFileNames().add(m_collection.getPhotoNames().get(itemPos));
+               }
            }
        });
+
+
 
     }
 

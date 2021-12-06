@@ -33,5 +33,5 @@ public interface MainDao {
     Collection getCollectionById(long id);
 
     @Query("SELECT * FROM collection")
-    LiveData<List<Collection>> getAll();
+    List<Collection> getAll();
 }

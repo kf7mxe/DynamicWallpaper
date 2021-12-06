@@ -1,6 +1,7 @@
 package com.kf7mxe.dynamicwallpaper.viewmodels;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
@@ -16,12 +17,15 @@ import java.util.List;
 
 public class CollectionViewModel extends AndroidViewModel {
     private RoomDB database;
-    LiveData<List<Collection> >collections;
-    public CollectionViewModel(@NonNull Application application) {
+    private Context m_context;
+    List<Collection> collections;
+    public CollectionViewModel(@NonNull Application application, Context context) {
         super(application);
         database = RoomDB.getInstance(application.getApplicationContext());
+        m_context = context;
         queryAllFromDatabase();
     }
+
 
     public void queryAllFromDatabase(){
         collections = database.mainDao().getAll();
@@ -31,8 +35,21 @@ public class CollectionViewModel extends AndroidViewModel {
         return database.mainDao().insert(collection);
     }
 
+    public boolean isEmpty(){
+        List<Collection> test = collections;
+        if(this.collections==null){
+            return true;
+        }
+        return this.collections.size()==0;
+    }
+
     public List<Collection> getAllCollections(){
-        return collections.getValue();
+        if(RoomDB.getInstance(m_context).isOpen()){
+            return collections;
+        } else {
+            RoomDB.getInstance(m_context);
+        }
+        return collections;
     }
 
     public Collection getSpecificCollection(Long id){

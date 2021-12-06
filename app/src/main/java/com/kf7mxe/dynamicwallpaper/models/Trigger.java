@@ -13,6 +13,10 @@ public class Trigger implements Serializable {
         return triggerType;
     }
 
+    public String getDisplayType(){
+        return triggerType;
+    }
+
     public Trigger(String fromString){
 
     }

@@ -1,15 +1,26 @@
 package com.kf7mxe.dynamicwallpaper.models;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+
+import android.app.WallpaperManager;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 @Entity
-public class Collection {
+public class Collection implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="id")
@@ -110,5 +121,66 @@ public class Collection {
 
     public int getSubCollectionSelectedImageIndex() {
         return subCollectionSelectedImageIndex;
+    }
+
+
+
+
+    public void runAction(int actionIndex,Context context){
+        this.rules.get(actionIndex).getAction();
+        switch (this.rules.get(actionIndex).getAction().getType()){
+            case "selectActionNextInCollection":
+                goToNextWallpaper(this.getSelectedImageIndex(),context);
+                break;
+            case "selectActionSwitchToDiffSubColRadio":
+                goToRandWallpaper();
+                break;
+            case "selectActionRandomInCollSubRadio":
+                //type="Go to Random Wallpaper in Collection or subcollection";
+                break;
+            case "selectActionSpecificWallpaperRadio":
+                // type="Go to Specific Wallpaper \n Selected Wallpaper:"+changeToSecificImage;
+                break;
+        }
+    }
+
+    public void goToNextWallpaper(int nextIndex, Context context){
+        File file;
+        if(nextIndex<this.getPhotoNames().size()-1){
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+this.getPhotoNames().get(nextIndex));
+            int temp = this.getSelectedImageIndex()+1;
+            this.setSelectedImageIndex(temp);
+        } else {
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+this.getPhotoNames().get(0));
+            this.setSelectedImageIndex(0);
+        }
+
+        setWallpaper(context,file);
+    }
+    public void goToRandWallpaper(){
+
+    }
+
+    public void goToSpecificWallpaper(String specificWallpaper){
+
+    }
+
+    public void goToSpecificSubCollection(String subCollection){
+
+    }
+
+    public void setWallpaper(Context context,File file){
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+        //File file = new File(resultUri.getPath());
+        //Bitmap testBitmap = BitmapFactory.decodeFile( resultUri.getPath());
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            if(bitmap!=null){
+                wallpaperManager.setBitmap(bitmap);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

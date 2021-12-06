@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +45,9 @@ public class ViewChangePhotoOrderFragment extends Fragment {
 
     private CollectionViewModel collectionViewModel;
 
+    private FragmentManager fragmentManager;
+    private NavController navController;
+
     public ViewChangePhotoOrderFragment() {
         // Required empty public constructor
     }
@@ -67,7 +73,7 @@ public class ViewChangePhotoOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionViewModel =new CollectionViewModel(getActivity().getApplication());
+        collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -81,9 +87,11 @@ public class ViewChangePhotoOrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentViewChangePhotoOrderBinding.inflate(getLayoutInflater());
+        fragmentManager = getActivity().getSupportFragmentManager();
+        navController = NavHostFragment.findNavController(this);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
         binding.viewCollectionPhotosChangeOrderRecycler.setLayoutManager(gridLayoutManager);
-        ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection);
+        ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection,navController);
         binding.viewCollectionPhotosChangeOrderRecycler.setAdapter(adapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
@@ -100,6 +108,9 @@ public class ViewChangePhotoOrderFragment extends Fragment {
 
             int fromPosition = viewHolder.getLayoutPosition();
             int toPosition = target.getLayoutPosition();
+            if(fromPosition==collection.getPhotoNames().size()){
+                return false;
+            }
 
             Collections.swap(collection.getPhotoNames(),fromPosition,toPosition);
             recyclerView.getAdapter().notifyItemMoved(fromPosition,toPosition);

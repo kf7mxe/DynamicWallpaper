@@ -21,6 +21,25 @@ public class Action implements Serializable {
         return type;
     }
 
+    public String getDisplayType(){
+        String type = "";
+        switch (this.type){
+            case "selectActionNextInCollection":
+                type = "Go to Next Wallpaper in Colection";
+                break;
+            case "selectActionSwitchToDiffSubColRadio":
+                type="Switch To Different Sub Collection \n Selected SubCollection"+changeToSubCollection;
+                break;
+            case "selectActionRandomInCollSubRadio":
+                type="Go to Random Wallpaper in Collection or subcollection";
+                break;
+            case "selectActionSpecificWallpaperRadio":
+                type="Go to Specific Wallpaper \n Selected Wallpaper:"+changeToSecificImage;
+                break;
+        }
+        return type;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -36,4 +55,6 @@ public class Action implements Serializable {
     public String myToString() {
         return type + "~actionTypeDeliminator~" + this.changeToSubCollection +"~actionSubCollection~"+this.changeToSecificImage;
     }
+
+
 }

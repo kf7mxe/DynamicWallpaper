@@ -127,7 +127,7 @@ public class AddCollectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionViewModel =new CollectionViewModel(getActivity().getApplication());
+        collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -136,6 +136,7 @@ public class AddCollectionFragment extends Fragment {
             int pause =0;
         } else {
             collection = new Collection();
+            List<Collection> test = collectionViewModel.getAllCollections();
             collectionId = collectionViewModel.saveCollection(collection);
             collection.setId(collectionId);
         }
@@ -244,6 +245,16 @@ public class AddCollectionFragment extends Fragment {
                     return;
                 }
                 openImageSelector();
+            }
+        });
+
+        binding.saveCollectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(collection!=null){
+                    collectionViewModel.saveCollection(collection);
+                    navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
+                }
             }
         });
 

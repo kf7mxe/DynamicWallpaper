@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.SelectSubCollectionsImagesAdapter;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentSelectImagesForSubCollectionBinding;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.models.SubCollection;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 /**
@@ -32,7 +33,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     private Long collectionId;
     private Collection collection;
     private CollectionViewModel collectionViewModel;
-
+    private SubCollection newSubCollection;
 
     private FragmentSelectImagesForSubCollectionBinding binding;
 
@@ -61,7 +62,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionViewModel =new CollectionViewModel(getActivity().getApplication());
+        collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -73,10 +74,11 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+            newSubCollection = new SubCollection();
             binding = FragmentSelectImagesForSubCollectionBinding.inflate(getLayoutInflater());
             GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
             binding.selectImagesForSubCollectionRecycler.setLayoutManager(gridLayoutManager);
-            SelectSubCollectionsImagesAdapter adapter = new SelectSubCollectionsImagesAdapter(getContext(),collection);
+            SelectSubCollectionsImagesAdapter adapter = new SelectSubCollectionsImagesAdapter(getContext(),collection,newSubCollection);
             binding.selectImagesForSubCollectionRecycler.setAdapter(adapter);
 
 

@@ -1,4 +1,6 @@
 package com.kf7mxe.dynamicwallpaper.models;
 
-public class TriggerBySeason {
+import java.io.Serializable;
+
+public class TriggerBySeason implements Serializable {
 }

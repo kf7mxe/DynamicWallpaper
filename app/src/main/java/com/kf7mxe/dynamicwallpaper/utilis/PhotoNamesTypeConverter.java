@@ -23,7 +23,9 @@ public class PhotoNamesTypeConverter {
         String[] splitPhotoNames = photoNamesString.split("~photoNamesDeliminator~");
         ArrayList<String> photoNames = new ArrayList<>();
         for(String photoname:splitPhotoNames){
-            photoNames.add(photoname);
+            if(!photoname.equals("")){
+                photoNames.add(photoname);
+            }
         }
         return photoNames;
     }

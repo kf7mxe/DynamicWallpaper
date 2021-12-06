@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_viewChangePhotoOrderFragment_to_addCollectionFragment"
             app:destination="@id/addCollectionFragment" />
+        <action
+            android:id="@+id/action_viewChangePhotoOrderFragment_to_selectImagesForSubCollectionFragment"
+            app:destination="@id/selectImagesForSubCollectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectImagesForSubCollectionFragment"

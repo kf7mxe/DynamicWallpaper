@@ -1,8 +1,9 @@
 package com.kf7mxe.dynamicwallpaper.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SubCollection {
+public class SubCollection implements Serializable {
     private String name;
     private ArrayList<String> fileNames = new ArrayList<>();
     public SubCollection(){
