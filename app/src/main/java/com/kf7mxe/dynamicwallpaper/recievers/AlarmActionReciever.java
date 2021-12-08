@@ -19,6 +19,10 @@ public class AlarmActionReciever extends BroadcastReceiver {
 
         Toast.makeText(context, "In reciever", Toast.LENGTH_SHORT).show();
         database = RoomDB.getInstance(context.getApplicationContext());
+        Long test = intent.getLongExtra("selectedCollection", (long) 0.0);
+        if(intent.getLongExtra("selectedCollection", (long) 0.0)==0){
+            return;
+        }
         Collection selectedCollection = database.mainDao().getCollectionById(intent.getLongExtra("selectedCollection", (long) 0.0));
         selectedCollection.runAction(intent.getIntExtra("actionIndex",0),context);
         database.mainDao().updateCollection(selectedCollection);

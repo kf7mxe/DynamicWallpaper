@@ -2,15 +2,21 @@ package com.kf7mxe.dynamicwallpaper.models;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+
+import com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 @Entity
 public class Collection implements Serializable{
@@ -67,6 +74,10 @@ public class Collection implements Serializable{
 
     public long getId() {
         return id;
+    }
+    public int getIdAsInt(){
+        Long temp = getId();
+        return Integer.parseInt(temp.toString());
     }
     public void setId(long id) {
         this.id = id;
@@ -123,6 +134,48 @@ public class Collection implements Serializable{
         return subCollectionSelectedImageIndex;
     }
 
+    public void removeTriggersBroadcastRecievers(Context context){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        for(int i=0;i<this.getRules().size();i++){
+            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            PendingIntent pi=null;
+                intent.putExtra("selectedCollection", getId());
+                //intent.putExtra("actionToRun",action)
+                pi = PendingIntent.getBroadcast(context,getIdAsInt()+1001+i, intent
+                        , 0);
+
+            if(pi!=null){
+                am.cancel(pi);
+            }
+        }
+    }
+
+    public void startTriggers(Context context){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        for(int i=0;i<this.getRules().size();i++){
+
+            switch (this.getRules().get(i).getTrigger().getTriggerType()){
+                case "triggerByDateTime":
+
+                    break;
+                case "triggerBySeason":
+                    break;
+            }
+
+            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            PendingIntent pi=null;
+            intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            intent.putExtra("selectedCollection",id);
+            pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+i,intent
+                    ,0);
+            Long test = intent.getLongExtra("selectedCollection",0);
+            Calendar calendar = Calendar.getInstance();
+
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
+                    10000, pi);
+            Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
 
@@ -183,4 +236,10 @@ public class Collection implements Serializable{
             e.printStackTrace();
         }
     }
+
+    public void createAlarmForByDateTime(Trigger trigger){
+
+    }
+
+
 }

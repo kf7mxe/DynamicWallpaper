@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TimePicker;
 
@@ -83,6 +84,40 @@ public class TriggerByDateTimeFragment extends Fragment {
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getContext(), R.array.repeat_interval_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         bindings.repeatIntervalTypeSpinner.setAdapter(adapter);
+        bindings.repeatIntervalTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                    case 1:
+                    case 2:
+                        bindings.repeatDayOfWeekChipGroup.setVisibility(View.GONE);
+                        bindings.repeateDayOfWeekTitle.setVisibility(View.GONE);
+                        bindings.dateToChangeOn.setVisibility(View.GONE);
+                        bindings.monthlyDayToChangeOn.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        bindings.repeatDayOfWeekChipGroup.setVisibility(View.VISIBLE);
+                        bindings.repeateDayOfWeekTitle.setVisibility(View.VISIBLE);
+                        bindings.dateToChangeOn.setVisibility(View.GONE);
+                        bindings.monthlyDayToChangeOn.setVisibility(View.GONE);
+                        break;
+                    case 4:
+                        bindings.repeatDayOfWeekChipGroup.setVisibility(View.GONE);
+                        bindings.repeateDayOfWeekTitle.setVisibility(View.GONE);
+                        bindings.dateToChangeOn.setVisibility(View.VISIBLE);
+                        bindings.monthlyDayToChangeOn.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         bindings.timeToTriggerInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -125,4 +160,5 @@ public class TriggerByDateTimeFragment extends Fragment {
         }, 0, 0, false);
         timePickerDialog.show();
     }
+
 }

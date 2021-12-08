@@ -166,7 +166,6 @@ public class AddCollectionFragment extends Fragment {
         binding.subcollectionRecyclerView.setLayoutManager(linearLayoutManagerForSubCollectionsRecycler);
         binding.subcollectionRecyclerView.setAdapter(subcollectionRecyclerViewAdapter);
 
-        int pause = 0;
         binding.enterCollectionName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -410,23 +409,6 @@ public class AddCollectionFragment extends Fragment {
             return greatestCommonDenominator(q,p%q);
         }
     }
-
-
-public void testImage(String path){
-    File file = new File(path);
-
-    //File file = new File(resultUri.getPath());
-    //Bitmap testBitmap = BitmapFactory.decodeFile( resultUri.getPath());
-    try {
-        InputStream inputStream = new FileInputStream(file);
-        Bitmap bitmap =BitmapFactory.decodeStream(inputStream);
-        if(bitmap!=null){
-            wallpaperManager.setBitmap(bitmap);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
 
 
 

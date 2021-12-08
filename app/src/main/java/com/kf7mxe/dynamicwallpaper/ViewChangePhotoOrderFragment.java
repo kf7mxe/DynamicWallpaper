@@ -41,6 +41,7 @@ public class ViewChangePhotoOrderFragment extends Fragment {
     private FragmentViewChangePhotoOrderBinding binding;
 
     private Long collectionId;
+    private int subCollectionId;
     private Collection collection;
 
     private CollectionViewModel collectionViewModel;
@@ -78,7 +79,10 @@ public class ViewChangePhotoOrderFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             collectionId = getArguments().getLong("collectionId");
+            subCollectionId = getArguments().getInt("selectedSubCollection",-1);
             collection = collectionViewModel.getSpecificCollection(collectionId);
+        } else {
+            subCollectionId = -1;
         }
     }
 
@@ -91,7 +95,7 @@ public class ViewChangePhotoOrderFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
         binding.viewCollectionPhotosChangeOrderRecycler.setLayoutManager(gridLayoutManager);
-        ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection,navController);
+        ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection,subCollectionId,navController);
         binding.viewCollectionPhotosChangeOrderRecycler.setAdapter(adapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);

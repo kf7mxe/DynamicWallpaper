@@ -2,12 +2,16 @@ package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
+import androidx.cardview.widget.CardView;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 import com.kf7mxe.dynamicwallpaper.R;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
@@ -33,10 +38,20 @@ import java.util.List;
 public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<HomeCollectionRecyclerViewAdapter.ViewHolder> {
     private List<Collection> m_collections;
     private Context m_context;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor myEditor;
+    private NavController m_navController;
+    private Long selectedId;
 
-    public HomeCollectionRecyclerViewAdapter(Context context, List<Collection> allCollections) {
+    public HomeCollectionRecyclerViewAdapter(Context context, List<Collection> allCollections,NavController navController) {
         m_context =context;
         m_collections = allCollections;
+        m_navController = navController;
+        sharedPreferences = context.getSharedPreferences("sharedPrefrences",Context.MODE_PRIVATE);
+        myEditor = sharedPreferences.edit();
+        if(!sharedPreferences.getString("selectedCollection","").equals("")){
+            selectedId = Long.parseLong(sharedPreferences.getString("selectedCollection",""));
+        } else {selectedId=(long)0.0;}
     }
 
     /**
@@ -44,6 +59,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
      * (custom ViewHolder).
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final MaterialCardView card;
         private final TextView nameOfCollection;
         private final LinearLayout triggers;
         private final LinearLayout actions;
@@ -53,7 +69,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-
+            card = (MaterialCardView) view.findViewById(R.id.collectionCardView);
             nameOfCollection = (TextView) view.findViewById(R.id.collectionNameCollectionListCard);
             triggers = (LinearLayout) view.findViewById(R.id.triggersLinearView);
             actions = (LinearLayout) view.findViewById(R.id.actionsLinearView);
@@ -104,6 +120,14 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
         // contents of the view with that element
         viewHolder.nameOfCollection.setText(m_collections.get(position).getName());
         if(m_collections.get(position).getRules().size()!=0){
+            viewHolder.triggers.removeAllViews();
+            viewHolder.actions.removeAllViews();
+            TextView triggerTitle =new TextView(m_context);
+            TextView actionTitle = new TextView(m_context);
+            triggerTitle.setText("Triggers");
+            actionTitle.setText("Actions");
+            viewHolder.triggers.addView(triggerTitle);
+            viewHolder.actions.addView(actionTitle);
             for(int i=0;i<m_collections.get(position).getRules().size();i++){
                 String trigger = m_collections.get(position).getRules().get(i).getTrigger().getDisplayType();
                 String action = m_collections.get(position).getRules().get(i).getAction().getDisplayType();
@@ -149,7 +173,48 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
                 }
             }
         }
-        //viewHolder.setTriggerTextView(m_collections.get(position).getTrigger().getTriggerType());
+
+        if(m_collections.get(position).getId()==selectedId){
+            viewHolder.card.setChecked(true);
+        } else {
+            viewHolder.card.setChecked(false);
+        }
+
+        int item =position;
+
+        viewHolder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Long testPreviousRemoveBroadcast = selectedId;
+                if(selectedId==0.0){
+
+                } else {
+                    int indexToRemove = Integer.parseInt(selectedId.toString())-1;
+                    m_collections.get(indexToRemove).removeTriggersBroadcastRecievers(m_context);
+                }
+                myEditor.putString("selectedCollection",Long.toString(m_collections.get(item).getId()));
+                myEditor.commit();
+                notifyDataSetChanged();
+                selectedId = m_collections.get(item).getId();
+                m_collections.get(item).startTriggers(m_context);
+                if(!viewHolder.card.isChecked()){
+                    viewHolder.card.setChecked(true);
+                } else {
+                    viewHolder.card.setChecked(false);
+                }
+            }
+        });
+
+        viewHolder.card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("collectionId",m_collections.get(item).getId());
+                m_navController.navigate(R.id.action_homeFragment_to_addCollectionFragment,bundle);
+                return false;
+            }
+        });
 
     }
 

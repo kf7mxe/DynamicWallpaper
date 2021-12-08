@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment {
 
 
     private SharedPreferences sharedPreferences;
-    private SharedPreferences  testingSharedPreferences;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -89,12 +88,10 @@ public class HomeFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
 
         sharedPreferences = getActivity().getSharedPreferences("sharedPrefrences",Context.MODE_PRIVATE);
-        testingSharedPreferences = getActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
-        SharedPreferences.Editor myTestEditor = testingSharedPreferences.edit();
-        SharedPreferences.Editor myEditor = sharedPreferences.edit();
-        myTestEditor.putString("selectedCollection","1");
-        myTestEditor.commit();
-        startRunningCollections();
+        String selectedCollectionString = sharedPreferences.getString("selectedCollection","");
+//        if(!selectedCollectionString.equals("")){
+//            startRunningCollections();
+//        }
 
         // Set the adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -104,7 +101,7 @@ public class HomeFragment extends Fragment {
             binding.allCollectionsRecycler.setVisibility(View.VISIBLE);
             binding.noCollections.setVisibility(View.GONE);
             binding.hitPlusButtonToAddColTextview.setVisibility(View.GONE);
-            HomeCollectionRecyclerViewAdapter adapter = new HomeCollectionRecyclerViewAdapter(getContext(),collectionViewModel.getAllCollections());
+            HomeCollectionRecyclerViewAdapter adapter = new HomeCollectionRecyclerViewAdapter(getContext(),collectionViewModel.getAllCollections(),navController);
             binding.allCollectionsRecycler.setAdapter(adapter);
         }
         else {
@@ -131,20 +128,23 @@ public class HomeFragment extends Fragment {
 
         // for (int trigger = 0; trigger<collection.rules().triggers();trigger++)
         //      set up broadcast reciever
-
-
+        AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getActivity().getApplication(), AlarmActionReciever.class);
+        String test =sharedPreferences.getString("selectedCollection","");
+        intent.putExtra("selectedCollection",Long.parseLong(sharedPreferences.getString("selectedCollection","")));
+        //intent.putExtra("actionToRun",action)
+        PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0,intent
+                ,0);
+        if(am!=null){
+            am.cancel(pi);
+        }
 
                 Calendar calendar = Calendar.getInstance();
 
 //        calendar.set(Calendar.HOUR_OF_DAY, 13); // For 1 PM or 2 PM
         //calendar.set(Calendar.MINUTE, 0);
         //calendar.set(Calendar.SECOND, 30);
-        Intent intent = new Intent(getActivity().getApplication(), AlarmActionReciever.class);
-        intent.putExtra("selectedCollection",Long.parseLong(testingSharedPreferences.getString("selectedCollection","")));
-        //intent.putExtra("actionToRun",action)
-        PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0,intent
-                ,0);
-        AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
                 10000, pi);
         Toast.makeText(getContext(), "in Set alarm", Toast.LENGTH_SHORT).show();

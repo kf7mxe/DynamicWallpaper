@@ -31,6 +31,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Long collectionId;
+    private int subCollectionId;
     private Collection collection;
     private CollectionViewModel collectionViewModel;
     private SubCollection newSubCollection;
@@ -67,6 +68,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             collectionId = getArguments().getLong("collectionId");
+            subCollectionId = getArguments().getInt("subCollectionId",-1);
             collection = collectionViewModel.getSpecificCollection(collectionId);
         }
     }
@@ -74,12 +76,28 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            newSubCollection = new SubCollection();
+            if(subCollectionId==-1){
+                newSubCollection = new SubCollection();
+            } else {
+                newSubCollection = collection.getSubCollectionArray().get(subCollectionId);
+            }
             binding = FragmentSelectImagesForSubCollectionBinding.inflate(getLayoutInflater());
             GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
             binding.selectImagesForSubCollectionRecycler.setLayoutManager(gridLayoutManager);
             SelectSubCollectionsImagesAdapter adapter = new SelectSubCollectionsImagesAdapter(getContext(),collection,newSubCollection);
             binding.selectImagesForSubCollectionRecycler.setAdapter(adapter);
+
+            binding.saveImagesInSubCollection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(subCollectionId==-1){
+                        collection.getSubCollectionArray().add(newSubCollection);
+                    } else {
+                        collection.getSubCollectionArray().set(subCollectionId,newSubCollection);
+                    }
+                    collectionViewModel.saveCollection(collection);
+                }
+            });
 
 
         return binding.getRoot();

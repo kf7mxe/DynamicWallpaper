@@ -40,7 +40,8 @@
             android:id="@+id/selectLocationTriggerRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Location Event" />
+            android:text="Location Event"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/selectBySeasonTriggerRadio"
@@ -52,13 +53,15 @@
             android:id="@+id/selectCalendarEventTriggerRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calendar Event" />
+            android:text="Calendar Event"
+            android:visibility="gone" />
 
         <RadioButton
             android:id="@+id/selectTempretureTriggerRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tempreture / Weather" />
+            android:text="Tempreture / Weather"
+            android:visibility="gone" />
     </RadioGroup>
 
     <Button
