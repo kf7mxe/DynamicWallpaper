@@ -122,34 +122,4 @@ public class HomeFragment extends Fragment {
 
         return binding.getRoot();
     }
-
-    public void startRunningCollections(){
-
-
-        // for (int trigger = 0; trigger<collection.rules().triggers();trigger++)
-        //      set up broadcast reciever
-        AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getActivity().getApplication(), AlarmActionReciever.class);
-        String test =sharedPreferences.getString("selectedCollection","");
-        intent.putExtra("selectedCollection",Long.parseLong(sharedPreferences.getString("selectedCollection","")));
-        //intent.putExtra("actionToRun",action)
-        PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0,intent
-                ,0);
-        if(am!=null){
-            am.cancel(pi);
-        }
-
-                Calendar calendar = Calendar.getInstance();
-
-//        calendar.set(Calendar.HOUR_OF_DAY, 13); // For 1 PM or 2 PM
-        //calendar.set(Calendar.MINUTE, 0);
-        //calendar.set(Calendar.SECOND, 30);
-
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
-                10000, pi);
-        Toast.makeText(getContext(), "in Set alarm", Toast.LENGTH_SHORT).show();
-
-    }
-
-
 }

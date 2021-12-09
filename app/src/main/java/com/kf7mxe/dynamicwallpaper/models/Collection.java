@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 @Entity
 public class Collection implements Serializable{
@@ -38,9 +39,9 @@ public class Collection implements Serializable{
     @TypeConverters(com.kf7mxe.dynamicwallpaper.utilis.SubcollectionTypeConverter.class)
     private ArrayList<SubCollection> subCollectionArray;
     @ColumnInfo(name="sub_collections_index")
-    private int selectedSubCollectionArrayIndex;
+    private int selectedSubCollectionArrayIndex =-1;
     @ColumnInfo(name="sub_collection_selected_image_index")
-    private int subCollectionSelectedImageIndex;
+    private int subCollectionSelectedImageIndex = -1;
     @ColumnInfo(name="rules")
     @TypeConverters(com.kf7mxe.dynamicwallpaper.utilis.RulesTypeConverter.class)
     private ArrayList<Rule> rules;
@@ -142,7 +143,7 @@ public class Collection implements Serializable{
                 intent.putExtra("selectedCollection", getId());
                 //intent.putExtra("actionToRun",action)
                 pi = PendingIntent.getBroadcast(context,getIdAsInt()+1001+i, intent
-                        , 0);
+                        , PendingIntent.FLAG_MUTABLE);
 
             if(pi!=null){
                 am.cancel(pi);
@@ -151,29 +152,20 @@ public class Collection implements Serializable{
     }
 
     public void startTriggers(Context context){
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         for(int i=0;i<this.getRules().size();i++){
-
-            switch (this.getRules().get(i).getTrigger().getTriggerType()){
+            Trigger trigger = this.getRules().get(i).getTrigger();
+            switch (trigger.getTriggerType()){
                 case "triggerByDateTime":
-
+                    createAlarmForByDateTime(context,trigger,i);
                     break;
                 case "triggerBySeason":
+                    createAlarmForSeasons(context,trigger,i);
                     break;
+                case "":
+
             }
 
-            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
-            PendingIntent pi=null;
-            intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
-            intent.putExtra("selectedCollection",id);
-            pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+i,intent
-                    ,0);
-            Long test = intent.getLongExtra("selectedCollection",0);
-            Calendar calendar = Calendar.getInstance();
 
-            am.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
-                    10000, pi);
-            Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -183,43 +175,95 @@ public class Collection implements Serializable{
         this.rules.get(actionIndex).getAction();
         switch (this.rules.get(actionIndex).getAction().getType()){
             case "selectActionNextInCollection":
-                goToNextWallpaper(this.getSelectedImageIndex(),context);
+                goToNextWallpaper(context);
                 break;
             case "selectActionSwitchToDiffSubColRadio":
-                goToRandWallpaper();
+                int subcollection = Integer.parseInt(this.rules.get(actionIndex).getAction().changeToSubCollection);
+                goToSpecificSubCollection(context,subcollection);
                 break;
             case "selectActionRandomInCollSubRadio":
+                goToRandWallpaper(context);
                 //type="Go to Random Wallpaper in Collection or subcollection";
                 break;
             case "selectActionSpecificWallpaperRadio":
+                goToSpecificWallpaper(context,this.rules.get(actionIndex).getAction().changeToSecificImage);
                 // type="Go to Specific Wallpaper \n Selected Wallpaper:"+changeToSecificImage;
                 break;
         }
     }
 
-    public void goToNextWallpaper(int nextIndex, Context context){
+    public void goToNextWallpaper(Context context){
         File file;
-        if(nextIndex<this.getPhotoNames().size()-1){
-            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+this.getPhotoNames().get(nextIndex));
+
+        ArrayList<String> images;
+        int nextIndex;
+        if(this.selectedSubCollectionArrayIndex!=-1) {
+            images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
+            nextIndex = this.subCollectionSelectedImageIndex;
+        } else {
+            images = this.getPhotoNames();
+            nextIndex = this.getSelectedImageIndex();
+        }
+        if(nextIndex<images.size()-1){
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(nextIndex));
             int temp = this.getSelectedImageIndex()+1;
             this.setSelectedImageIndex(temp);
         } else {
-            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+this.getPhotoNames().get(0));
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(0));
             this.setSelectedImageIndex(0);
         }
-
         setWallpaper(context,file);
     }
-    public void goToRandWallpaper(){
+    public void goToRandWallpaper(Context context){
+        File file;
+        ArrayList<String> photos;
+        if(selectedSubCollectionArrayIndex!=-1){
+            photos = this.subCollectionArray.get(selectedSubCollectionArrayIndex).getFileNames();
+        } else {
+            photos = this.getPhotoNames();
+        }
+        Random rand = new Random();
+        int index = rand.nextInt(this.getPhotoNames().size());
 
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+photos.get(index));
+            int temp = this.getSelectedImageIndex()+1;
+            this.setSelectedImageIndex(temp);
+        setWallpaper(context,file);
     }
 
-    public void goToSpecificWallpaper(String specificWallpaper){
-
+    public void goToSpecificWallpaper(Context context, String specificWallpaper){
+        File file;
+        file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+specificWallpaper);
+        int temp = this.getSelectedImageIndex()+1;
+        this.setSelectedImageIndex(temp);
+        setWallpaper(context,file);
     }
 
-    public void goToSpecificSubCollection(String subCollection){
-
+    public void goToSpecificSubCollection(Context context, int subCollection){
+        File file;
+        this.selectedSubCollectionArrayIndex = subCollection;
+        ArrayList<String> images;
+        int nextIndex;
+        if(this.selectedSubCollectionArrayIndex!=-1) {
+            images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
+            if(this.subCollectionSelectedImageIndex!=-1){
+                nextIndex = this.subCollectionSelectedImageIndex;
+            } else {
+                nextIndex = 0;
+            }
+        } else {
+            images = this.getPhotoNames();
+            nextIndex = this.getSelectedImageIndex();
+        }
+        if(nextIndex<images.size()-1){
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(nextIndex));
+            int temp = this.getSelectedImageIndex()+1;
+            this.setSelectedImageIndex(temp);
+        } else {
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(0));
+            this.setSelectedImageIndex(0);
+        }
+        setWallpaper(context,file);
     }
 
     public void setWallpaper(Context context,File file){
@@ -237,8 +281,57 @@ public class Collection implements Serializable{
         }
     }
 
-    public void createAlarmForByDateTime(Trigger trigger){
+    public void createAlarmForByDateTime(Context context,Trigger trigger,int triggerIndex){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        PendingIntent pi=null;
+        intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        intent.putExtra("selectedCollection",id);
+        pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
+                ,PendingIntent.FLAG_MUTABLE);
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY,trigger.getHourToStartTrigger());
+        startTime.set(Calendar.MINUTE,trigger.getMinuteToStartTrigger());
+        if(trigger.getRepeatIntervalType().equals("Week")){
+//            trigger.getRepeatDayOfWeek().contains("monday");
+//
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
 
+        }
+
+        long interval = trigger.getRepeateIntervalAmount()*trigger.getIntervalTypeAsLong();
+
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
+                interval, pi);
+        Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
+    }
+
+    public void createAlarmForSeasons(Context context,Trigger trigger,int triggerIndex){
+        for(int i=0;i<trigger.getSeasonsSize();i++){
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            PendingIntent pi=null;
+            intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            intent.putExtra("selectedCollection",id);
+            pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
+                    ,PendingIntent.FLAG_MUTABLE);
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = Calendar.getInstance();
+            startTime.set(Calendar.MONTH,trigger.getSeasons().get(i).getCalMonth());
+            startTime.set(Calendar.DAY_OF_MONTH,trigger.getSeasons().get(i).getDay());
+            endTime.set(Calendar.MONTH,trigger.getSeasons().get(i).getEndMCalMonthInt());
+            endTime.set(Calendar.DAY_OF_MONTH,trigger.getSeasons().get(i).getEndDayInt());
+            long interval = endTime.getTimeInMillis()- startTime.getTimeInMillis();
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
+                    interval, pi);
+            Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

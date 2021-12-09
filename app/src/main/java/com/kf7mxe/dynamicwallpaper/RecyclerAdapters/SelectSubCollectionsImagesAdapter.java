@@ -100,6 +100,9 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
             Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
         }
         int itemPos = position;
+        if(m_subCollection.getFileNames().contains(m_data.get(position))){
+                viewHolder.checkMark.setVisibility(View.VISIBLE);
+        }
 
 
        viewHolder.getImageView().setOnClickListener(new View.OnClickListener() {

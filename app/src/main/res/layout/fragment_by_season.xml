@@ -15,121 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox2"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2">
-
-        <ImageView
-            android:id="@+id/winterEndImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_today_24" />
-
-        <TextView
-            android:id="@+id/winterEndtextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dec 21" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@+id/checkBox3"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox3">
-
-        <ImageView
-            android:id="@+id/springEndImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_today_24" />
-
-        <TextView
-            android:id="@+id/springEndTextView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dec 21" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox3"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox3">
-
-        <ImageView
-            android:id="@+id/springStartImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_today_24" />
-
-        <TextView
-            android:id="@+id/springStarttextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dec 21" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox4"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox4">
-
-        <ImageView
-            android:id="@+id/summerEndImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_today_24" />
-
-        <TextView
-            android:id="@+id/summerEndTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dec 21" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@+id/checkBox4"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox4">
-
-        <ImageView
-            android:id="@+id/summerStartImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_today_24" />
-
-        <TextView
-            android:id="@+id/summerStartTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dec 21" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@+id/checkBox2"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2">
+        app:layout_constraintEnd_toStartOf="@+id/winterCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/winterCheckBox">
 
         <ImageView
             android:id="@+id/winterStartImageView"
@@ -142,6 +29,119 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dec 21" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/springCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/springCheckBox">
+
+        <ImageView
+            android:id="@+id/springEndImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_today_24" />
+
+        <TextView
+            android:id="@+id/springEndTextView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jun 20" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/springCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/springCheckBox">
+
+        <ImageView
+            android:id="@+id/springStartImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_today_24" />
+
+        <TextView
+            android:id="@+id/springStarttextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mar 21" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/summerCheckbox"
+        app:layout_constraintTop_toBottomOf="@+id/summerCheckbox">
+
+        <ImageView
+            android:id="@+id/summerStartImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_today_24" />
+
+        <TextView
+            android:id="@+id/summerStartTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jun 21" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/summerCheckbox"
+        app:layout_constraintTop_toBottomOf="@+id/summerCheckbox">
+
+        <ImageView
+            android:id="@+id/summerEndImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_today_24" />
+
+        <TextView
+            android:id="@+id/summerEndTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sep 20" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/winterCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/winterCheckBox">
+
+        <ImageView
+            android:id="@+id/winterendImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_today_24" />
+
+        <TextView
+            android:id="@+id/winterStart1textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mar 20" />
     </LinearLayout>
 
     <LinearLayout
@@ -149,8 +149,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@+id/checkBox5"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox5">
+        app:layout_constraintStart_toEndOf="@+id/fallCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/fallCheckBox">
 
         <ImageView
             android:id="@+id/fallEndimageView"
@@ -162,7 +162,7 @@
             android:id="@+id/fallEndtextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dec 21" />
+            android:text="Dec 20" />
 
     </LinearLayout>
 
@@ -171,8 +171,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox5"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox5">
+        app:layout_constraintEnd_toStartOf="@+id/fallCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/fallCheckBox">
 
         <ImageView
             android:id="@+id/fallStartimageView"
@@ -184,7 +184,7 @@
             android:id="@+id/fallStartDatetextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dec 21" />
+            android:text="Sep 21" />
     </LinearLayout>
 
     <TextView
@@ -217,7 +217,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/winterCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Winter"
@@ -226,7 +226,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <CheckBox
-        android:id="@+id/checkBox3"
+        android:id="@+id/springCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -237,7 +237,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout8" />
 
     <CheckBox
-        android:id="@+id/checkBox4"
+        android:id="@+id/summerCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -247,7 +247,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
 
     <CheckBox
-        android:id="@+id/checkBox5"
+        android:id="@+id/fallCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

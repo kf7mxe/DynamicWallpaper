@@ -3,12 +3,15 @@ package com.kf7mxe.dynamicwallpaper;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.SelectSubCollectionsImagesAdapter;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentSelectImagesForSubCollectionBinding;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
@@ -35,6 +38,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     private Collection collection;
     private CollectionViewModel collectionViewModel;
     private SubCollection newSubCollection;
+    private NavController navController;
 
     private FragmentSelectImagesForSubCollectionBinding binding;
 
@@ -82,6 +86,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
                 newSubCollection = collection.getSubCollectionArray().get(subCollectionId);
             }
             binding = FragmentSelectImagesForSubCollectionBinding.inflate(getLayoutInflater());
+            navController = NavHostFragment.findNavController(this);
             GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
             binding.selectImagesForSubCollectionRecycler.setLayoutManager(gridLayoutManager);
             SelectSubCollectionsImagesAdapter adapter = new SelectSubCollectionsImagesAdapter(getContext(),collection,newSubCollection);
@@ -90,12 +95,18 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
             binding.saveImagesInSubCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(binding.enterNewSubCollectionName.getText().toString().length()==0){
+                        Snackbar.make(binding.getRoot(),"Please add title",Snackbar.LENGTH_LONG).setAnchorView(binding.selectImagesForSubCollectionRecycler).show();
+                        return;
+                    }
+                    newSubCollection.setName(binding.enterNewSubCollectionName.getText().toString());
                     if(subCollectionId==-1){
                         collection.getSubCollectionArray().add(newSubCollection);
                     } else {
                         collection.getSubCollectionArray().set(subCollectionId,newSubCollection);
                     }
                     collectionViewModel.saveCollection(collection);
+                    navController.navigate(R.id.action_selectImagesForSubCollectionFragment_to_addCollectionFragment,getArguments());
                 }
             });
 

@@ -14,7 +14,7 @@ public class TriggerByDateTime extends Trigger implements Serializable {
     private String repeatIntervalAmount;
     private String repeatIntervalType;
     private String timeToTrigger;
-    private String repeatDayOfWeek;
+    private String repeatDayOfWeek ="none";
     private String triggerType="triggerByDateTime";
     public TriggerByDateTime(){
 
@@ -33,7 +33,9 @@ public class TriggerByDateTime extends Trigger implements Serializable {
         this.repeatIntervalType = newRepeatIntervalType;
         this.repeatIntervalAmount = newRepeatIntervalAmount;
         this.timeToTrigger = newTimeToTrigger;
-        this.repeatDayOfWeek = newRepeateDayOfWeek;
+        if(newRepeateDayOfWeek!=null){
+            this.repeatDayOfWeek = newRepeateDayOfWeek;
+        }
     }
 
     public TriggerByDateTime(String splitString){
@@ -50,16 +52,50 @@ public class TriggerByDateTime extends Trigger implements Serializable {
                 +"~triggerDateTime~"+timeToTrigger+"~triggerDateTime~"+repeatDayOfWeek;
     }
 
-    public void runTrigger(Context context){
-//        Calendar calendar = Calendar.getInstance();
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, 13); // For 1 PM or 2 PM
-//        calendar.set(Calendar.MINUTE, 0);
-//        calendar.set(Calendar.SECOND, 0);
-//        PendingIntent pi = PendingIntent.getService(context, 0,
-//                new Intent(context, MyClass.class),PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                AlarmManager.INTERVAL_DAY, pi);
+    public int getHourToStartTrigger(){
+        if(this.timeToTrigger.equals("none")){
+            return 0;
+        }
+        String[] tempSplit = this.timeToTrigger.split(":");
+        return Integer.parseInt(tempSplit[0]);
     }
+
+    public long getRepeateIntervalAmount(){
+        return Long.parseLong(this.repeatIntervalAmount);
+    }
+
+    public String getRepeatIntervalType(){
+        return this.repeatIntervalType;
+    }
+
+    public long getIntervalTypeAsLong(){
+        switch (this.repeatIntervalType){
+            case "Minutes":
+                return (long)60000;
+            case "Hour":
+                return (long)3600000;
+            case "Day":
+                return (long)86400000;
+            case "Week":
+                return (long)604800000;
+            case "Month":
+                return (long) 2.6280E+9;
+            default:
+                return (long) 0;
+        }
+    }
+
+    public String getRepeatDayOfWeek(){
+        return this.repeatDayOfWeek;
+    }
+
+    public int getMinuteToStartTrigger(){
+        if(this.timeToTrigger.equals("none")){
+            return 0;
+        }
+        String[] tempSplit = this.timeToTrigger.split(":");
+        return Integer.parseInt(tempSplit[1]);
+    }
+
+
 }

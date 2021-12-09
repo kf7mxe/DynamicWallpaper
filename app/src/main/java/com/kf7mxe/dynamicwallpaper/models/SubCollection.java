@@ -12,6 +12,9 @@ public class SubCollection implements Serializable {
     public SubCollection(String createFromString){
         if(createFromString==null || createFromString.length()==0){return;}
        String[] nameSplit = createFromString.split("~subCollectionNameDeliminator~");
+        if(nameSplit.length==1 || nameSplit.length==0){
+            return;
+        }
        if(nameSplit[0]!=null){
            this.name = nameSplit[0];
        } else if(nameSplit[1]!=null){

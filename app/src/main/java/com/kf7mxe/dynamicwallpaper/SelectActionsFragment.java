@@ -15,6 +15,8 @@ import android.widget.RadioGroup;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentSelectActionsBinding;
+import com.kf7mxe.dynamicwallpaper.dialogs.SelectSpecificImageListDialogFragment;
+import com.kf7mxe.dynamicwallpaper.dialogs.SubCollectionsListDialogFragment;
 import com.kf7mxe.dynamicwallpaper.models.Action;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
@@ -107,6 +109,8 @@ public class SelectActionsFragment extends Fragment {
                     case "selectActionSwitchToDiffSubColRadio":
                         bindings.selectSubcollectionSelectAction.setVisibility(View.VISIBLE);
                         bindings.newSubcollectionTextview.setVisibility(View.VISIBLE);
+                        bindings.selectSpecificWallpaperSelectActionButton.setVisibility(View.GONE);
+                        bindings.specificWallpaperTextview.setVisibility(View.GONE);
                         break;
                     case "selectActionRandomInCollSubRadio":
                         bindings.selectSubcollectionSelectAction.setVisibility(View.GONE);
@@ -122,6 +126,20 @@ public class SelectActionsFragment extends Fragment {
                         break;
 
                 }
+            }
+        });
+
+        bindings.selectSubcollectionSelectAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 SubCollectionsListDialogFragment.newInstance(getArguments().getLong("collectionId")).show(getActivity().getSupportFragmentManager(), "dialog");
+            }
+        });
+
+        bindings.selectSpecificWallpaperSelectActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                      SelectSpecificImageListDialogFragment.newInstance(getArguments().getLong("collectionId")).show(getActivity().getSupportFragmentManager(), "dialog");
             }
         });
 

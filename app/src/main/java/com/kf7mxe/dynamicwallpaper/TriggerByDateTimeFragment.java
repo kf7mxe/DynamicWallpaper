@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TimePicker;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentTriggerByDateTimeBinding;
 import com.kf7mxe.dynamicwallpaper.models.TriggerByDateTime;
 
@@ -35,7 +36,7 @@ public class TriggerByDateTimeFragment extends Fragment {
     private FragmentTriggerByDateTimeBinding bindings;
     private FragmentManager fragmentManager;
 
-    private String timeToTrigger="";
+    private String timeToTrigger="none";
 
     private NavController navController;
     // TODO: Rename and change types of parameters
@@ -105,8 +106,8 @@ public class TriggerByDateTimeFragment extends Fragment {
                     case 4:
                         bindings.repeatDayOfWeekChipGroup.setVisibility(View.GONE);
                         bindings.repeateDayOfWeekTitle.setVisibility(View.GONE);
-                        bindings.dateToChangeOn.setVisibility(View.VISIBLE);
-                        bindings.monthlyDayToChangeOn.setVisibility(View.VISIBLE);
+//                        bindings.dateToChangeOn.setVisibility(View.VISIBLE);
+//                        bindings.monthlyDayToChangeOn.setVisibility(View.VISIBLE);
                         break;
                     default:
                         break;
@@ -129,9 +130,14 @@ public class TriggerByDateTimeFragment extends Fragment {
         bindings.goToActionsFromDateAndTImeTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = getArguments();
-                bundle.putSerializable("Trigger",getInputedDated());
-                navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment,bundle);
+                if(requiredFieldsFilled()) {
+                    Bundle bundle = getArguments();
+                    bundle.putSerializable("Trigger", getInputedDated());
+                    navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment, bundle);
+                } else {
+                    Snackbar.make(bindings.getRoot(),"Fill required Fields",Snackbar.LENGTH_LONG).setAnchorView(bindings.timeToTriggerInput).show();
+
+                }
             }
         });
 
@@ -147,7 +153,18 @@ public class TriggerByDateTimeFragment extends Fragment {
         for(int ids:checkedIds){
             daysOfWeeks = daysOfWeeks + getResources().getResourceEntryName(ids).replace("Chip","")+",";
         }
+        if(daysOfWeeks.length()==0){
+            daysOfWeeks="none";
+        }
         return new TriggerByDateTime(enteredRepeatIntervalAmountInput,enteredRepeatIntervalTypeSpinner,timeToTrigger,daysOfWeeks);
+    }
+
+    public boolean requiredFieldsFilled(){
+        if(bindings.enterRepeatIntervalAmountInput.getText().toString().length()==0 || bindings.enterRepeatIntervalAmountInput.getText().toString()==null ||bindings.repeatIntervalTypeSpinner.getSelectedItem().toString().length()==0 || bindings.repeatIntervalTypeSpinner.getSelectedItem().toString() ==null ){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void timePickerListener(){
