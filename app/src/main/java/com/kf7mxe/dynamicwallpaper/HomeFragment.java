@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.opengl.Visibility;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -29,6 +33,7 @@ import com.kf7mxe.dynamicwallpaper.databinding.FragmentHomeBinding;
 import com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -78,6 +83,8 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +96,15 @@ public class HomeFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences("sharedPrefrences",Context.MODE_PRIVATE);
         String selectedCollectionString = sharedPreferences.getString("selectedCollection","");
+        try {
+            if(collectionViewModel.getSpecificCollection(Long.parseLong(selectedCollectionString))!=null){
+                binding.displaySelectedCollectionInHomeTextView.setText(collectionViewModel.getSpecificCollection(Long.parseLong(selectedCollectionString)).getName());
+            }
+        } catch (NumberFormatException e){
+
+            //int pause = 0;
+        }
+
 //        if(!selectedCollectionString.equals("")){
 //            startRunningCollections();
 //        }

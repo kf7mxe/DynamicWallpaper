@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,10 +32,11 @@ public class RulesRecyclerAdapter extends RecyclerView.Adapter<RulesRecyclerAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView triggerTextView;
         private final TextView actionTextView;
+        private ImageView deleteButton;
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-
+            deleteButton = (ImageView) view.findViewById(R.id.deleteRuleButton);
             triggerTextView = (TextView) view.findViewById(R.id.triggerType);
             actionTextView = (TextView) view.findViewById(R.id.ruleCardAction);
 
@@ -79,8 +81,17 @@ public class RulesRecyclerAdapter extends RecyclerView.Adapter<RulesRecyclerAdap
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
+        int item = position;
+
         viewHolder.setTriggerTextView(m_collections.get(position).getTrigger().getTriggerType());
         viewHolder.setActionTextView(m_collections.get(position).getAction().getType());
+        viewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_collections.remove(item);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

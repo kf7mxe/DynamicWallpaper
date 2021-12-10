@@ -2,8 +2,11 @@ package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.Image;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kf7mxe.dynamicwallpaper.R;
+import com.kf7mxe.dynamicwallpaper.database.RoomDB;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.SubCollection;
 
@@ -93,28 +97,57 @@ public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<Vie
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         if(m_subCollection!=-1) {
-            if (position == m_collection.getPhotoNames().size()) {
+            if (position == m_data.size()) {
                 viewHolder.image.setImageDrawable(m_context.getDrawable(R.drawable.ic_baseline_add_photo_alternate_24));
                 viewHolder.image.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 viewHolder.image.setPadding(10, 10, 10, 10);
                 viewHolder.getImageView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        m_navController.navigate(R.id.action_viewChangePhotoOrderFragment_to_selectImagesForSubCollectionFragment);
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("collectionId",m_collection.getId());
+                        bundle.putInt("subCollectionId",m_subCollection);
+                        m_navController.navigate(R.id.action_viewChangePhotoOrderFragment_to_selectImagesForSubCollectionFragment,bundle);
                     }
                 });
                 return;
             }
         }
 
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(m_context);
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you want to delete this?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_data.remove(position);
+                        notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog confirmDelete = builder.create();
+                confirmDelete.show();
+                return false;
+            }
+        });
 
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.placeholder);
-        File fileGlide = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+m_collection.getName()+"/"+m_data.get(position));
-        if(fileGlide.isFile()){
-            Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
+        if(position<m_data.size()) {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.placeholder);
+            File fileGlide = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + m_collection.getName() + "/" + m_data.get(position));
+            if (fileGlide.isFile()) {
+                Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
+            }
         }
        // viewHolder.getSubCollectionTitle().setText(m_collections.get(position));
 
@@ -123,8 +156,11 @@ public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<Vie
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return m_data.size()+1;
-    }{
-
+        if (m_subCollection != -1) {
+            return m_data.size() + 1;
+        } else {
+            return m_data.size();
+        }
     }
+
 }

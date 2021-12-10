@@ -1,28 +1,41 @@
 package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kf7mxe.dynamicwallpaper.R;
+import com.kf7mxe.dynamicwallpaper.database.RoomDB;
+import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
 import com.kf7mxe.dynamicwallpaper.models.SubCollection;
+import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 import java.util.ArrayList;
 
 public class SubcollectionRecyclerViewAdapter extends RecyclerView.Adapter<SubcollectionRecyclerViewAdapter.ViewHolder> {
     private ArrayList<SubCollection> m_collections;
     private Context m_context;
+    private NavController mNavController;
+    private Collection mCollection;
+    private RoomDB database;
 
-    public SubcollectionRecyclerViewAdapter(Context context, ArrayList<SubCollection> allCollections) {
+    public SubcollectionRecyclerViewAdapter(Context context, Collection collection, NavController navController) {
         m_context =context;
-        m_collections = allCollections;
+        mNavController = navController;
+        mCollection = collection;
+        m_collections = collection.getSubCollectionArray();
+        database = RoomDB.getInstance(context.getApplicationContext());
+
     }
 
     /**
@@ -32,10 +45,11 @@ public class SubcollectionRecyclerViewAdapter extends RecyclerView.Adapter<Subco
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView subCollectionTitle;
         private final Button viewSubCollectionButton;
+        private final ImageView delete;
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-
+            delete = (ImageView) view.findViewById(R.id.deleteSubCollectionButton);
             subCollectionTitle = (TextView) view.findViewById(R.id.subCollectionNameCardTextview);
             viewSubCollectionButton = (Button) view.findViewById(R.id.viewSubCollectionButtonOnCard);
 
@@ -75,11 +89,25 @@ public class SubcollectionRecyclerViewAdapter extends RecyclerView.Adapter<Subco
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
+        final int item = position;
+
+        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_collections.remove(item);
+                mCollection.getSubCollectionArray().remove(item);
+                database.mainDao().updateCollection(mCollection);
+                notifyDataSetChanged();
+            }
+        });
         viewHolder.getSubCollectionTitle().setText(m_collections.get(position).getName());
         viewHolder.getViewSubCollection().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(m_context, "test"+position, Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putLong("collectionId",mCollection.getId());
+                bundle.putInt("selectedSubCollection",item);
+                mNavController.navigate(R.id.action_addCollectionFragment_to_viewChangePhotoOrderFragment,bundle);
             }
         });
     }

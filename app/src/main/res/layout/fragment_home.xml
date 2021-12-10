@@ -43,7 +43,7 @@
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/displaySelectedCollectionInHomeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="None Selected"

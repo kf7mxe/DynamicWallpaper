@@ -6,5 +6,7 @@
         android:id="@+id/deleteTopNavButton"
         android:orderInCategory="100"
         android:title="delete"
-        app:showAsAction="never" />
+        android:visible="false"
+        android:icon="@drawable/ic_baseline_delete_24"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/collection_list_item.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.3023255813953488" />
@@ -24,8 +25,8 @@
         <entry key="app/src/main/res/layout/fragment_subcollection_list_dialog_list_dialog_item.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/fragment_trigger_by_date_time.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/fragment_view_change_photo_order.xml" value="0.19947916666666668" />
-        <entry key="app/src/main/res/layout/rule_card.xml" value="0.19947916666666668" />
-        <entry key="app/src/main/res/layout/subcollection_card.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/rule_card.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/subcollection_card.xml" value="0.75" />
         <entry key="app/src/main/res/layout/view_change_collection_photos_card.xml" value="0.5" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.19947916666666668" />
       </map>

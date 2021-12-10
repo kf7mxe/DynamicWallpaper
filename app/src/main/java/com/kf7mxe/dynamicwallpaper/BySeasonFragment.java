@@ -140,8 +140,9 @@ public class BySeasonFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getDates();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Trigger",trigger);
+                Bundle bundle = getArguments();
+                bundle.putString("Trigger",trigger.myToString());
+                bundle.putString("TriggerType","triggerBySeason");
                 navController.navigate(R.id.action_bySeasonFragment_to_selectActionsFragment,bundle);
             }
         });

@@ -1,17 +1,51 @@
 package com.kf7mxe.dynamicwallpaper.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TriggerBySeason implements Serializable {
+public class TriggerBySeason extends Trigger implements Serializable {
     private String triggerType="triggerBySeason";
     private ArrayList<Season> seasons = new ArrayList<>();
     public TriggerBySeason(){
 
     }
+    public TriggerBySeason(String splitString){
+        String[] splitSeasons;
+        String tempString=splitString;
+        if(splitString.contains("~triggerTypeDeliminator~")){
+            String[] temp = splitString.split("~triggerTypeDeliminator~");
+            if(temp.length==1){tempString=temp[0];} else{
+                tempString = temp[1];
+            }
+        }
+        splitSeasons = tempString.split("~triggerSeasonDeliminator~");
+        for(int i=0;i<splitSeasons.length;i++){
+            seasons.add(new Season(splitSeasons[i]));
+        }
 
-    public void addSeason(String season,String date,String month,String endDate,String endMonth){
+    }
+
+//    protected TriggerBySeason(Parcel in) {
+//        triggerType = in.readString();
+//    }
+
+//    public static final Creator<TriggerBySeason> CREATOR = new Creator<TriggerBySeason>() {
+//        @Override
+//        public TriggerBySeason createFromParcel(Parcel in) {
+//            return new TriggerBySeason(in);
+//        }
+//
+//        @Override
+//        public TriggerBySeason[] newArray(int size) {
+//            return new TriggerBySeason[size];
+//        }
+//    };
+
+    public void addSeason(String season, String date, String month, String endDate, String endMonth){
         seasons.add(new Season(season,month,date,endMonth,endDate));
     }
 
@@ -23,7 +57,31 @@ public class TriggerBySeason implements Serializable {
         return seasons;
     }
 
-    public class Season {
+    @Override
+    public String getTriggerType() {
+        return triggerType;
+    }
+
+    @Override
+    public String getDisplayType(){
+        String temp =  "Trigger By Change in Season";
+        for(int i=0;i<seasons.size();i++){
+            temp = temp + "\n"+seasons.get(i).m_season+" "+seasons.get(i).m_month+" "+seasons.get(i).m_date+"\n"+ "End of Season:"+seasons.get(i).m_endMonth+" "+seasons.get(i).m_endDate;
+        }
+        return temp;
+    }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(triggerType);
+//    }
+
+    public class Season implements Serializable{
         private String m_season ="none";
         private String m_month = "none";
         private String m_date = "none";
@@ -31,7 +89,7 @@ public class TriggerBySeason implements Serializable {
         private String m_endDate = "none";
         private int calMonth = -1;
         private int calEndMonth = -1;
-        Season(String season, String month,String date,String endMonth,String endDate){
+        public  Season(String season, String month,String date,String endMonth,String endDate){
             m_season = season;
             m_date =date;
             m_month = month;
@@ -40,6 +98,19 @@ public class TriggerBySeason implements Serializable {
             setCalMonth(month,false);
             setCalMonth(endMonth,true);
 
+        }
+
+        public Season(String seasonParse){
+            String[] seasonParseString = seasonParse.split("~seasonDeliminator~");
+            m_season = seasonParseString[0];
+            m_month = seasonParseString[2];
+            m_date = seasonParseString[1];
+            m_endMonth = seasonParseString[4];
+            m_endDate = seasonParseString[3];
+        }
+
+        public String myToString(){
+            return m_season+"~seasonDeliminator~"+m_month+"~seasonDeliminator~"+m_date+"~seasonDeliminator~"+m_endMonth+"~seasonDeliminator~"+m_endDate;
         }
 
         public int getCalMonth(){
@@ -142,6 +213,17 @@ public class TriggerBySeason implements Serializable {
                     break;
             }
         }
+    }
+    public String myToString(){
+        String temp = this.triggerType+"~triggerTypeDeliminator~";
+        for(int i=0;i<seasons.size();i++){
+            if(i!=seasons.size()-1){
+                temp = temp + seasons.get(i).myToString() +"~triggerSeasonDeliminator~";
+            } else {
+                temp = temp + seasons.get(i).myToString();
+            }
+        }
+        return temp;
     }
 
 }

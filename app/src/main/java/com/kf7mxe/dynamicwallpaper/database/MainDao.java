@@ -21,7 +21,6 @@ public interface MainDao {
 
     @Delete
     void delete(Collection collection);
-
     //Delete all querys
     @Delete
     void reset(List<Collection> collections);

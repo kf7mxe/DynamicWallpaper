@@ -47,14 +47,6 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
             // Define click listener for the ViewHolder's View
             image = (ImageView) view.findViewById(R.id.collectionViewImagesOrderInCardImageView);
             checkMark = (ImageView) view.findViewById(R.id.checkMarkPhotoCard);
-
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
         }
 
 

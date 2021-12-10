@@ -11,19 +11,13 @@ public class SubCollection implements Serializable {
     }
     public SubCollection(String createFromString){
         if(createFromString==null || createFromString.length()==0){return;}
-       String[] nameSplit = createFromString.split("~subCollectionNameDeliminator~");
-        if(nameSplit.length==1 || nameSplit.length==0){
-            return;
-        }
-       if(nameSplit[0]!=null){
-           this.name = nameSplit[0];
-       } else if(nameSplit[1]!=null){
-           String[] fileNamesStringSplit = nameSplit[1].split("~subCollectionFileNames~");
-           for(String fileName:fileNamesStringSplit){
-               fileNames.add(fileName);
+       String[] fileNamesStringSplit = createFromString.split("~subCollectionFileNames~");
+        this.name = fileNamesStringSplit[0];
+           for(int i=0;i<fileNamesStringSplit.length;i++) {
+               if (i != 0) {
+                   fileNames.add(fileNamesStringSplit[i]);
+               }
            }
-       }
-
     }
 
     public void setName(String name) {
@@ -55,7 +49,10 @@ public class SubCollection implements Serializable {
 
     public String myToString(){
         String temp = "";
-        temp = temp + this.name+"subCollectionNameDeliminator";
+        temp = temp + this.name+"~subCollectionFileNames~";
+        if(this.fileNames.size()==0){
+            return "";
+        }
         for(String fileName:this.fileNames){
             temp = temp + fileName + "~subCollectionFileNames~";
         }

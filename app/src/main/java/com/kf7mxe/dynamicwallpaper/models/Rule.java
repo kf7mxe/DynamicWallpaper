@@ -36,6 +36,8 @@ public class Rule implements Serializable {
         switch (triggerType){
             case "triggerByDateTime":
                 return new TriggerByDateTime(stringTriggerTypeSplit[1]);
+            case "triggerBySeason":
+                return new TriggerBySeason(stringTriggerTypeSplit[1]);
             default:
                 return new Trigger();
         }

@@ -80,12 +80,13 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            if(subCollectionId==-1){
+        binding = FragmentSelectImagesForSubCollectionBinding.inflate(getLayoutInflater());
+        if(subCollectionId==-1){
                 newSubCollection = new SubCollection();
             } else {
                 newSubCollection = collection.getSubCollectionArray().get(subCollectionId);
+                binding.enterNewSubCollectionName.setText(collection.getSubCollectionArray().get(subCollectionId).getName());
             }
-            binding = FragmentSelectImagesForSubCollectionBinding.inflate(getLayoutInflater());
             navController = NavHostFragment.findNavController(this);
             GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
             binding.selectImagesForSubCollectionRecycler.setLayoutManager(gridLayoutManager);

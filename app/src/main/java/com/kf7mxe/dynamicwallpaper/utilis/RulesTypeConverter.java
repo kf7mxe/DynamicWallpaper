@@ -15,7 +15,11 @@ public class RulesTypeConverter {
             return null;
         } else {
             for(int i=0;i<rules.size();i++){
-                rulesArrayString = rulesArrayString +"~rulesDeliminator~"+rules.get(i).myToString();
+                if(i==0){
+                    rulesArrayString = rules.get(i).myToString();
+                } else {
+                    rulesArrayString = rulesArrayString +"~rulesDeliminator~"+rules.get(i).myToString();
+                }
             }
         }
         return rulesArrayString;

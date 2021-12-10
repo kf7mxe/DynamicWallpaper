@@ -191,7 +191,12 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
 
                 } else {
                     int indexToRemove = Integer.parseInt(selectedId.toString())-1;
-                    m_collections.get(indexToRemove).removeTriggersBroadcastRecievers(m_context);
+                    for(int i=0;i<m_collections.size();i++){
+                        if(m_collections.get(i).getId()==selectedId){
+                            m_collections.get(i).removeTriggersBroadcastRecievers(m_context);
+                            break;
+                        }
+                    }
                 }
                 myEditor.putString("selectedCollection",Long.toString(m_collections.get(item).getId()));
                 myEditor.commit();

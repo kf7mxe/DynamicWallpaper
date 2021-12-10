@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public class Trigger implements Serializable {
-    String triggerType;
+    String triggerType="none";
 
     public Trigger(){
 

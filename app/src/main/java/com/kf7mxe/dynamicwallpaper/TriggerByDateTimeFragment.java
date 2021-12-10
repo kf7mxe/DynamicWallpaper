@@ -132,7 +132,9 @@ public class TriggerByDateTimeFragment extends Fragment {
             public void onClick(View v) {
                 if(requiredFieldsFilled()) {
                     Bundle bundle = getArguments();
-                    bundle.putSerializable("Trigger", getInputedDated());
+                    TriggerByDateTime trigger = getInputedDated();
+                    bundle.putString("Trigger",trigger.myToString());
+                    bundle.putString("TriggerType","triggerByDateTime");
                     navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment, bundle);
                 } else {
                     Snackbar.make(bindings.getRoot(),"Fill required Fields",Snackbar.LENGTH_LONG).setAnchorView(bindings.timeToTriggerInput).show();

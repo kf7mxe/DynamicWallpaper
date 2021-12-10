@@ -39,16 +39,23 @@ public class TriggerByDateTime extends Trigger implements Serializable {
     }
 
     public TriggerByDateTime(String splitString){
-        String[] triggerDateTimeSplit = splitString.split("~triggerDateTime~");
-        this.triggerType = triggerDateTimeSplit[0];
-        this.repeatIntervalAmount = triggerDateTimeSplit[1];
-        this.repeatIntervalType = triggerDateTimeSplit[2];
-        this.timeToTrigger = triggerDateTimeSplit[3];
-        this.repeatDayOfWeek = triggerDateTimeSplit[4];
+        String[] splitSeasons;
+        String tempString=splitString;
+        if(splitString.contains("~triggerTypeDeliminator~")){
+            String[] temp = splitString.split("~triggerTypeDeliminator~");
+            if(temp.length==1){tempString=temp[0];} else{
+                tempString = temp[1];
+            }
+        }
+        String[] triggerDateTimeSplit = tempString.split("~triggerDateTime~");
+        this.repeatIntervalAmount = triggerDateTimeSplit[0];
+        this.repeatIntervalType = triggerDateTimeSplit[1];
+        this.timeToTrigger = triggerDateTimeSplit[2];
+        this.repeatDayOfWeek = triggerDateTimeSplit[3];
     }
 
     public String myToString() {
-        return this.triggerType +"~triggerTypeDeliminator~" + this.triggerType+"~triggerDateTime~"+ this.repeatIntervalAmount+"~triggerDateTime~"+this.repeatIntervalType
+        return this.triggerType +"~triggerTypeDeliminator~"+ this.repeatIntervalAmount+"~triggerDateTime~"+this.repeatIntervalType
                 +"~triggerDateTime~"+timeToTrigger+"~triggerDateTime~"+repeatDayOfWeek;
     }
 

@@ -35,6 +35,10 @@ public class CollectionViewModel extends AndroidViewModel {
         return database.mainDao().insert(collection);
     }
 
+    public void deleteFromDatabase(Collection collection){
+         database.mainDao().delete(collection);
+    }
+
     public boolean isEmpty(){
         List<Collection> test = collections;
         if(this.collections==null){

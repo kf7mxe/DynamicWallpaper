@@ -178,8 +178,8 @@ public class Collection implements Serializable{
                 goToNextWallpaper(context);
                 break;
             case "selectActionSwitchToDiffSubColRadio":
-                int subcollection = Integer.parseInt(this.rules.get(actionIndex).getAction().changeToSubCollection);
-                goToSpecificSubCollection(context,subcollection);
+                String subCollectionName = this.rules.get(actionIndex).getAction().changeToSubCollection.replace("Selected Subcollection To change to: ","");
+                goToSpecificSubCollection(context,subCollectionName);
                 break;
             case "selectActionRandomInCollSubRadio":
                 goToRandWallpaper(context);
@@ -231,7 +231,8 @@ public class Collection implements Serializable{
         setWallpaper(context,file);
     }
 
-    public void goToSpecificWallpaper(Context context, String specificWallpaper){
+    public void goToSpecificWallpaper(Context context, String specificWallpaperUnEdited){
+        String specificWallpaper = specificWallpaperUnEdited.replace("Selected Specific Wallpaper:","");
         File file;
         file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+specificWallpaper);
         int temp = this.getSelectedImageIndex()+1;
@@ -239,17 +240,25 @@ public class Collection implements Serializable{
         setWallpaper(context,file);
     }
 
-    public void goToSpecificSubCollection(Context context, int subCollection){
+    public void goToSpecificSubCollection(Context context, String subCollection){
+        int subcollectionIndex=-1;
+        for(int i=0;i<this.getSubCollectionArray().size();i++){
+            if(this.getSubCollectionArray().get(i).getName().equals(subCollection)){
+                subcollectionIndex = i;
+            }
+        }
         File file;
-        this.selectedSubCollectionArrayIndex = subCollection;
+        this.selectedSubCollectionArrayIndex = subcollectionIndex;
         ArrayList<String> images;
         int nextIndex;
         if(this.selectedSubCollectionArrayIndex!=-1) {
             images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
             if(this.subCollectionSelectedImageIndex!=-1){
                 nextIndex = this.subCollectionSelectedImageIndex;
+                this.subCollectionSelectedImageIndex = this.subCollectionSelectedImageIndex +1;
             } else {
                 nextIndex = 0;
+                this.subCollectionSelectedImageIndex = 0;
             }
         } else {
             images = this.getPhotoNames();

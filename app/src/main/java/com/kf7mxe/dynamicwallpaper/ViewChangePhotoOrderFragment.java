@@ -98,6 +98,14 @@ public class ViewChangePhotoOrderFragment extends Fragment {
         ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection,subCollectionId,navController);
         binding.viewCollectionPhotosChangeOrderRecycler.setAdapter(adapter);
 
+        binding.saveCollectionOrderChangesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collectionViewModel.saveCollection(collection);
+                navController.navigate(R.id.action_viewChangePhotoOrderFragment_to_addCollectionFragment,getArguments());
+            }
+        });
+
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(binding.viewCollectionPhotosChangeOrderRecycler);
 

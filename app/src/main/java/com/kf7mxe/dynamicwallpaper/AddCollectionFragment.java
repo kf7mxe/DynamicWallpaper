@@ -4,9 +4,11 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.WallpaperManager;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -31,6 +33,9 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -142,7 +147,38 @@ public class AddCollectionFragment extends Fragment {
         }
 
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        //menu.removeItem(R.id.deleteTopNavButton);
+        menu.getItem(1).setVisible(true);
+        menu.getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you want to delete this?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        collectionViewModel.deleteFromDatabase(collection);
+                        navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog confirmDelete = builder.create();
+                confirmDelete.show();
+                return false;
+            }
+        });
 
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -151,6 +187,7 @@ public class AddCollectionFragment extends Fragment {
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
         wallpaperManager = WallpaperManager.getInstance(getContext());
+        setHasOptionsMenu(true);
 
         sharedPreferences = getActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
 
@@ -161,11 +198,11 @@ public class AddCollectionFragment extends Fragment {
         LinearLayoutManager linearLayoutManagerForSubCollectionsRecycler = new LinearLayoutManager(getContext());
         binding.rulesRecyclerView.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
         RulesRecyclerAdapter adapter = new RulesRecyclerAdapter(getActivity(),collection.getRules());
-        SubcollectionRecyclerViewAdapter subcollectionRecyclerViewAdapter = new SubcollectionRecyclerViewAdapter(getActivity(),collection.getSubCollectionArray());
+        SubcollectionRecyclerViewAdapter subcollectionRecyclerViewAdapter = new SubcollectionRecyclerViewAdapter(getActivity(),collection,navController);
         binding.rulesRecyclerView.setAdapter(adapter);
         binding.subcollectionRecyclerView.setLayoutManager(linearLayoutManagerForSubCollectionsRecycler);
         binding.subcollectionRecyclerView.setAdapter(subcollectionRecyclerViewAdapter);
-
+        binding.collectionImageCountTextView.setText("Collection Images:"+collection.getPhotoNames().size());
         binding.enterCollectionName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -208,14 +245,9 @@ public class AddCollectionFragment extends Fragment {
         binding.addSubcollectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.addSubcollectionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Bundle bundle = new Bundle();
-                        bundle.putLong("collectionId",collectionId);
-                        navController.navigate(R.id.action_addCollectionFragment_to_selectImagesForSubCollectionFragment,bundle);
-                    }
-                });
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("collectionId",collectionId);
+                    navController.navigate(R.id.action_addCollectionFragment_to_selectImagesForSubCollectionFragment,bundle);
             }
         });
 
@@ -385,6 +417,8 @@ public class AddCollectionFragment extends Fragment {
                 .start(getActivity());
 
         collectionViewModel.saveCollection(collection);
+        binding.collectionImageCountTextView.setText("Collection Images:"+collection.getPhotoNames().size());
+
     }
 
 

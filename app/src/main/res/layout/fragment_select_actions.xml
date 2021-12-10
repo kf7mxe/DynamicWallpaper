@@ -53,7 +53,7 @@
             android:id="@+id/newSubcollectionTextview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Selected Subcollection To change to"
+            android:text="Selected Subcollection To change to:"
             android:visibility="gone" />
 
         <RadioButton
@@ -79,7 +79,7 @@
             android:id="@+id/specificWallpaperTextview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Selected Specific Wallpaper"
+            android:text="Selected Specific Wallpaper:"
             android:visibility="gone" />
     </RadioGroup>
 
