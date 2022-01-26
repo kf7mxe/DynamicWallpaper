@@ -6,7 +6,7 @@
     style="@style/Widget.MaterialComponents.Chip.Filter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TriggerByDateTimeFragment">
+    tools:context=".TriggerByTimeIntervalFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -129,7 +129,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/goToActionsFromDateAndTImeTrigger"
+        android:id="@+id/goToActionsFromTimeIntervalTrigger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -144,7 +144,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/goToActionsFromDateAndTImeTrigger"
+        app:layout_constraintBottom_toTopOf="@+id/goToActionsFromTimeIntervalTrigger"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -161,6 +161,7 @@
         android:id="@+id/timeToTriggerInputLayout"
         android:layout_width="167dp"
         android:layout_height="59dp"
+        app:helperText="Optional. If left empty the start time will be as soon as you select the collection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.422"
         app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +171,7 @@
             android:id="@+id/timeToTriggerInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="hint"
+            android:hint="Enter time"
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,6 +61,8 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView card;
+        private final Button editButton;
+        private final Button selectButton;
         private final TextView nameOfCollection;
         private final LinearLayout triggers;
         private final LinearLayout actions;
@@ -69,6 +72,8 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
+            selectButton = (Button) view.findViewById(R.id.selectCollectionCardButton);
+            editButton = (Button) view.findViewById(R.id.editCollectionCardButton);
             card = (MaterialCardView) view.findViewById(R.id.collectionCardView);
             nameOfCollection = (TextView) view.findViewById(R.id.collectionNameCollectionListCard);
             triggers = (LinearLayout) view.findViewById(R.id.triggersLinearView);
@@ -176,13 +181,15 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
 
         if(m_collections.get(position).getId()==selectedId){
             viewHolder.card.setChecked(true);
+            viewHolder.selectButton.setEnabled(false);
         } else {
             viewHolder.card.setChecked(false);
+            viewHolder.selectButton.setEnabled(true);
         }
 
         int item =position;
 
-        viewHolder.card.setOnClickListener(new View.OnClickListener() {
+        viewHolder.selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -203,6 +210,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
                 notifyDataSetChanged();
                 selectedId = m_collections.get(item).getId();
                 m_collections.get(item).startTriggers(m_context);
+                viewHolder.selectButton.setEnabled(false);
                 if(!viewHolder.card.isChecked()){
                     viewHolder.card.setChecked(true);
                 } else {
@@ -211,13 +219,14 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
             }
         });
 
-        viewHolder.card.setOnLongClickListener(new View.OnLongClickListener() {
+        viewHolder.editButton.setOnClickListener(new View.OnClickListener()  {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putLong("collectionId",m_collections.get(item).getId());
+                bundle.putBoolean("update",true);
+                bundle.putBoolean("fromAddOptionFragment",false);
                 m_navController.navigate(R.id.action_homeFragment_to_addCollectionFragment,bundle);
-                return false;
             }
         });
 

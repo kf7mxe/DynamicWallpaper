@@ -85,6 +85,9 @@ public class SelectTriggersFragment extends Fragment {
                     case R.id.selectBySeasonTriggerRadio:
                         navController.navigate(R.id.action_selectTriggersFragment_to_bySeasonFragment,getArguments());
                         break;
+                    case R.id.selectDateTriggerRadio:
+                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerByDateFragment,getArguments());
+                        break;
                     case R.id.selectLocationTriggerRadio:
                         break;
                     case R.id.selectCalendarEventTriggerRadio:

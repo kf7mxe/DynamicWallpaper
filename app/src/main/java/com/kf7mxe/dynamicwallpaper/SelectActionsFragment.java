@@ -26,11 +26,9 @@ import com.kf7mxe.dynamicwallpaper.models.Action;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
 import com.kf7mxe.dynamicwallpaper.models.Trigger;
-import com.kf7mxe.dynamicwallpaper.models.TriggerByDateTime;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByTimeInterval;
 import com.kf7mxe.dynamicwallpaper.models.TriggerBySeason;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
-
-import java.io.Serializable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,8 +93,8 @@ public class SelectActionsFragment extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
             Bundle recievingBundle = getArguments();
             switch (recievingBundle.getString("TriggerType")){
-                case "triggerByDateTime":
-                    trigger = new TriggerByDateTime(recievingBundle.getString("Trigger"));
+                case "triggerByTimeInterval":
+                    trigger = new TriggerByTimeInterval(recievingBundle.getString("Trigger"));
                     break;
                 case "triggerBySeason":
                     trigger = new TriggerBySeason(recievingBundle.getString("Trigger"));
@@ -114,7 +112,7 @@ public class SelectActionsFragment extends Fragment  {
         navController = NavHostFragment.findNavController(this);
         tempSharedPreferences =getActivity().getSharedPreferences("temp", Context.MODE_PRIVATE);
         Long id = getArguments().getLong("collectionId");
-        collection = viewModel.getSpecificCollection(id);
+        collection = viewModel.getSpecificCachCollection(id);
         selectSubcollectionBottomSheet = new BottomSheetDialog(getContext());
         selectSpecificWallpaperBottomSheet = new BottomSheetDialog(getContext());
         selectSubcollectionBottomSheet.setContentView(R.layout.fragment_subcollection_list_dialog_list_dialog);
@@ -194,7 +192,7 @@ public class SelectActionsFragment extends Fragment  {
                 Action action = getData();
                 Rule rule = new Rule(trigger,action);
                 collection.getRules().add(rule);
-                viewModel.saveCollection(collection);
+                viewModel.saveCollectionToCache(collection);
                 navController.navigate(R.id.action_selectActionsFragment_to_addCollectionFragment,getArguments());
 
             }

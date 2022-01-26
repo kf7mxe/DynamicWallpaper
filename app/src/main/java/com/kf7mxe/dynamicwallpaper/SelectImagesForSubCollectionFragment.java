@@ -73,7 +73,7 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
             collectionId = getArguments().getLong("collectionId");
             subCollectionId = getArguments().getInt("subCollectionId",-1);
-            collection = collectionViewModel.getSpecificCollection(collectionId);
+            collection = collectionViewModel.getSpecificCachCollection(collectionId);
         }
     }
 
@@ -106,7 +106,8 @@ public class SelectImagesForSubCollectionFragment extends Fragment {
                     } else {
                         collection.getSubCollectionArray().set(subCollectionId,newSubCollection);
                     }
-                    collectionViewModel.saveCollection(collection);
+                    collectionViewModel.saveCollectionToCache(collection);
+
                     navController.navigate(R.id.action_selectImagesForSubCollectionFragment_to_addCollectionFragment,getArguments());
                 }
             });

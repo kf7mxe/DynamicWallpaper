@@ -107,6 +107,7 @@ public class SubcollectionRecyclerViewAdapter extends RecyclerView.Adapter<Subco
                 Bundle bundle = new Bundle();
                 bundle.putLong("collectionId",mCollection.getId());
                 bundle.putInt("selectedSubCollection",item);
+                bundle.putBoolean("fromAddOptionFragment",true);
                 mNavController.navigate(R.id.action_addCollectionFragment_to_viewChangePhotoOrderFragment,bundle);
             }
         });

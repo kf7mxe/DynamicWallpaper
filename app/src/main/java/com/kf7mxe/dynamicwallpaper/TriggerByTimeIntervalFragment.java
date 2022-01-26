@@ -16,24 +16,24 @@ import android.widget.ArrayAdapter;
 import android.widget.TimePicker;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.kf7mxe.dynamicwallpaper.databinding.FragmentTriggerByDateTimeBinding;
-import com.kf7mxe.dynamicwallpaper.models.TriggerByDateTime;
+import com.kf7mxe.dynamicwallpaper.databinding.FragmentTriggerByTimeIntervalBinding;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByTimeInterval;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TriggerByDateTimeFragment#newInstance} factory method to
+ * Use the {@link TriggerByTimeIntervalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TriggerByDateTimeFragment extends Fragment {
+public class TriggerByTimeIntervalFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private FragmentTriggerByDateTimeBinding bindings;
+    private FragmentTriggerByTimeIntervalBinding bindings;
     private FragmentManager fragmentManager;
 
     private String timeToTrigger="none";
@@ -43,7 +43,7 @@ public class TriggerByDateTimeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public TriggerByDateTimeFragment() {
+    public TriggerByTimeIntervalFragment() {
         // Required empty public constructor
     }
 
@@ -56,8 +56,8 @@ public class TriggerByDateTimeFragment extends Fragment {
      * @return A new instance of fragment TriggerByDateTimeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TriggerByDateTimeFragment newInstance(String param1, String param2) {
-        TriggerByDateTimeFragment fragment = new TriggerByDateTimeFragment();
+    public static TriggerByTimeIntervalFragment newInstance(String param1, String param2) {
+        TriggerByTimeIntervalFragment fragment = new TriggerByTimeIntervalFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -78,11 +78,11 @@ public class TriggerByDateTimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        bindings = FragmentTriggerByDateTimeBinding.inflate(getLayoutInflater());
+        bindings = FragmentTriggerByTimeIntervalBinding.inflate(getLayoutInflater());
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
 
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getContext(), R.array.repeat_interval_type, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getContext(), R.array.repeat_interval_type, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         bindings.repeatIntervalTypeSpinner.setAdapter(adapter);
         bindings.repeatIntervalTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -127,14 +127,14 @@ public class TriggerByDateTimeFragment extends Fragment {
             }
         });
 
-        bindings.goToActionsFromDateAndTImeTrigger.setOnClickListener(new View.OnClickListener() {
+        bindings.goToActionsFromTimeIntervalTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(requiredFieldsFilled()) {
                     Bundle bundle = getArguments();
-                    TriggerByDateTime trigger = getInputedDated();
+                    TriggerByTimeInterval trigger = getInputedDated();
                     bundle.putString("Trigger",trigger.myToString());
-                    bundle.putString("TriggerType","triggerByDateTime");
+                    bundle.putString("TriggerType","triggerByTimeInterval");
                     navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment, bundle);
                 } else {
                     Snackbar.make(bindings.getRoot(),"Fill required Fields",Snackbar.LENGTH_LONG).setAnchorView(bindings.timeToTriggerInput).show();
@@ -146,7 +146,7 @@ public class TriggerByDateTimeFragment extends Fragment {
         return bindings.getRoot();
     }
 
-    public TriggerByDateTime getInputedDated(){
+    public TriggerByTimeInterval getInputedDated(){
         String enteredRepeatIntervalAmountInput = bindings.enterRepeatIntervalAmountInput.getText().toString();
         String enteredRepeatIntervalTypeSpinner = bindings.repeatIntervalTypeSpinner.getSelectedItem().toString();
         //timeToTrigger;
@@ -158,7 +158,7 @@ public class TriggerByDateTimeFragment extends Fragment {
         if(daysOfWeeks.length()==0){
             daysOfWeeks="none";
         }
-        return new TriggerByDateTime(enteredRepeatIntervalAmountInput,enteredRepeatIntervalTypeSpinner,timeToTrigger,daysOfWeeks);
+        return new TriggerByTimeInterval(enteredRepeatIntervalAmountInput,enteredRepeatIntervalTypeSpinner,timeToTrigger,daysOfWeeks);
     }
 
     public boolean requiredFieldsFilled(){

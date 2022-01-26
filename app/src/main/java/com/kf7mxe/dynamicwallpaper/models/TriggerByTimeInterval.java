@@ -10,13 +10,13 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class TriggerByDateTime extends Trigger implements Serializable {
+public class TriggerByTimeInterval extends Trigger implements Serializable {
     private String repeatIntervalAmount;
     private String repeatIntervalType;
     private String timeToTrigger;
     private String repeatDayOfWeek ="none";
-    private String triggerType="triggerByDateTime";
-    public TriggerByDateTime(){
+    private String triggerType="triggerByTimeInterval";
+    public TriggerByTimeInterval(){
 
     }
 
@@ -29,7 +29,7 @@ public class TriggerByDateTime extends Trigger implements Serializable {
         return "Trigger By Date and Time \n Repeat Every"+repeatIntervalType +" "+repeatIntervalType + "\n Change at "+timeToTrigger+"\n Repeat Day Of week"+repeatDayOfWeek;
     }
 
-    public TriggerByDateTime(String newRepeatIntervalAmount, String newRepeatIntervalType, String newTimeToTrigger, String newRepeateDayOfWeek){
+    public TriggerByTimeInterval(String newRepeatIntervalAmount, String newRepeatIntervalType, String newTimeToTrigger, String newRepeateDayOfWeek){
         this.repeatIntervalType = newRepeatIntervalType;
         this.repeatIntervalAmount = newRepeatIntervalAmount;
         this.timeToTrigger = newTimeToTrigger;
@@ -38,7 +38,7 @@ public class TriggerByDateTime extends Trigger implements Serializable {
         }
     }
 
-    public TriggerByDateTime(String splitString){
+    public TriggerByTimeInterval(String splitString){
         String[] splitSeasons;
         String tempString=splitString;
         if(splitString.contains("~triggerTypeDeliminator~")){

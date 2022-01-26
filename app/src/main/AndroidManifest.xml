@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:action="http://schemas.android.com/apk/distribution"
     package="com.kf7mxe.dynamicwallpaper">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".DynamicWallpaperApplication"
         android:theme="@style/Theme.DynamicWallpaper">
         <service
             android:name=".WallpaperChangeService"
@@ -32,11 +35,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <receiver android:name="com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever" android:enabled="true"/>
+        <receiver android:name=".recievers.AlarmActionReciever" android:enabled="true"
+            android:exported="false">
+        </receiver>
+
+        <receiver android:name=".recievers.BootCompleteIntentReciever" android:enabled="true" android:exported="true" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+            </intent-filter>
+        </receiver>
+
+
+
+
+        <service
+            android:name=".services.GoToNextWallpaperTileService"
+            android:icon="@drawable/ic_go_to_next_image"
+            android:label="Next Wallpaper"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".services.ShuffleWallpaperTileService"
+            android:icon="@drawable/ic_shuffle_image"
+            android:label="Random Wallpaper"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

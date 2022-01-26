@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.color.DynamicColors;
 import com.kf7mxe.dynamicwallpaper.databinding.ActivityMainBinding;
 
 import android.view.Menu;
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        DynamicColors.applyToActivitiesIfAvailable(getApplication());
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

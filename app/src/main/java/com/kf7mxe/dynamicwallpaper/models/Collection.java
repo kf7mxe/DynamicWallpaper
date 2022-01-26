@@ -141,7 +141,8 @@ public class Collection implements Serializable{
             Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
             PendingIntent pi=null;
                 intent.putExtra("selectedCollection", getId());
-                //intent.putExtra("actionToRun",action)
+                intent.putExtra("actionIndex",i);
+            //intent.putExtra("actionToRun",action)
                 pi = PendingIntent.getBroadcast(context,getIdAsInt()+1001+i, intent
                         , PendingIntent.FLAG_MUTABLE);
 
@@ -155,14 +156,17 @@ public class Collection implements Serializable{
         for(int i=0;i<this.getRules().size();i++){
             Trigger trigger = this.getRules().get(i).getTrigger();
             switch (trigger.getTriggerType()){
-                case "triggerByDateTime":
+                case "triggerByTimeInterval":
                     createAlarmForByDateTime(context,trigger,i);
                     break;
                 case "triggerBySeason":
                     createAlarmForSeasons(context,trigger,i);
                     break;
-                case "":
-
+                case "triggerByDate":
+                    createAlarmForDateTrigger(context,trigger,i);
+                    break;
+                default:
+                    break;
             }
 
 
@@ -200,17 +204,57 @@ public class Collection implements Serializable{
         if(this.selectedSubCollectionArrayIndex!=-1) {
             images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
             nextIndex = this.subCollectionSelectedImageIndex;
+
         } else {
             images = this.getPhotoNames();
             nextIndex = this.getSelectedImageIndex();
         }
         if(nextIndex<images.size()-1){
             file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(nextIndex));
-            int temp = this.getSelectedImageIndex()+1;
-            this.setSelectedImageIndex(temp);
+           if(this.selectedSubCollectionArrayIndex!=-1){
+               this.subCollectionSelectedImageIndex = this.selectedSubCollectionArrayIndex +1;
+           } else {
+               int temp = this.getSelectedImageIndex()+1;
+               this.setSelectedImageIndex(temp);
+           }
         } else {
             file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(0));
-            this.setSelectedImageIndex(0);
+            if(this.selectedSubCollectionArrayIndex!=-1){
+                this.selectedSubCollectionArrayIndex = 0;
+            } else {
+                this.setSelectedImageIndex(0);
+            }
+        }
+        setWallpaper(context,file);
+    }
+    public void goToPreviousWallpaper(Context context){
+        File file;
+
+        ArrayList<String> images;
+        int nextIndex;
+        if(this.selectedSubCollectionArrayIndex!=-1) {
+            images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
+            nextIndex = this.subCollectionSelectedImageIndex;
+
+        } else {
+            images = this.getPhotoNames();
+            nextIndex = this.getSelectedImageIndex();
+        }
+        if(nextIndex<images.size()-1 && nextIndex>-1){
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(nextIndex));
+            if(this.selectedSubCollectionArrayIndex!=-1){
+                this.subCollectionSelectedImageIndex = this.selectedSubCollectionArrayIndex -1;
+            } else {
+                int temp = this.getSelectedImageIndex()-1;
+                this.setSelectedImageIndex(temp);
+            }
+        } else {
+            file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+this.getName()+"/"+images.get(0));
+            if(this.selectedSubCollectionArrayIndex!=-1){
+                this.selectedSubCollectionArrayIndex = 0;
+            } else {
+                this.setSelectedImageIndex(0);
+            }
         }
         setWallpaper(context,file);
     }
@@ -296,6 +340,7 @@ public class Collection implements Serializable{
         PendingIntent pi=null;
         intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
         intent.putExtra("selectedCollection",id);
+        intent.putExtra("actionIndex",triggerIndex);
         pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
                 ,PendingIntent.FLAG_MUTABLE);
         Calendar startTime = Calendar.getInstance();
@@ -328,6 +373,7 @@ public class Collection implements Serializable{
             PendingIntent pi=null;
             intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
             intent.putExtra("selectedCollection",id);
+            intent.putExtra("actionIndex",triggerIndex);
             pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
                     ,PendingIntent.FLAG_MUTABLE);
             Calendar startTime = Calendar.getInstance();
@@ -339,8 +385,25 @@ public class Collection implements Serializable{
             long interval = endTime.getTimeInMillis()- startTime.getTimeInMillis();
             am.setInexactRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
                     interval, pi);
-            Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void createAlarmForDateTrigger(Context context,Trigger trigger,int triggerIndex){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        PendingIntent pi=null;
+        intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        intent.putExtra("selectedCollection",id);
+        intent.putExtra("actionIndex",triggerIndex);
+        pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
+                ,PendingIntent.FLAG_MUTABLE);
+        Calendar startTime = Calendar.getInstance();
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(Calendar.MONTH,trigger.getM_Month());
+        endTime.set(Calendar.DAY_OF_MONTH,trigger.getM_date());
+        long interval = endTime.getTimeInMillis()- startTime.getTimeInMillis();
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
+                interval, pi);
     }
 
 

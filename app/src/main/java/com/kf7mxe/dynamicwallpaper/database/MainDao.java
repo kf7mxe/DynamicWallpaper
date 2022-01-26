@@ -33,4 +33,7 @@ public interface MainDao {
 
     @Query("SELECT * FROM collection")
     List<Collection> getAll();
+
+    @Query("DELETE FROM collection")
+    int deleteAll();
 }

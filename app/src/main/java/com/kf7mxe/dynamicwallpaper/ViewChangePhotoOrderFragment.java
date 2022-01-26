@@ -80,7 +80,7 @@ public class ViewChangePhotoOrderFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
             collectionId = getArguments().getLong("collectionId");
             subCollectionId = getArguments().getInt("selectedSubCollection",-1);
-            collection = collectionViewModel.getSpecificCollection(collectionId);
+            collection = collectionViewModel.getSpecificCachCollection(collectionId);
         } else {
             subCollectionId = -1;
         }
@@ -101,7 +101,7 @@ public class ViewChangePhotoOrderFragment extends Fragment {
         binding.saveCollectionOrderChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                collectionViewModel.saveCollection(collection);
+                collectionViewModel.saveCollectionToCache(collection);
                 navController.navigate(R.id.action_viewChangePhotoOrderFragment_to_addCollectionFragment,getArguments());
             }
         });

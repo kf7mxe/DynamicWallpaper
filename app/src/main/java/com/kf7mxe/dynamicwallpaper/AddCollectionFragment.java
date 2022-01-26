@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -99,8 +100,8 @@ public class AddCollectionFragment extends Fragment {
 
     private Long collectionId;
     private Collection collection;
-    private Uri selectedImageUri;
-    private Uri pickerInitialUri;
+
+    private Boolean updateCollection;
 
     private CollectionViewModel collectionViewModel;
 
@@ -129,7 +130,8 @@ public class AddCollectionFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
+
+        @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
@@ -137,12 +139,18 @@ public class AddCollectionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             collectionId = getArguments().getLong("collectionId");
-            collection = collectionViewModel.getSpecificCollection(collectionId);
+            updateCollection = getArguments().getBoolean("update");
+            boolean fromAddOptionFragment = getArguments().getBoolean("fromAddOptionFragment",false);
+            if(fromAddOptionFragment){
+                collection = collectionViewModel.getSpecificCachCollection(collectionId);
+            } else {
+                collection = collectionViewModel.getSpecificCollection(collectionId);
+            }
             int pause =0;
         } else {
             collection = new Collection();
-            List<Collection> test = collectionViewModel.getAllCollections();
-            collectionId = collectionViewModel.saveCollection(collection);
+            collectionId = collectionViewModel.saveCollectionToCache(collection);
+            updateCollection = false;
             collection.setId(collectionId);
         }
 
@@ -151,32 +159,37 @@ public class AddCollectionFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
         //menu.removeItem(R.id.deleteTopNavButton);
-        menu.getItem(1).setVisible(true);
-        menu.getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setCancelable(true);
-                builder.setTitle("Are you sure you want to delete this?");
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        collectionViewModel.deleteFromDatabase(collection);
-                        navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog confirmDelete = builder.create();
-                confirmDelete.show();
-                return false;
-            }
-        });
+        if(updateCollection) {
+            menu.getItem(1).setVisible(true);
+            menu.getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setCancelable(true);
+                    builder.setTitle("Are you sure you want to delete this?");
+                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            collectionViewModel.deleteFromDatabase(collection);
+                            if (collection.getPhotoNames().size() != 0 && collection.getName().length() != 0) {
+                                deleteRecursive(new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName()));
+                            }
+                            navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog confirmDelete = builder.create();
+                    confirmDelete.show();
+                    return false;
+                }
 
+            });
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -188,6 +201,8 @@ public class AddCollectionFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         wallpaperManager = WallpaperManager.getInstance(getContext());
         setHasOptionsMenu(true);
+
+
 
         sharedPreferences = getActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
 
@@ -224,12 +239,21 @@ public class AddCollectionFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                collectionViewModel.saveCollection(collection);
+                collectionViewModel.saveCollectionToCache(collection);
                 Bundle bundle = new Bundle();
                 bundle.putLong("collectionId",collectionId);
+                bundle.putBoolean("update",updateCollection);
+                bundle.putBoolean("fromAddOptionFragment",true);
                 navController.navigate(R.id.action_addCollectionFragment_to_selectTriggersFragment,bundle);
             }
         });
+
+        if(collection.getSubCollectionArray().size()>0){
+            if(!binding.useSubcollectionCheckbox.isChecked()){
+                binding.useSubcollectionCheckbox.setChecked(true);
+                binding.addSubcollectionButton.setVisibility(View.VISIBLE);
+            }
+        }
 
         binding.useSubcollectionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -247,7 +271,9 @@ public class AddCollectionFragment extends Fragment {
             public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putLong("collectionId",collectionId);
-                    navController.navigate(R.id.action_addCollectionFragment_to_selectImagesForSubCollectionFragment,bundle);
+                    bundle.putBoolean("fromAddOptionFragment",true);
+                    bundle.putBoolean("update",updateCollection);
+                navController.navigate(R.id.action_addCollectionFragment_to_selectImagesForSubCollectionFragment,bundle);
             }
         });
 
@@ -256,6 +282,8 @@ public class AddCollectionFragment extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putLong("collectionId",collectionId);
+                bundle.putBoolean("update",updateCollection);
+                bundle.putBoolean("fromAddOptionFragment",true);
                 navController.navigate(R.id.action_addCollectionFragment_to_viewChangePhotoOrderFragment,bundle);
             }
         });
@@ -263,6 +291,9 @@ public class AddCollectionFragment extends Fragment {
         binding.cancelNewCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(collection.getName().length()==0) {
+                    collectionViewModel.deleteFromDatabase(collection);
+                }
                 navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
             }
         });
@@ -309,6 +340,23 @@ public class AddCollectionFragment extends Fragment {
             launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
+
+
+
+
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                // Handle the back button event
+//                if(collection.getName().length()==0){
+//                    collectionViewModel.deleteFromDatabase(collection);
+//                }
+//            }
+//        };
+        //requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
+
+        // The callback can be enabled or disabled here or in handleOnBackPressed()
+
 
 
         // Inflate the layout for this fragment
@@ -416,7 +464,7 @@ public class AddCollectionFragment extends Fragment {
                 .withMaxResultSize((Integer)screenResolution.first, (Integer)screenResolution.second)
                 .start(getActivity());
 
-        collectionViewModel.saveCollection(collection);
+        collectionViewModel.saveCollectionToCache(collection);
         binding.collectionImageCountTextView.setText("Collection Images:"+collection.getPhotoNames().size());
 
     }
@@ -444,6 +492,16 @@ public class AddCollectionFragment extends Fragment {
         }
     }
 
+
+    public void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+
+        fileOrDirectory.delete();
+    }
 
 
 //

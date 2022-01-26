@@ -23,6 +23,7 @@ public class AlarmActionReciever extends BroadcastReceiver {
             return;
         }
         Collection selectedCollection = database.mainDao().getCollectionById(intent.getLongExtra("selectedCollection", (long) 0.0));
+        int test = intent.getIntExtra("actionIndex",20);
         selectedCollection.runAction(intent.getIntExtra("actionIndex",0),context);
         database.mainDao().updateCollection(selectedCollection);
     }

@@ -107,6 +107,7 @@ public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<Vie
                         Bundle bundle = new Bundle();
                         bundle.putLong("collectionId",m_collection.getId());
                         bundle.putInt("subCollectionId",m_subCollection);
+                        bundle.putBoolean("fromAddOptionFragment",true);
                         m_navController.navigate(R.id.action_viewChangePhotoOrderFragment_to_selectImagesForSubCollectionFragment,bundle);
                     }
                 });

@@ -54,4 +54,11 @@ public class Trigger implements Serializable {
         return new ArrayList<>();
     }
 
+    public int getM_date() {
+        return -1;
     }
+
+    public int getM_Month() {
+        return -1;
+    }
+}

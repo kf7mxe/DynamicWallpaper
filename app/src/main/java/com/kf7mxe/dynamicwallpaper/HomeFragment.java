@@ -2,6 +2,7 @@ package com.kf7mxe.dynamicwallpaper;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
+import android.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -78,10 +79,16 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
         collectionList = collectionViewModel.getAllCollections();
+        List <Collection> cache = collectionViewModel.getAllCacheCollections();
+        if(cache.size()!=0){
+            int itemsDeleted = collectionViewModel.deleteAllItemsInCache();
+        }
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
+
+
 
 
 

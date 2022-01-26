@@ -34,10 +34,12 @@ public class Rule implements Serializable {
         String[] stringTriggerTypeSplit = triggerString.split("~triggerTypeDeliminator~");
         String triggerType = stringTriggerTypeSplit[0];
         switch (triggerType){
-            case "triggerByDateTime":
-                return new TriggerByDateTime(stringTriggerTypeSplit[1]);
+            case "triggerByTimeInterval":
+                return new TriggerByTimeInterval(stringTriggerTypeSplit[1]);
             case "triggerBySeason":
                 return new TriggerBySeason(stringTriggerTypeSplit[1]);
+            case "triggerByDate":
+                return new TriggerByDate(stringTriggerTypeSplit[1]);
             default:
                 return new Trigger();
         }
