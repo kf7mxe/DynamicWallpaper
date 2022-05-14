@@ -31,6 +31,7 @@
         <entry key="app/src/main/res/layout/fragment_trigger_by_date_time.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/fragment_trigger_by_time_interval.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_view_change_photo_order.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/fragment_view_wallpaper.xml" value="0.35280797101449274" />
         <entry key="app/src/main/res/layout/rule_card.xml" value="0.5" />
         <entry key="app/src/main/res/layout/subcollection_card.xml" value="0.75" />
         <entry key="app/src/main/res/layout/view_change_collection_photos_card.xml" value="0.5" />

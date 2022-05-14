@@ -114,30 +114,16 @@ public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<Vie
                 return;
             }
         }
-
-        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        int item = position;
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(m_context);
-                builder.setCancelable(true);
-                builder.setTitle("Are you sure you want to delete this?");
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        m_data.remove(position);
-                        notifyDataSetChanged();
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog confirmDelete = builder.create();
-                confirmDelete.show();
-                return false;
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("collectionId",m_collection.getId());
+                bundle.putInt("subCollectionId",m_subCollection);
+                bundle.putString("fileName",m_data.get(item));
+                bundle.putBoolean("fromAddOptionFragment",true);
+                m_navController.navigate(R.id.action_viewChangePhotoOrderFragment_to_viewWallpaperFragment,bundle);
             }
         });
 

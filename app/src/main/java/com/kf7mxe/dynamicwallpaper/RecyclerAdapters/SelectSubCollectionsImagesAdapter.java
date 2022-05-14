@@ -96,13 +96,20 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
                 viewHolder.checkMark.setVisibility(View.VISIBLE);
         }
 
+        viewHolder.checkMark.setVisibility(View.INVISIBLE);
 
        viewHolder.getImageView().setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               if(viewHolder.checkMark.getVisibility()==View.VISIBLE){
-                   viewHolder.checkMark.setVisibility(View.INVISIBLE);
-                   m_subCollection.getFileNames().remove(m_collection.getPhotoNames().get(itemPos));
+
+               if(m_subCollection.getFileNames().size()!=0) {
+                   if (m_subCollection.getFileNames().contains(m_collection.getPhotoNames().get(itemPos))) {
+                       viewHolder.checkMark.setVisibility(View.INVISIBLE);
+                       m_subCollection.getFileNames().remove(m_collection.getPhotoNames().get(itemPos));
+                   } else {
+                       viewHolder.checkMark.setVisibility(View.VISIBLE);
+                       m_subCollection.getFileNames().add(m_collection.getPhotoNames().get(itemPos));
+                   }
                } else {
                    viewHolder.checkMark.setVisibility(View.VISIBLE);
                    m_subCollection.getFileNames().add(m_collection.getPhotoNames().get(itemPos));

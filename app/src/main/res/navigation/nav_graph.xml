@@ -84,6 +84,9 @@
         <action
             android:id="@+id/action_viewChangePhotoOrderFragment_to_selectImagesForSubCollectionFragment"
             app:destination="@id/selectImagesForSubCollectionFragment" />
+        <action
+            android:id="@+id/action_viewChangePhotoOrderFragment_to_viewWallpaperFragment"
+            app:destination="@id/viewWallpaperFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectImagesForSubCollectionFragment"
@@ -102,5 +105,14 @@
         <action
             android:id="@+id/action_triggerByDateFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewWallpaperFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.ViewWallpaperFragment"
+        android:label="fragment_view_wallpaper"
+        tools:layout="@layout/fragment_view_wallpaper" >
+        <action
+            android:id="@+id/action_viewWallpaperFragment_to_viewChangePhotoOrderFragment"
+            app:destination="@id/viewChangePhotoOrderFragment" />
     </fragment>
 </navigation>

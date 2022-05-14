@@ -2,7 +2,6 @@ package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
-import androidx.cardview.widget.CardView;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,11 +24,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.kf7mxe.dynamicwallpaper.R;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
-import com.kf7mxe.dynamicwallpaper.models.Rule;
-import com.kf7mxe.dynamicwallpaper.placeholder.PlaceholderContent.PlaceholderItem;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,6 +116,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(HomeCollectionRecyclerViewAdapter.ViewHolder viewHolder, final int position) {
+
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element

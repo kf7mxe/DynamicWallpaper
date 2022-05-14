@@ -499,7 +499,6 @@ public class AddCollectionFragment extends Fragment {
                 deleteRecursive(child);
             }
         }
-
         fileOrDirectory.delete();
     }
 

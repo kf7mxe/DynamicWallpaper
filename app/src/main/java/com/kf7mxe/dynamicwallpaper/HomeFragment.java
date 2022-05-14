@@ -1,41 +1,24 @@
 package com.kf7mxe.dynamicwallpaper;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
-
-import android.app.ActionBar;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.opengl.Visibility;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.HomeCollectionRecyclerViewAdapter;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
-import com.kf7mxe.dynamicwallpaper.placeholder.PlaceholderContent;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentHomeBinding;
-import com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
-import java.text.ParseException;
-import java.util.Calendar;
 import java.util.List;
 
 /**

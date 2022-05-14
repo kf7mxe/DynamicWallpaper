@@ -16,13 +16,6 @@
         android:supportsRtl="true"
         android:name=".DynamicWallpaperApplication"
         android:theme="@style/Theme.DynamicWallpaper">
-        <service
-            android:name=".WallpaperChangeService"
-            android:enabled="true"
-            android:exported="true"></service>
-        <service
-            android:name=".RecyclerAdapters.WallpaperIntentService"
-            android:exported="false" />
 
         <activity
             android:name=".MainActivity"

@@ -52,7 +52,6 @@ public class SelectSubCollectionRecycerAdapter extends RecyclerView.Adapter<Sele
 
         @Override
         public void onBindViewHolder(SelectSubCollectionRecycerAdapter.ViewHolder holder, int position) {
-            int puase = 0;
             final int item = position;
             holder.subCollection.setText(mSubcollections.get(position).getName());
             holder.itemView.setOnClickListener(new View.OnClickListener() {

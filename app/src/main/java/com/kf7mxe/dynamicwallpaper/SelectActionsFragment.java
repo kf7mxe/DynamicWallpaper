@@ -26,6 +26,7 @@ import com.kf7mxe.dynamicwallpaper.models.Action;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
 import com.kf7mxe.dynamicwallpaper.models.Trigger;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByDate;
 import com.kf7mxe.dynamicwallpaper.models.TriggerByTimeInterval;
 import com.kf7mxe.dynamicwallpaper.models.TriggerBySeason;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
@@ -99,6 +100,8 @@ public class SelectActionsFragment extends Fragment  {
                 case "triggerBySeason":
                     trigger = new TriggerBySeason(recievingBundle.getString("Trigger"));
                     break;
+                case "triggerByDate":
+                    trigger = new TriggerByDate(recievingBundle.getString("Trigger"));
             }
         }
 
