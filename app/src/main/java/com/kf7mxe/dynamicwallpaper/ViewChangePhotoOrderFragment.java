@@ -21,6 +21,7 @@ import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,9 +79,12 @@ public class ViewChangePhotoOrderFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            collectionViewModel.getAllCollections();
+            List <Collection> cache = collectionViewModel.getAllCacheCollections();
             collectionId = getArguments().getLong("collectionId");
             subCollectionId = getArguments().getInt("selectedSubCollection",-1);
             collection = collectionViewModel.getSpecificCachCollection(collectionId);
+            int pause = 0;
         } else {
             subCollectionId = -1;
         }
@@ -93,6 +97,8 @@ public class ViewChangePhotoOrderFragment extends Fragment {
         binding = FragmentViewChangePhotoOrderBinding.inflate(getLayoutInflater());
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
+
+
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3);
         binding.viewCollectionPhotosChangeOrderRecycler.setLayoutManager(gridLayoutManager);
         ViewChangeCollectionsImagesAdapter adapter = new ViewChangeCollectionsImagesAdapter(getContext(),collection,subCollectionId,navController);

@@ -61,4 +61,8 @@ public class Trigger implements Serializable {
     public int getM_Month() {
         return -1;
     }
+
+    public boolean isExact(){
+        return false;
+    }
 }

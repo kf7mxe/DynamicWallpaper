@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.color.DynamicColors;
 import com.kf7mxe.dynamicwallpaper.databinding.ActivityMainBinding;
+import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,6 +70,14 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // on destroy
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CollectionViewModel collectionViewModel =new CollectionViewModel(getApplication(),this);
+        collectionViewModel.deleteAllItemsInCache();
     }
 
 }

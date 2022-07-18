@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
-
 android {
     compileSdk 31
 
@@ -9,8 +10,8 @@ android {
         applicationId "com.kf7mxe.dynamicwallpaper"
         minSdk 30
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,8 +30,8 @@ android {
         viewBinding true
         dataBinding true
     }
+    namespace 'com.kf7mxe.dynamicwallpaper'
 }
-
 dependencies {
 
 
@@ -38,7 +39,7 @@ dependencies {
     def arch_version = "2.1.0"
     def room_version = "2.3.0"
 
-    def material_design ="1.6.0-alpha01"
+    def material_design ="1.6.1"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -69,7 +70,18 @@ dependencies {
 
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.11'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    // For an optimal experience using Crashlytics, add the Firebase SDK
+    // for Google Analytics. This is recommended, but not required.
+    implementation 'com.google.firebase:firebase-analytics'
 
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies

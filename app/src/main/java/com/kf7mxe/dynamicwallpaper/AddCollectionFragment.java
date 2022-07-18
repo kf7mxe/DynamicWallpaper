@@ -145,6 +145,7 @@ public class AddCollectionFragment extends Fragment {
                 collection = collectionViewModel.getSpecificCachCollection(collectionId);
             } else {
                 collection = collectionViewModel.getSpecificCollection(collectionId);
+                collectionViewModel.saveCollectionToCache(collection);
             }
             int pause =0;
         } else {
@@ -500,6 +501,23 @@ public class AddCollectionFragment extends Fragment {
             }
         }
         fileOrDirectory.delete();
+    }
+
+
+    // onresume
+    @Override
+    public void onResume() {
+        super.onResume();
+        // set the title of the toolbar
+       // ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Collection");
+    }
+
+    // onpause
+    @Override
+    public void onPause() {
+        super.onPause();
+        // set the title of the toolbar
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Collection");
     }
 
 

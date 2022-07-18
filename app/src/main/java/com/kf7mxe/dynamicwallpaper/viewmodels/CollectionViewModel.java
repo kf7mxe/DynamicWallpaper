@@ -87,6 +87,7 @@ public class CollectionViewModel extends AndroidViewModel {
         return cacheDatabase.mainDao().getCollectionById(id);
     }
 
+
     public int deleteAllItemsInCache(){
         queryAllFromDatabase();
         for(int i=0;i<cacheCollections.size();i++){

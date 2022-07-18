@@ -157,6 +157,9 @@ public class Collection implements Serializable{
             Trigger trigger = this.getRules().get(i).getTrigger();
             switch (trigger.getTriggerType()){
                 case "triggerByTimeInterval":
+                    if(trigger.isExact()) {
+                        createExactAlarmForByDateTime(context,trigger, i);
+                    }
                     createAlarmForByDateTime(context,trigger,i);
                     break;
                 case "triggerBySeason":
@@ -365,6 +368,37 @@ public class Collection implements Serializable{
                 interval, pi);
         Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
     }
+    public void createExactAlarmForByDateTime(Context context,Trigger trigger,int triggerIndex){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        PendingIntent pi=null;
+        intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        intent.putExtra("selectedCollection",id);
+        intent.putExtra("actionIndex",triggerIndex);
+        pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
+                ,PendingIntent.FLAG_MUTABLE);
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY,trigger.getHourToStartTrigger());
+        startTime.set(Calendar.MINUTE,trigger.getMinuteToStartTrigger());
+        if(trigger.getRepeatIntervalType().equals("Week")){
+//            trigger.getRepeatDayOfWeek().contains("monday");
+//
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
+//            startTime.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+
+        }
+
+        long interval = trigger.getRepeateIntervalAmount()*trigger.getIntervalTypeAsLong();
+
+        am.setRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
+                interval, pi);
+        Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
+    }
 
     public void createAlarmForSeasons(Context context,Trigger trigger,int triggerIndex){
         for(int i=0;i<trigger.getSeasonsSize();i++){
@@ -406,5 +440,22 @@ public class Collection implements Serializable{
                 interval, pi);
     }
 
+    public void createExactAlarmForDateTrigger(Context context,Trigger trigger,int triggerIndex){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        PendingIntent pi=null;
+        intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+        intent.putExtra("selectedCollection",id);
+        intent.putExtra("actionIndex",triggerIndex);
+        pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
+                ,PendingIntent.FLAG_MUTABLE);
+        Calendar startTime = Calendar.getInstance();
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(Calendar.MONTH,trigger.getM_Month());
+        endTime.set(Calendar.DAY_OF_MONTH,trigger.getM_date());
+        long interval = endTime.getTimeInMillis()- startTime.getTimeInMillis();
+        am.setRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
+                interval, pi);
+    }
 
 }

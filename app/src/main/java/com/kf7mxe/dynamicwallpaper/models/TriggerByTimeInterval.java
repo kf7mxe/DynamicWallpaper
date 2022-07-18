@@ -16,6 +16,7 @@ public class TriggerByTimeInterval extends Trigger implements Serializable {
     private String timeToTrigger;
     private String repeatDayOfWeek ="none";
     private String triggerType="triggerByTimeInterval";
+    private String exactTime="false";
     public TriggerByTimeInterval(){
 
     }
@@ -29,10 +30,11 @@ public class TriggerByTimeInterval extends Trigger implements Serializable {
         return "Trigger By Date and Time \n Repeat Every"+repeatIntervalType +" "+repeatIntervalType + "\n Change at "+timeToTrigger+"\n Repeat Day Of week"+repeatDayOfWeek;
     }
 
-    public TriggerByTimeInterval(String newRepeatIntervalAmount, String newRepeatIntervalType, String newTimeToTrigger, String newRepeateDayOfWeek){
+    public TriggerByTimeInterval(String newRepeatIntervalAmount, String newRepeatIntervalType, String newTimeToTrigger, String newRepeateDayOfWeek,String exactTime){
         this.repeatIntervalType = newRepeatIntervalType;
         this.repeatIntervalAmount = newRepeatIntervalAmount;
         this.timeToTrigger = newTimeToTrigger;
+        this.exactTime = exactTime;
         if(newRepeateDayOfWeek!=null){
             this.repeatDayOfWeek = newRepeateDayOfWeek;
         }
@@ -48,15 +50,26 @@ public class TriggerByTimeInterval extends Trigger implements Serializable {
             }
         }
         String[] triggerDateTimeSplit = tempString.split("~triggerDateTime~");
-        this.repeatIntervalAmount = triggerDateTimeSplit[0];
-        this.repeatIntervalType = triggerDateTimeSplit[1];
-        this.timeToTrigger = triggerDateTimeSplit[2];
-        this.repeatDayOfWeek = triggerDateTimeSplit[3];
+        if (triggerDateTimeSplit.length>1) {
+            this.repeatIntervalAmount = triggerDateTimeSplit[0];
+        }
+        if (triggerDateTimeSplit.length>2) {
+            this.repeatIntervalType = triggerDateTimeSplit[1];
+        }
+        if (triggerDateTimeSplit.length>2) {
+            this.timeToTrigger = triggerDateTimeSplit[2];
+        }
+        if (triggerDateTimeSplit.length>3) {
+            this.repeatDayOfWeek = triggerDateTimeSplit[3];
+        }
+        if(triggerDateTimeSplit.length>4){
+            this.exactTime = triggerDateTimeSplit[4];
+        }
     }
 
     public String myToString() {
         return this.triggerType +"~triggerTypeDeliminator~"+ this.repeatIntervalAmount+"~triggerDateTime~"+this.repeatIntervalType
-                +"~triggerDateTime~"+timeToTrigger+"~triggerDateTime~"+repeatDayOfWeek;
+                +"~triggerDateTime~"+timeToTrigger+"~triggerDateTime~"+repeatDayOfWeek+"~triggerDateTime~"+exactTime;
     }
 
     public int getHourToStartTrigger(){
@@ -104,5 +117,8 @@ public class TriggerByTimeInterval extends Trigger implements Serializable {
         return Integer.parseInt(tempSplit[1]);
     }
 
+    public boolean isExact(){
+        return Boolean.parseBoolean(this.exactTime);
+    }
 
 }

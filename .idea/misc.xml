@@ -14,7 +14,7 @@
         <entry key="app/src/main/res/layout/fragment_add_collection.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_by_season.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.35833333333333334" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home_collection_list.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog_item.xml" value="0.1875" />
@@ -29,7 +29,9 @@
         <entry key="app/src/main/res/layout/fragment_subcollection_list_dialog_list_dialog_item.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/fragment_trigger_by_date.xml" value="0.21341463414634146" />
         <entry key="app/src/main/res/layout/fragment_trigger_by_date_time.xml" value="0.35833333333333334" />
-        <entry key="app/src/main/res/layout/fragment_trigger_by_time_interval.xml" value="0.15729166666666666" />
+        <entry key="app/src/main/res/layout/fragment_trigger_by_time_interval.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_trigger_calendar_event.xml" value="0.184375" />
+        <entry key="app/src/main/res/layout/fragment_trigger_location.xml" value="0.184375" />
         <entry key="app/src/main/res/layout/fragment_view_change_photo_order.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/fragment_view_wallpaper.xml" value="0.35280797101449274" />
         <entry key="app/src/main/res/layout/rule_card.xml" value="0.5" />

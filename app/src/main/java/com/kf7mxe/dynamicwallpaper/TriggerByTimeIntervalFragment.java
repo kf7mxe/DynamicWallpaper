@@ -127,6 +127,7 @@ public class TriggerByTimeIntervalFragment extends Fragment {
             }
         });
 
+
         bindings.goToActionsFromTimeIntervalTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +139,6 @@ public class TriggerByTimeIntervalFragment extends Fragment {
                     navController.navigate(R.id.action_triggerByDateTimeFragment_to_selectActionsFragment, bundle);
                 } else {
                     Snackbar.make(bindings.getRoot(),"Fill required Fields",Snackbar.LENGTH_LONG).setAnchorView(bindings.timeToTriggerInput).show();
-
                 }
             }
         });
@@ -158,7 +158,7 @@ public class TriggerByTimeIntervalFragment extends Fragment {
         if(daysOfWeeks.length()==0){
             daysOfWeeks="none";
         }
-        return new TriggerByTimeInterval(enteredRepeatIntervalAmountInput,enteredRepeatIntervalTypeSpinner,timeToTrigger,daysOfWeeks);
+        return new TriggerByTimeInterval(enteredRepeatIntervalAmountInput,enteredRepeatIntervalTypeSpinner,timeToTrigger,daysOfWeeks,Boolean.toString(bindings.exactInterval.isChecked()));
     }
 
     public boolean requiredFieldsFilled(){

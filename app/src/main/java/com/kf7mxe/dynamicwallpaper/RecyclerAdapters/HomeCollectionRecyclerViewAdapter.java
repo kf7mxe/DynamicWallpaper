@@ -5,6 +5,7 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -142,7 +143,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
                 View divider = new View(m_context);
                 View actionDivider = new View(m_context);
                 int[] attrs = { android.R.attr.listDivider };
-                TypedArray ta = m_context.getApplicationContext().obtainStyledAttributes(attrs);
+                @SuppressLint("ResourceType") TypedArray ta = m_context.getApplicationContext().obtainStyledAttributes(attrs);
                 Drawable dividerBackground = ta.getDrawable(0);
                 ta.recycle();
                 divider.setBackground(dividerBackground);
@@ -178,7 +179,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
 
         if(m_collections.get(position).getId()==selectedId){
             viewHolder.card.setChecked(true);
-            viewHolder.selectButton.setEnabled(false);
+            viewHolder.selectButton.setText("Deselect");
         } else {
             viewHolder.card.setChecked(false);
             viewHolder.selectButton.setEnabled(true);
@@ -193,10 +194,21 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
                 Long testPreviousRemoveBroadcast = selectedId;
                 if(selectedId==0.0){
 
+                } else if (viewHolder.selectButton.getText().equals("Deselect")) {
+                    for (int i = 0; i < m_collections.size(); i++) {
+                        if (m_collections.get(i).getId() == selectedId) {
+                            m_collections.get(i).removeTriggersBroadcastRecievers(m_context);
+                            break;
+                        }
+                    }
+                    myEditor.putString("selectedCollection",Double.toString(0.0));
+                    myEditor.commit();
+                    notifyDataSetChanged();
+                    return;
                 } else {
-                    int indexToRemove = Integer.parseInt(selectedId.toString())-1;
-                    for(int i=0;i<m_collections.size();i++){
-                        if(m_collections.get(i).getId()==selectedId){
+                    int indexToRemove = Integer.parseInt(selectedId.toString()) - 1;
+                    for (int i = 0; i < m_collections.size(); i++) {
+                        if (m_collections.get(i).getId() == selectedId) {
                             m_collections.get(i).removeTriggersBroadcastRecievers(m_context);
                             break;
                         }
@@ -204,15 +216,15 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
                 }
                 myEditor.putString("selectedCollection",Long.toString(m_collections.get(item).getId()));
                 myEditor.commit();
-                notifyDataSetChanged();
                 selectedId = m_collections.get(item).getId();
                 m_collections.get(item).startTriggers(m_context);
-                viewHolder.selectButton.setEnabled(false);
+//                viewHolder.selectButton.setEnabled(false);
                 if(!viewHolder.card.isChecked()){
                     viewHolder.card.setChecked(true);
                 } else {
                     viewHolder.card.setChecked(false);
                 }
+                notifyDataSetChanged();
             }
         });
 
