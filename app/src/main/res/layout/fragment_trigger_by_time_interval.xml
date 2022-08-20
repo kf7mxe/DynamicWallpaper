@@ -6,7 +6,7 @@
     style="@style/Widget.MaterialComponents.Chip.Filter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_dynamic_primary95"
+    android:background="@color/md_theme_light_background"
     tools:context=".TriggerByTimeIntervalFragment">
 
     <!-- TODO: Update blank fragment layout -->

@@ -48,8 +48,11 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
         sharedPreferences = context.getSharedPreferences("sharedPrefrences",Context.MODE_PRIVATE);
         myEditor = sharedPreferences.edit();
         if(!sharedPreferences.getString("selectedCollection","").equals("")){
+            if(sharedPreferences.getString("selectedCollection","")=="0.0"){
+                selectedId = 0L;
+            }
             selectedId = Long.parseLong(sharedPreferences.getString("selectedCollection",""));
-        } else {selectedId=(long)0.0;}
+        } else {selectedId=(long)0;}
     }
 
     /**
@@ -192,7 +195,7 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
             public void onClick(View v) {
 
                 Long testPreviousRemoveBroadcast = selectedId;
-                if(selectedId==0.0){
+                if(selectedId==0L){
 
                 } else if (viewHolder.selectButton.getText().equals("Deselect")) {
                     for (int i = 0; i < m_collections.size(); i++) {

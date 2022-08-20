@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_dynamic_primary95"
+    android:background="@color/md_theme_light_background"
     tools:context=".TriggerByDateFragment">
 
     <!-- TODO: Update blank fragment layout -->

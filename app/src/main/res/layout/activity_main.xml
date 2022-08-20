@@ -9,8 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleCentered="true"
-        android:theme="@style/Theme.DynamicWallpaper.AppBarOverlay">
+        app:titleCentered="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -18,8 +17,9 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:titleCentered="true"
-            app:titleTextColor="@color/material_dynamic_primary95"
-            app:popupTheme="@style/Theme.DynamicWallpaper.PopupOverlay" />
+            app:titleTextColor="@color/md_theme_light_onPrimary"
+            app:navigationIcon="@drawable/ic_back_arrow"
+             />
 
     </com.google.android.material.appbar.AppBarLayout>
 
