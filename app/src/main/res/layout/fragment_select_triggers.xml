@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Location Event"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <RadioButton
             android:id="@+id/selectBySeasonTriggerRadio"
@@ -61,14 +61,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calendar Event"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <RadioButton
             android:id="@+id/selectTempretureTriggerRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tempreture / Weather"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RadioGroup>
 
     <Button

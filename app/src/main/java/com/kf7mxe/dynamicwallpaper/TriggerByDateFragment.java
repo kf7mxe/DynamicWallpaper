@@ -94,7 +94,6 @@ public class TriggerByDateFragment extends Fragment {
         bindings.goToActionsFromDateTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"test "+bindings.dateTextTriggerDateTextView.getText().toString().split(" ").length,Toast.LENGTH_LONG);
                 if(requiredFieldsFilled()){
 
                     String[] dateTrigger = bindings.dateTextTriggerDateTextView.getText().toString().split(" ");

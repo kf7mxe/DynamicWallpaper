@@ -89,10 +89,13 @@ public class SelectTriggersFragment extends Fragment {
                         navController.navigate(R.id.action_selectTriggersFragment_to_triggerByDateFragment,getArguments());
                         break;
                     case R.id.selectLocationTriggerRadio:
+                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerLocationFragment,getArguments());
                         break;
                     case R.id.selectCalendarEventTriggerRadio:
+                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerCalendarEventFragment,getArguments());
                         break;
                     case R.id.selectTempretureTriggerRadio:
+                        navController.navigate(R.id.action_selectTriggersFragment_to_triggerByWeatherFragment,getArguments());
                         break;
                     default:
                 }

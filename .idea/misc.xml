@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.192" />
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1315" />
         <entry key="app/src/main/res/drawable/ic_baseline_today_24.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/drawable/ic_go_to_next_image.xml" value="0.21197916666666666" />
@@ -35,7 +36,7 @@
         <entry key="app/src/main/res/layout/fragment_trigger_by_date_time.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/fragment_trigger_by_time_interval.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_trigger_calendar_event.xml" value="0.184375" />
-        <entry key="app/src/main/res/layout/fragment_trigger_location.xml" value="0.184375" />
+        <entry key="app/src/main/res/layout/fragment_trigger_location.xml" value="0.2404447533009034" />
         <entry key="app/src/main/res/layout/fragment_view_change_photo_order.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/fragment_view_wallpaper.xml" value="0.35280797101449274" />
         <entry key="app/src/main/res/layout/rule_card.xml" value="0.5" />

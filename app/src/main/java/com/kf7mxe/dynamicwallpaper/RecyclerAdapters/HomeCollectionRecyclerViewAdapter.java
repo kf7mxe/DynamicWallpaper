@@ -48,10 +48,11 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
         sharedPreferences = context.getSharedPreferences("sharedPrefrences",Context.MODE_PRIVATE);
         myEditor = sharedPreferences.edit();
         if(!sharedPreferences.getString("selectedCollection","").equals("")){
-            if(sharedPreferences.getString("selectedCollection","")=="0.0"){
+            if(sharedPreferences.getString("selectedCollection","").equals("0.0")){
                 selectedId = 0L;
+            } else {
+                selectedId = Long.parseLong(sharedPreferences.getString("selectedCollection",""));
             }
-            selectedId = Long.parseLong(sharedPreferences.getString("selectedCollection",""));
         } else {selectedId=(long)0;}
     }
 
@@ -201,11 +202,13 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
                     for (int i = 0; i < m_collections.size(); i++) {
                         if (m_collections.get(i).getId() == selectedId) {
                             m_collections.get(i).removeTriggersBroadcastRecievers(m_context);
+                            selectedId= 0L;
                             break;
                         }
                     }
                     myEditor.putString("selectedCollection",Double.toString(0.0));
                     myEditor.commit();
+                    viewHolder.selectButton.setText("Select");
                     notifyDataSetChanged();
                     return;
                 } else {

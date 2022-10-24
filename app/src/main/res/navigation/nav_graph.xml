@@ -45,6 +45,15 @@
         <action
             android:id="@+id/action_selectTriggersFragment_to_triggerByDateFragment"
             app:destination="@id/triggerByDateFragment" />
+        <action
+            android:id="@+id/action_selectTriggersFragment_to_triggerCalendarEventFragment"
+            app:destination="@id/triggerCalendarEventFragment" />
+        <action
+            android:id="@+id/action_selectTriggersFragment_to_triggerLocationFragment"
+            app:destination="@id/triggerLocationFragment" />
+        <action
+            android:id="@+id/action_selectTriggersFragment_to_triggerByWeatherFragment"
+            app:destination="@id/triggerByWeatherFragment" />
     </fragment>
     <fragment
         android:id="@+id/triggerByDateTimeFragment"
@@ -114,5 +123,31 @@
         <action
             android:id="@+id/action_viewWallpaperFragment_to_viewChangePhotoOrderFragment"
             app:destination="@id/viewChangePhotoOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triggerCalendarEventFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.TriggerCalendarEventFragment"
+        android:label="fragment_trigger_calendar_event"
+        tools:layout="@layout/fragment_trigger_calendar_event" >
+        <action
+            android:id="@+id/action_triggerCalendarEventFragment_to_selectActionsFragment"
+            app:destination="@id/selectActionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triggerLocationFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.TriggerLocationFragment"
+        android:label="fragment_trigger_location"
+        tools:layout="@layout/fragment_trigger_location" >
+        <action
+            android:id="@+id/action_triggerLocationFragment_to_selectActionsFragment"
+            app:destination="@id/selectActionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triggerByWeatherFragment"
+        android:name="com.kf7mxe.dynamicwallpaper.TriggerByWeatherFragment"
+        android:label="TriggerByWeatherFragment" >
+        <action
+            android:id="@+id/action_triggerByWeatherFragment_to_selectActionsFragment"
+            app:destination="@id/selectActionsFragment" />
     </fragment>
 </navigation>
