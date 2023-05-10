@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,10 @@ import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
 import com.kf7mxe.dynamicwallpaper.models.Trigger;
 import com.kf7mxe.dynamicwallpaper.models.TriggerByDate;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByLocation;
 import com.kf7mxe.dynamicwallpaper.models.TriggerByTimeInterval;
 import com.kf7mxe.dynamicwallpaper.models.TriggerBySeason;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByWeather;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 /**
@@ -93,6 +96,7 @@ public class SelectActionsFragment extends Fragment  {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             Bundle recievingBundle = getArguments();
+
             switch (recievingBundle.getString("TriggerType")){
                 case "triggerByTimeInterval":
                     trigger = new TriggerByTimeInterval(recievingBundle.getString("Trigger"));
@@ -102,9 +106,15 @@ public class SelectActionsFragment extends Fragment  {
                     break;
                 case "triggerByDate":
                     trigger = new TriggerByDate(recievingBundle.getString("Trigger"));
+                    break;
+                case "triggerByWeather":
+                    trigger = new TriggerByWeather(recievingBundle.getString("Trigger"));
+                    break;
+                case "triggerByLocation":
+                    trigger = new TriggerByLocation(recievingBundle.getString("Trigger"));
+                    break;
             }
         }
-
     }
 
     @Override

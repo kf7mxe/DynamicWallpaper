@@ -140,7 +140,7 @@ public class TriggerLocationFragment extends Fragment {
                 triggerByLocation.setLatitude(latitude);
                 triggerByLocation.setLongitude(longitude);
                 triggerByLocation.setRadius(Double.toString(getRadius()));
-                bundle.putString("triggerType", "triggerByLocation");
+                bundle.putString("TriggerType", "triggerByLocation");
                 bundle.putString("Trigger", triggerByLocation.toString());
                 navController.navigate(R.id.action_triggerLocationFragment_to_selectActionsFragment, bundle);
             }

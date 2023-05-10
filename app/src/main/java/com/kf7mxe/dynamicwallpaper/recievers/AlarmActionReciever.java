@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.kf7mxe.dynamicwallpaper.database.RoomDB;
 import com.kf7mxe.dynamicwallpaper.models.Action;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.models.Trigger;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByWeather;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 public class AlarmActionReciever extends BroadcastReceiver {
@@ -24,7 +26,15 @@ public class AlarmActionReciever extends BroadcastReceiver {
         }
         Collection selectedCollection = database.mainDao().getCollectionById(intent.getLongExtra("selectedCollection", (long) 0.0));
         int test = intent.getIntExtra("actionIndex",20);
-        selectedCollection.runAction(intent.getIntExtra("actionIndex",0),context);
-        database.mainDao().updateCollection(selectedCollection);
+        Trigger trigger = selectedCollection.getSpecificRule(intent.getIntExtra("actionIndex",0)).getTrigger();
+        if (trigger.getTriggerType()=="triggerByWeather"){
+            TriggerByWeather triggerByWeather = (TriggerByWeather) trigger;
+            triggerByWeather.removeWeatherTriggersToUpdate(context);
+            triggerByWeather.setWeatherTriggersToUpdate(context);
+        } else {
+            selectedCollection.runAction(intent.getIntExtra("actionIndex",0),context);
+            database.mainDao().updateCollection(selectedCollection);
+        }
+
     }
 }

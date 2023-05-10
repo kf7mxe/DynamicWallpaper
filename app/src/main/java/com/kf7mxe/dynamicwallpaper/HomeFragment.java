@@ -2,6 +2,7 @@ package com.kf7mxe.dynamicwallpaper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -60,6 +61,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
         collectionList = collectionViewModel.getAllCollections();
         List <Collection> cache = collectionViewModel.getAllCacheCollections();
@@ -78,9 +82,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         binding = FragmentHomeBinding.inflate(getLayoutInflater());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            //get dynamic color
+
+
+
+            //android.R.color.system_accent1_0
+
+
+            //binding.fab.setBackgroundColor();
+        }
         fragmentManager = getActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
 

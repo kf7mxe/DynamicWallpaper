@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.navigation.NavController;
@@ -15,8 +16,18 @@ import com.google.android.material.color.DynamicColors;
 import com.kf7mxe.dynamicwallpaper.databinding.ActivityMainBinding;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
+import android.os.Debug;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,9 +38,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
+        // if device is running android 12
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+        }
+
+
+//        String addressToGet = "https://ipapi.co/24.48.0.1/latlong/";
+//
+//        // make a request to get the json object using okhttp
+//        OkHttpClient client = new OkHttpClient();
+//        // make a request with a get request method and the address to get
+//        Request request = new Request.Builder()
+//                .url(addressToGet)
+//                .build();
+
+
+//        super.setTheme();
+
+
+
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);

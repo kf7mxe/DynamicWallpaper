@@ -5,133 +5,210 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Update Forecase in background every:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weatherRadioGroup" />
 
-    <RadioGroup
-        android:id="@+id/weatherRadioGroup"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RadioButton
-            android:id="@+id/whenTempretureIsRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="When tempreture is:" />
-
-        <EditText
-            android:id="@+id/whenTempretureIsEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:minHeight="48dp"
-            android:visibility="gone" />
-
-        <RadioButton
-            android:id="@+id/whenTempretureIsLessThan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="when Tempreture is less than:" />
-
-        <EditText
-            android:id="@+id/whenTempretureIsLessThanEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:minHeight="48dp"
-            android:visibility="gone" />
-
-        <RadioButton
-            android:id="@+id/whenTempretureIsGreaterThanRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="When tempreture is greater than:" />
-
-        <EditText
-            android:id="@+id/whenTempretureIsGreaterThanEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:minHeight="48dp"
-            android:visibility="gone" />
-
-        <RadioButton
-            android:id="@+id/whenTempretureIsBetweenRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="When tempreture is between:" />
-
         <LinearLayout
-            android:id="@+id/whenTempretureIsBetweenLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-            >
-
-            <EditText
-                android:id="@+id/lowEndTempretureEditText"
-                android:layout_width="0dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number" />
+                android:text="Weather Triggers"
+                />
 
             <TextView
-                android:id="@+id/textView12"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:text="And" />
+                android:id="@+id/textView17"
+                android:layout_width="235dp"
+                android:layout_height="16dp"
+                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:text="Update Forecase in background every:"
+                 />
 
-            <EditText
-                android:id="@+id/highEndTempretureEditText"
-                android:layout_width="0dp"
+            <RadioGroup
+                android:id="@+id/weatherRadioGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number" />
+                android:padding="16dp"
+                >
+
+                <RadioButton
+                    android:id="@+id/whenTempretureIsRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="When tempreture is:" />
+
+                <EditText
+                    android:id="@+id/whenTempretureIsEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/whenTempretureIsLessThanEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:visibility="gone" />
+
+                <RadioButton
+                    android:id="@+id/whenTempretureIsLessThan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="when Tempreture is less than:" />
+
+                <RadioButton
+                    android:id="@+id/whenTempretureIsGreaterThanRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="When tempreture is greater than:" />
+
+                <EditText
+                    android:id="@+id/whenTempretureIsGreaterThanEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:visibility="gone" />
+
+                <RadioButton
+                    android:id="@+id/whenTempretureIsBetweenRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="When tempreture is between:" />
+
+                <LinearLayout
+                    android:id="@+id/whenTempretureIsBetweenLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    >
+
+                    <EditText
+                        android:id="@+id/lowEndTempretureEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="And"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:id="@+id/highEndTempretureEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <RadioButton
+                    android:id="@+id/whenWeatherConditionsRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="When it is:" />
+
+                <Spinner
+                    android:id="@+id/whenItIsWeatherCondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:visibility="gone" />
+            </RadioGroup>
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Interval" />
+
+            <Spinner
+                android:id="@+id/updateForcasdEverySpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:minHeight="48dp" />
+
+
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weather Location" />
+
+            <RadioGroup
+                android:id="@+id/locationTypeRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+>
+
+                <RadioButton
+                    android:id="@+id/ipAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="By IP address" />
+
+                <RadioButton
+                    android:id="@+id/currentLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Requires Background Location Permission"
+                    android:text="Current Location" />
+
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Requires Background Location Permission" />
+
+                <RadioButton
+                    android:id="@+id/specificSetLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Specific Set Location" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/specificSetLocationEditText"
+                        android:hint="Please input a latitude (latitude first) and longitude coordinate seperated by a comma ie:38.8894,-77.0352" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </RadioGroup>
+
+
 
         </LinearLayout>
-
-        <RadioButton
-            android:id="@+id/whenItIsRadioRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="When it is:" />
-
-        <Spinner
-            android:id="@+id/whenItIsWeatherType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:visibility="gone" />
-    </RadioGroup>
-
-    <Spinner
-        android:id="@+id/updateForcasdEverySpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.443"
-        app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/weatherRadioGroup" />
+    </ScrollView>
 
     <View
         android:id="@+id/divider2"
@@ -151,5 +228,7 @@
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

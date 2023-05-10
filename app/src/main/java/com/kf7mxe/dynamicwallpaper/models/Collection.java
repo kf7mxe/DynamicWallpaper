@@ -10,13 +10,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.Toast;
+import com.google.android.gms.location.Geofence;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever;
+import com.kf7mxe.dynamicwallpaper.recievers.AlarmUpdateWeatherActionReciever;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +55,8 @@ public class Collection implements Serializable{
     @ColumnInfo(name="photo_names")
     @TypeConverters(com.kf7mxe.dynamicwallpaper.utilis.PhotoNamesTypeConverter.class)
     private ArrayList<String> photoNames ;
+
+
 
     public Collection(){
         this.name="";
@@ -103,6 +110,10 @@ public class Collection implements Serializable{
         return rules;
     }
 
+    public Rule getSpecificRule(int index){
+        return rules.get(index);
+    }
+
     public int getSelectedImageIndex() {
         return selectedImageIndex;
     }
@@ -138,11 +149,16 @@ public class Collection implements Serializable{
     public void removeTriggersBroadcastRecievers(Context context){
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         for(int i=0;i<this.getRules().size();i++){
+
+            if(this.getSpecificRule(i).getTrigger().getTriggerType()=="triggerByWeather"){
+                TriggerByWeather triggerByWeather = (TriggerByWeather) this.getSpecificRule(i).getTrigger();
+                triggerByWeather.removeWeatherTriggersToUpdate(context);
+            }
+
             Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
             PendingIntent pi=null;
                 intent.putExtra("selectedCollection", getId());
                 intent.putExtra("actionIndex",i);
-            //intent.putExtra("actionToRun",action)
                 pi = PendingIntent.getBroadcast(context,getIdAsInt()+1001+i, intent
                         , PendingIntent.FLAG_MUTABLE);
 
@@ -168,6 +184,11 @@ public class Collection implements Serializable{
                 case "triggerByDate":
                     createAlarmForDateTrigger(context,trigger,i);
                     break;
+                case "triggerByWeather":
+                    createAlarmForWeatherTrigger(context,trigger,i);
+                    break;
+                case "triggerByLocation":
+                    createTriggersForLocation(context,trigger,i);
                 default:
                     break;
             }
@@ -382,7 +403,6 @@ public class Collection implements Serializable{
         startTime.set(Calendar.MINUTE,trigger.getMinuteToStartTrigger());
         if(trigger.getRepeatIntervalType().equals("Week")){
 //            trigger.getRepeatDayOfWeek().contains("monday");
-//
 //            startTime.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
 //            startTime.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
 //            startTime.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
@@ -397,7 +417,6 @@ public class Collection implements Serializable{
 
         am.setRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
                 interval, pi);
-        Toast.makeText(context, "in Set alarm", Toast.LENGTH_SHORT).show();
     }
 
     public void createAlarmForSeasons(Context context,Trigger trigger,int triggerIndex){
@@ -456,6 +475,61 @@ public class Collection implements Serializable{
         long interval = endTime.getTimeInMillis()- startTime.getTimeInMillis();
         am.setRepeating(AlarmManager.RTC_WAKEUP,startTime.getTimeInMillis(),
                 interval, pi);
+    }
+
+    public void createAlarmForWeatherTrigger(Context context,Trigger trigger,int triggerIndex){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context.getApplicationContext(), AlarmUpdateWeatherActionReciever.class);
+        PendingIntent pi=null;
+        intent.putExtra("selectedCollection",id);
+        intent.putExtra("actionIndex",triggerIndex);
+
+        pi = PendingIntent.getBroadcast(context, getIdAsInt()+1001+triggerIndex,intent
+                ,PendingIntent.FLAG_MUTABLE);
+        TriggerByWeather triggerByWeather = TriggerByWeather.class.cast(trigger);
+
+        String updateEvery = triggerByWeather.getUpdateForcastEvery();
+        switch (updateEvery){
+            case "Hourly":
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                        AlarmManager.INTERVAL_HOUR, pi);
+                break;
+            case "6 Hours":
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                        AlarmManager.INTERVAL_DAY/4, pi);
+                break;
+            case "12 Hours":
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                        AlarmManager.INTERVAL_DAY/2, pi);
+                break;
+            case "24 Hours":
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                        AlarmManager.INTERVAL_DAY, pi);
+                break;
+
+                case "2 Days":
+
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                        AlarmManager.INTERVAL_DAY *2, pi);
+                break;
+            default:
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                        AlarmManager.INTERVAL_DAY, pi);
+                break;
+        }
+    }
+
+    public void createTriggersForLocation(Context context,Trigger trigger,int triggerIndex){
+//       GeofencingClient geofencingClient = LocationServices.getGeofencingClient(context);
+//
+//        Geofence geofence = new Geofence.Builder()
+//                .setRequestId()
+//                .setCircularRegion()
+//                .setExpirationDuration()
+//                .setTransitionTypes()
+//                .build();
+//
+//        GeofencingRequest
     }
 
 }
