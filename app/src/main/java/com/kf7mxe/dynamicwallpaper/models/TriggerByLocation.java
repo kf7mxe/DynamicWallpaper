@@ -1,5 +1,7 @@
 package com.kf7mxe.dynamicwallpaper.models;
 
+import com.google.android.gms.location.Geofence;
+
 import java.io.Serializable;
 
 public class TriggerByLocation extends Trigger implements Serializable {
@@ -8,14 +10,18 @@ public class TriggerByLocation extends Trigger implements Serializable {
     private String longitude;
     private String radius;
 
+    private String endEnterTrigger;
+
     public TriggerByLocation(){
 
     }
 
     public TriggerByLocation(String newLatitude, String newLongitude, String newRadius){
+
         this.latitude = newLatitude;
         this.longitude = newLongitude;
         this.radius = newRadius;
+        this.endEnterTrigger = "enter";
     }
 
     public TriggerByLocation(String splitString){
@@ -71,6 +77,13 @@ public class TriggerByLocation extends Trigger implements Serializable {
         this.radius = radius;
     }
 
+    public int getEndEnterTrigger() {
+        if (endEnterTrigger.equals("enter")) {
+            return Geofence.GEOFENCE_TRANSITION_ENTER;
+        } else {
+            return Geofence.GEOFENCE_TRANSITION_EXIT;
+        }
+    }
 
     public String myToString(){
         return this.latitude+"~triggerDateTime~"+this.longitude+"~triggerDateTime~"+this.radius+"~triggerTypeDeliminator~"+this.triggerType;

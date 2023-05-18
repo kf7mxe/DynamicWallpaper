@@ -17,7 +17,6 @@
         app:cardCornerRadius="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="3dp"
-        app:cardBackgroundColor="?attr/colorSecondaryContainer"
         tools:layout_editor_absoluteX="5dp">
 
         <LinearLayout
@@ -134,14 +133,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:textColor="?attr/colorOnPrimary"
                     android:text="Select"
                     />
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editCollectionCardButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnPrimary"
                     android:text="Edit"
                     />
             </LinearLayout>

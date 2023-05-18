@@ -29,8 +29,10 @@ public class AlarmActionReciever extends BroadcastReceiver {
         Trigger trigger = selectedCollection.getSpecificRule(intent.getIntExtra("actionIndex",0)).getTrigger();
         if (trigger.getTriggerType()=="triggerByWeather"){
             TriggerByWeather triggerByWeather = (TriggerByWeather) trigger;
-            triggerByWeather.removeWeatherTriggersToUpdate(context);
-            triggerByWeather.setWeatherTriggersToUpdate(context);
+            triggerByWeather.removeWeatherTriggersToUpdate(context,intent.getIntExtra("actionIndex",0),(int)intent.getLongExtra("selectedCollection", (long) 0.0));
+            triggerByWeather.setWeatherTriggersToUpdate(context,intent.getIntExtra("actionIndex",0),(int)intent.getLongExtra("selectedCollection", (long) 0.0));
+
+            database.mainDao().updateCollection(selectedCollection); // might not work if the triger is not updated by referenced
         } else {
             selectedCollection.runAction(intent.getIntExtra("actionIndex",0),context);
             database.mainDao().updateCollection(selectedCollection);

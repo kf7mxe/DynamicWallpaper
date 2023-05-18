@@ -16,6 +16,7 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.google.type.DateTime;
 import com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever;
 
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,6 +56,8 @@ public class TriggerByWeather extends Trigger implements Serializable {
     private String location = "auto";
     private String latLocation;
     private String longLocation;
+
+    private String weatherTriggersAmount ="";
 
     public TriggerByWeather(){
 
@@ -126,6 +130,11 @@ public class TriggerByWeather extends Trigger implements Serializable {
         if (triggerDateTimeSplit.length>2) {
             if (!triggerDateTimeSplit[9].equals("null")) {
                 this.longLocation = triggerDateTimeSplit[9];
+            }
+        }
+        if (triggerDateTimeSplit.length>2) {
+            if (!triggerDateTimeSplit[10].equals("null")) {
+                this.weatherTriggersAmount = triggerDateTimeSplit[10];
             }
         }
     }
@@ -276,30 +285,35 @@ public class TriggerByWeather extends Trigger implements Serializable {
         returnString = returnString + "~triggerByWeather~";
         if (this.latLocation != null) {
             returnString = returnString + "~triggerByWeather~" + this.latLocation;
-        } else {
+        } else if (this.weatherTriggersAmount != null){
+            returnString = returnString + "~triggerByWeather~" + this.weatherTriggersAmount;
+        }
+        else {
             returnString = returnString + "~triggerByWeather~" + "null";
         }
         returnString = returnString + "~triggerByWeather~";
         return returnString;
     }
 
-    public void removeWeatherTriggersToUpdate(Context context) {
+    public void removeWeatherTriggersToUpdate(Context context,int actionIndex, int collection) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        for(int i=0;i<this.getRules().size();i++){
-//            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
-//            PendingIntent pi=null;
-//            intent.putExtra("selectedCollection", getId());
-//            intent.putExtra("actionIndex",i);
-//            pi = PendingIntent.getBroadcast(context,getIdAsInt()+1001+i, intent
-//                    , PendingIntent.FLAG_MUTABLE);
-//
-//            if(pi!=null){
-//                am.cancel(pi);
-//            }
-//        }
+        int weatherTriggerAmount = Integer.parseInt(this.weatherTriggersAmount);
+        for(int i=0;i<weatherTriggerAmount;i++){
+            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            PendingIntent pi=null;
+            intent.putExtra("selectedCollection", collection);
+            intent.putExtra("actionIndex",actionIndex);
+            intent.putExtra("weatherTriggerIndex",i);
+            pi = PendingIntent.getBroadcast(context,collection+1001+actionIndex+i, intent
+                    , PendingIntent.FLAG_MUTABLE);
+
+            if(pi!=null){
+                am.cancel(pi);
+            }
+        }
     }
 
-    public void setWeatherTriggersToUpdate(Context context){
+    public void setWeatherTriggersToUpdate(Context context, int actionIndex,int collection){
         if (locationType.equals("ipAddress")) {
             Pair<String,String> latLong = getLatLonFromIp();
             if (latLong == null) {
@@ -308,9 +322,7 @@ public class TriggerByWeather extends Trigger implements Serializable {
             String url = getWeatherUrl(latLong);
             JSONArray weatherJsonArray= getWeatherForcast(url);
 
-            setUpWeatherPredictionTriggers(weatherJsonArray);
-
-
+            setUpWeatherPredictionTriggers(weatherJsonArray, context, actionIndex,collection);
 
         }
         if (locationType.equals("specificLocation")) {
@@ -326,25 +338,182 @@ public class TriggerByWeather extends Trigger implements Serializable {
 
     }
 
-    public void setUpWeatherPredictionTriggers(JSONArray weatherDays) {
+    public void setUpWeatherPredictionTriggers(JSONArray weatherDays, Context context, int actionIndex,int collection) {
         if (weatherDays == null) {
             return;
+        }
+        int numberPeriodsToPredict = 0;
+        switch (updateForcastEvery) {
+            case "Hourly":
+                numberPeriodsToPredict = 1;
+                break;
+            case "6 Hours":
+                numberPeriodsToPredict = 6;
+                break;
+            case "12 Hours":
+                numberPeriodsToPredict = 12;
+                break;
+            case "24 Hourse":
+                numberPeriodsToPredict = 24;
+                break;
+            case "2 Days":
+                numberPeriodsToPredict = 48;
+                break;
+            default:
+                numberPeriodsToPredict = 48;
+                break;
         }
 
 //        ArrayList<String> oneDay
 
         updateForcastEveryOptions.indexOf("24 Hours");
 
-        int numberOfDaysToPredict = 0;
-//        int currentDaysPrediction = 0;
-//        for (int i = 0; i < weatherDays.length(); i++) {
-//            try {
-//
-//            }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+        String whenTempretureIsLastSet = "null";
+        String whenTempretureIsLessThanLastSet = "null";
+        String whenTempretureIsGreaterThanLastSet = "null";
+        String betweenLastSet = "null";
+        String weatherConditionLastSet = "null";
 
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        int intentIndex = 0;
+        for (int i = 0; i < numberPeriodsToPredict; i++) {
+            Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
+            intent.putExtra("selectedCollection", collection);
+            intent.putExtra("actionIndex", actionIndex);
+            intent.putExtra("weatherTriggerIndex",intentIndex);
+            PendingIntent pi=null;
+
+            pi = PendingIntent.getBroadcast(context,collection+1001+actionIndex+intentIndex, intent
+                    , PendingIntent.FLAG_MUTABLE);
+
+
+            if (whenTempretureIs != null && !whenTempretureIs.equals("null")) {
+                try {
+                    JSONObject period = (JSONObject) weatherDays.get(i);
+                    String periodTemperature = period.getString("temperature");
+                    String periodTime = period.getString("startTime");
+
+                    ZonedDateTime zdt = ZonedDateTime.parse(periodTime);
+                    long timeInMilliseconds = zdt.toInstant().toEpochMilli();
+
+                    if (periodTemperature == whenTempretureIs && whenTempretureIsLastSet !=periodTemperature) {
+                        whenTempretureIsLastSet = periodTemperature;
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                    } else if(periodTemperature == whenTempretureIs ){
+                        whenTempretureIsLastSet = periodTemperature;
+                    }else {
+                        whenTempretureIsLastSet = "null";
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (whenTempretureIsLessThan != null && !whenTempretureIsLessThan.equals("null")) {
+                try {
+                    JSONObject period = (JSONObject) weatherDays.get(i);
+                    String periodTemperature = period.getString("temperature");
+
+                    String periodTime = period.getString("startTime");
+                    ZonedDateTime zdt = ZonedDateTime.parse(periodTime);
+                    long timeInMilliseconds = zdt.toInstant().toEpochMilli();
+
+                    if(Integer.parseInt(periodTemperature) < Integer.parseInt(whenTempretureIsLessThan) && whenTempretureIsLessThanLastSet.equals("null") ) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        whenTempretureIsLessThanLastSet = periodTemperature;
+                    } else if (Integer.parseInt(periodTemperature) < Integer.parseInt(whenTempretureIsLessThan)
+                            && Integer.parseInt(periodTemperature) > Integer.parseInt(whenTempretureIsLessThanLastSet) )
+                    {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        whenTempretureIsLessThanLastSet = periodTemperature;
+                    } else {
+                        whenTempretureIsLessThanLastSet = "null";
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (whenTempretureIsGreaterThan != null && !whenTempretureIsGreaterThan.equals("null")) {
+                try {
+                    JSONObject period = (JSONObject) weatherDays.get(i);
+                    String periodTemperature = period.getString("temperature");
+                    String periodTime = period.getString("startTime");
+                    ZonedDateTime zdt = ZonedDateTime.parse(periodTime);
+                    long timeInMilliseconds = zdt.toInstant().toEpochMilli();
+
+                    if(Integer.parseInt(periodTemperature) > Integer.parseInt(whenTempretureIsGreaterThan)
+                    && whenTempretureIsGreaterThanLastSet.equals("null")) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        whenTempretureIsGreaterThanLastSet = periodTemperature;
+                    } else if (Integer.parseInt(periodTemperature) > Integer.parseInt(whenTempretureIsGreaterThan)
+                            && Integer.parseInt(periodTemperature) < Integer.parseInt(whenTempretureIsGreaterThanLastSet)) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        whenTempretureIsGreaterThanLastSet = periodTemperature;
+                    } else {
+                        whenTempretureIsGreaterThanLastSet = "null";
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (betweenLowEndTempreture != null && !betweenLowEndTempreture.equals("null")
+                    && betweenHighEndTempreture != null && !betweenHighEndTempreture.equals("null")
+            ) {
+                try {
+                    JSONObject period = (JSONObject) weatherDays.get(i);
+                    String periodTemperature = period.getString("temperature");
+                    String periodTime = period.getString("startTime");
+                    ZonedDateTime zdt = ZonedDateTime.parse(periodTime);
+                    long timeInMilliseconds = zdt.toInstant().toEpochMilli();
+
+                    if(Integer.parseInt(periodTemperature) > Integer.parseInt(betweenLowEndTempreture)
+                            && Integer.parseInt(periodTemperature) < Integer.parseInt(betweenHighEndTempreture) &&
+                            betweenLastSet.equals("null")) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        betweenLastSet = periodTemperature;
+                    } else if(Integer.parseInt(periodTemperature) > Integer.parseInt(betweenLowEndTempreture)
+                            && Integer.parseInt(periodTemperature) < Integer.parseInt(betweenHighEndTempreture) &&
+                            (Integer.parseInt(betweenLowEndTempreture) < Integer.parseInt(betweenLastSet) || Integer.parseInt(betweenHighEndTempreture) > Integer.parseInt(betweenLastSet))) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        betweenLastSet = periodTemperature;
+                    } else {
+                        betweenLastSet = "null";
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (weatherCondition != null && !weatherCondition.equals("null")) {
+                try {
+                    JSONObject period = (JSONObject) weatherDays.get(i);
+                    String periodWeatherCondition = period.getString("weatherCondition");
+                    String periodTime = period.getString("startTime");
+                    ZonedDateTime zdt = ZonedDateTime.parse(periodTime);
+                    long timeInMilliseconds = zdt.toInstant().toEpochMilli();
+                    if(periodWeatherCondition.equals(weatherCondition) && weatherConditionLastSet.equals("null")) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        weatherConditionLastSet = periodWeatherCondition;
+                    } else if (periodWeatherCondition.equals(weatherCondition) && !weatherConditionLastSet.equals(weatherCondition)) {
+                        am.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pi);
+                        intentIndex++;
+                        weatherConditionLastSet = periodWeatherCondition;
+                    } else {
+                        weatherConditionLastSet = "null";
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        this.weatherTriggersAmount = Integer.toString(intentIndex);
     }
 
     public Pair<String,String> getLatLonFromIp(){
@@ -382,7 +551,7 @@ public class TriggerByWeather extends Trigger implements Serializable {
             // convert response to JSONObject
             String resonseString = response.body().toString();
             JSONObject returnJson = new JSONObject(resonseString);
-            getWeatherUrlForCooridinates = (String) returnJson.get("properties.forecast");
+            getWeatherUrlForCooridinates = (String) returnJson.get("properties.forecastHourly");
 
 
         } catch (IOException e) {

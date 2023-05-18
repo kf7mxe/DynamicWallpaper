@@ -14,14 +14,18 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.color.DynamicColors;
 import com.kf7mxe.dynamicwallpaper.databinding.ActivityMainBinding;
+import com.kf7mxe.dynamicwallpaper.utilis.DynamicColorUtils;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 import android.os.Debug;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         // if device is running android 12
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+
+
+            DynamicColorUtils dynamicColorUtils = new DynamicColorUtils();
+            dynamicColorUtils.setDynamicColor(binding.getRoot(),this);
 
         }
 
@@ -109,5 +118,8 @@ public class MainActivity extends AppCompatActivity {
         CollectionViewModel collectionViewModel =new CollectionViewModel(getApplication(),this);
         collectionViewModel.deleteAllItemsInCache();
     }
+
+
+
 
 }

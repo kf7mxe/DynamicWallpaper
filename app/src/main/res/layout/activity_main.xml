@@ -16,10 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:tag=""
             app:titleCentered="true"
             app:titleTextColor="@color/md_theme_light_onPrimary"
             app:navigationIcon="@drawable/ic_back_arrow"
-             />
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
