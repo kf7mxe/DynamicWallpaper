@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TriggerLocationFragment">
+    android:layout_height="match_parent">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    tools:context=".TriggerLocationFragment" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -38,7 +44,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"></org.osmdroid.views.MapView>
+        app:layout_constraintTop_toBottomOf="@+id/enterExitTriggerGroup">
+
+    </org.osmdroid.views.MapView>
 
     <View
         android:id="@+id/divider2"
@@ -69,8 +77,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
+        <RadioGroup
+        android:id="@+id/enterExitTriggerGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,16 +87,28 @@
         app:layout_constraintTop_toBottomOf="@+id/title">
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/enterTrigger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Enter" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/exitTrigger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Exit" />
     </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/getMyLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="86dp"
+        android:layout_marginEnd="24dp"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@drawable/baseline_my_location" />
+
+</FrameLayout>

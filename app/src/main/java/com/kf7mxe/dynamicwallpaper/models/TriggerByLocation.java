@@ -33,7 +33,7 @@ public class TriggerByLocation extends Trigger implements Serializable {
                 tempString = temp[1];
             }
         }
-        String[] triggerDateTimeSplit = tempString.split("~triggerDateTime~");
+        String[] triggerDateTimeSplit = tempString.split("~triggerByLocation~");
         if (triggerDateTimeSplit.length>1) {
             this.latitude = triggerDateTimeSplit[0];
         }
@@ -42,6 +42,9 @@ public class TriggerByLocation extends Trigger implements Serializable {
         }
         if (triggerDateTimeSplit.length>2) {
             this.radius = triggerDateTimeSplit[2];
+        }
+        if (triggerDateTimeSplit.length>3) {
+            this.endEnterTrigger = triggerDateTimeSplit[3];
         }
     }
 
@@ -77,6 +80,10 @@ public class TriggerByLocation extends Trigger implements Serializable {
         this.radius = radius;
     }
 
+    public void setEndEnterTrigger(String endEnterTrigger) {
+        this.endEnterTrigger = endEnterTrigger;
+    }
+
     public int getEndEnterTrigger() {
         if (endEnterTrigger.equals("enter")) {
             return Geofence.GEOFENCE_TRANSITION_ENTER;
@@ -86,6 +93,9 @@ public class TriggerByLocation extends Trigger implements Serializable {
     }
 
     public String myToString(){
-        return this.latitude+"~triggerDateTime~"+this.longitude+"~triggerDateTime~"+this.radius+"~triggerTypeDeliminator~"+this.triggerType;
+        return this.triggerType +"~triggerTypeDeliminator~" +  this.latitude+"~triggerByLocation~"
+                +this.longitude+"~triggerByLocation~"
+                +this.radius+"triggerByLocation+"+this.triggerType;
+
     }
 }

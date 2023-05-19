@@ -71,6 +71,8 @@ public class TriggerLocationFragment extends Fragment {
 
     double latitude, longitude;
 
+    private String endEnterTrigger = "enter";
+
 
     public TriggerLocationFragment() {
         // Required empty public constructor
@@ -126,11 +128,27 @@ public class TriggerLocationFragment extends Fragment {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
 
+
+        binding.getMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocation();
+            }
+        });
+
         binding.map.setBuiltInZoomControls(true);
         binding.map.setMultiTouchControls(true);
 
         MyLocationNewOverlay myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()),binding.map);
         myLocationNewOverlay.enableMyLocation();
+
+        binding.enterExitTriggerGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if(checkedId == R.id.enterTrigger){
+                endEnterTrigger = "enter";
+            }else if(checkedId == R.id.exitTrigger){
+                endEnterTrigger = "exit";
+            }
+        });
 
         binding.goToActionsFromDateTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +158,7 @@ public class TriggerLocationFragment extends Fragment {
                 triggerByLocation.setLatitude(latitude);
                 triggerByLocation.setLongitude(longitude);
                 triggerByLocation.setRadius(Double.toString(getRadius()));
+                triggerByLocation.setEndEnterTrigger(endEnterTrigger);
                 bundle.putString("TriggerType", "triggerByLocation");
                 bundle.putString("Trigger", triggerByLocation.toString());
                 navController.navigate(R.id.action_triggerLocationFragment_to_selectActionsFragment, bundle);

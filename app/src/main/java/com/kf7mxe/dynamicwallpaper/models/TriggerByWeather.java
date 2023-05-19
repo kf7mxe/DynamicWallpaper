@@ -234,7 +234,7 @@ public class TriggerByWeather extends Trigger implements Serializable {
     }
 
     public String myToString(){
-        String returnString = "";
+        String returnString = this.triggerType +"~triggerTypeDeliminator~";
         if (this.whenTempretureIs != null) {
             returnString = returnString + this.whenTempretureIs;
         } else {
@@ -291,7 +291,6 @@ public class TriggerByWeather extends Trigger implements Serializable {
         else {
             returnString = returnString + "~triggerByWeather~" + "null";
         }
-        returnString = returnString + "~triggerByWeather~";
         return returnString;
     }
 
