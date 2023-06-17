@@ -11,6 +11,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -42,7 +44,7 @@
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".GeofenceBroadcastReceiver"/>
+        <receiver android:name=".recievers.GeofenceBroadcastReceiver"/>
 
 
         <receiver android:name=".recievers.BootCompleteIntentReciever" android:enabled="true" android:exported="true" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">

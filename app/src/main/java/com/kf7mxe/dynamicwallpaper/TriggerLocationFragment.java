@@ -124,15 +124,22 @@ public class TriggerLocationFragment extends Fragment {
         binding.map.setTileSource(TileSourceFactory.MAPNIK);
 
         requestPermissionsIfNecessary(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
         });
 
 
         binding.getMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getLocation();
+                try {
+                    getLocation();
+                    GeoPoint currentLocation = new GeoPoint(latitude, longitude);
+                    mapController = binding.map.getController();
+                    mapController.setCenter(currentLocation);
+                    mapController.setZoom(15);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -153,14 +160,14 @@ public class TriggerLocationFragment extends Fragment {
         binding.goToActionsFromDateTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
+                Bundle bundle = getArguments();
                 TriggerByLocation triggerByLocation = new TriggerByLocation();
                 triggerByLocation.setLatitude(latitude);
                 triggerByLocation.setLongitude(longitude);
                 triggerByLocation.setRadius(Double.toString(getRadius()));
                 triggerByLocation.setEndEnterTrigger(endEnterTrigger);
                 bundle.putString("TriggerType", "triggerByLocation");
-                bundle.putString("Trigger", triggerByLocation.toString());
+                bundle.putString("Trigger", triggerByLocation.myToString());
                 navController.navigate(R.id.action_triggerLocationFragment_to_selectActionsFragment, bundle);
             }
         });
@@ -225,7 +232,7 @@ public class TriggerLocationFragment extends Fragment {
 
             mapController = binding.map.getController();
             mapController.setCenter(currentLocation);
-            mapController.setZoom(9.5);
+            mapController.setZoom(15);
 
         }
     }
@@ -235,18 +242,22 @@ public class TriggerLocationFragment extends Fragment {
     }
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(
-                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+
         } else {
-            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (locationGPS != null) {
-                double lat = locationGPS.getLatitude();
-                double longi = locationGPS.getLongitude();
-                latitude = locationGPS.getLatitude();
-                longitude = locationGPS.getLongitude();
-            } else {
-                Toast.makeText(getContext(), "Unable to find location.", Toast.LENGTH_SHORT).show();
+            try {
+                Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (locationGPS != null) {
+                    double lat = locationGPS.getLatitude();
+                    double longi = locationGPS.getLongitude();
+                    latitude = locationGPS.getLatitude();
+                    longitude = locationGPS.getLongitude();
+                } else {
+                    Toast.makeText(getContext(), "Unable to find location.", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

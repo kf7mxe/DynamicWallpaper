@@ -40,6 +40,10 @@ public class Rule implements Serializable {
                 return new TriggerBySeason(stringTriggerTypeSplit[1]);
             case "triggerByDate":
                 return new TriggerByDate(stringTriggerTypeSplit[1]);
+            case "triggerByLocation":
+                return new TriggerByLocation(stringTriggerTypeSplit[1]);
+            case "triggerByWeather":
+                return new TriggerByWeather(stringTriggerTypeSplit[1]);
             default:
                 return new Trigger();
         }

@@ -12,9 +12,20 @@ public class TriggerByLocation extends Trigger implements Serializable {
 
     private String endEnterTrigger;
 
+    @Override
+    public String getTriggerType() {
+        return triggerType;
+    }
+
+    @Override
+    public String getDisplayType(){
+        return "Location By Latitude: "+latitude+" Longitude: "+longitude+" Radius: "+radius+" End Trigger: "+endEnterTrigger;
+    }
     public TriggerByLocation(){
 
     }
+
+
 
     public TriggerByLocation(String newLatitude, String newLongitude, String newRadius){
 
@@ -95,7 +106,7 @@ public class TriggerByLocation extends Trigger implements Serializable {
     public String myToString(){
         return this.triggerType +"~triggerTypeDeliminator~" +  this.latitude+"~triggerByLocation~"
                 +this.longitude+"~triggerByLocation~"
-                +this.radius+"triggerByLocation+"+this.triggerType;
+                +this.radius+"~triggerByLocation~"+this.endEnterTrigger;
 
     }
 }

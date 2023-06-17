@@ -18,8 +18,9 @@
             android:background="?attr/colorPrimary"
             android:tag=""
             app:titleCentered="true"
-            app:titleTextColor="@color/md_theme_light_onPrimary"
+            app:titleTextColor="?attr/colorOnPrimary"
             app:navigationIcon="@drawable/ic_back_arrow"
+            app:navigationIconTint="?attr/colorOnPrimary"
             />
 
     </com.google.android.material.appbar.AppBarLayout>

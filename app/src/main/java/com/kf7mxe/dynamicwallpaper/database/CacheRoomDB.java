@@ -5,10 +5,12 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 
 @Database(entities = {Collection.class},version=1,exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class CacheRoomDB extends RoomDatabase {
     private static CacheRoomDB database;
 

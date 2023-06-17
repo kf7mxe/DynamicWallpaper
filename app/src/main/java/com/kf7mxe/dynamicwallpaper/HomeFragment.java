@@ -1,10 +1,17 @@
 package com.kf7mxe.dynamicwallpaper;
 
+import android.Manifest;
+import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationChannelCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -134,7 +141,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.action_homeFragment_to_addCollectionFragment);
-
             }
         });
 

@@ -57,12 +57,20 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                     return;
                 }
                 Collection selectedCollection = database.mainDao().getCollectionById(intent.getLongExtra("selectedCollection", (long) 0.0));
-                int test = intent.getIntExtra("actionIndex",20);
-                Trigger trigger = selectedCollection.getSpecificRule(intent.getIntExtra("actionIndex",0)).getTrigger();
+//                int test = intent.getIntExtra("actionIndex",20);
+//                Trigger trigger = selectedCollection.getSpecificRule(intent.getIntExtra("actionIndex",0)).getTrigger();
+
+                if (selectedCollection == null) {
+                    return;
+                }
+
                 selectedCollection.runAction(intent.getIntExtra("actionIndex",0),context);
                 database.mainDao().updateCollection(selectedCollection);
 
             }
+        } else {
+Toast.makeText(context, "Error in geofence", Toast.LENGTH_SHORT).show();
+
         }
     }
 }

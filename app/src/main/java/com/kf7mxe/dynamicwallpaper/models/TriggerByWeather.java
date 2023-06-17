@@ -63,6 +63,15 @@ public class TriggerByWeather extends Trigger implements Serializable {
 
     }
 
+    @Override
+    public String getTriggerType() {
+        return triggerType;
+    }
+    @Override
+    public String getDisplayType(){
+        return "Trigger By Weather \n When Tempreture is "+whenTempretureIs+" "+whenTempretureIsLessThan+" "+whenTempretureIsGreaterThan+" "+betweenLowEndTempreture+" "+betweenHighEndTempreture+" \n Weather Condition "+weatherCondition+" \n Update Forcast Every "+updateForcastEvery;
+    }
+
     public TriggerByWeather(String newWhenTempretureIs, String newWhenTempretureIsLessThan, String newWhenTempretureIsGreaterThan, String newBetweenLowEndTempreture, String newBetweenHighEndTempreture, String newWeatherCondition, String newUpdateEvery){
         this.whenTempretureIs = newWhenTempretureIs;
         this.whenTempretureIsLessThan = newWhenTempretureIsLessThan;

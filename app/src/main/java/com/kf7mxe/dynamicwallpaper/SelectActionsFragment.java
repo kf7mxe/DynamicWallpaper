@@ -111,6 +111,7 @@ public class SelectActionsFragment extends Fragment  {
                     trigger = new TriggerByWeather(recievingBundle.getString("Trigger"));
                     break;
                 case "triggerByLocation":
+                    String test = recievingBundle.getString("Trigger");
                     trigger = new TriggerByLocation(recievingBundle.getString("Trigger"));
                     break;
             }

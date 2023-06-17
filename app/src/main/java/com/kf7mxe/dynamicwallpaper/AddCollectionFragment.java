@@ -42,6 +42,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.RulesRecyclerAdapter;
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.SubcollectionRecyclerViewAdapter;
@@ -59,6 +60,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.fragment.NavHostFragment;
@@ -208,6 +210,48 @@ public class AddCollectionFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
 
         binding.enterCollectionName.setText(collection.getName());
+
+
+        if (collection.getPhotoNames().size() > 0){
+            int photoCount = collection.getPhotoNames().size();
+            Random rand = new Random();
+            int randomPhotoIndex1 = rand.nextInt(photoCount);
+            int randomPhotoIndex2 = rand.nextInt(photoCount);
+            int randomPhotoIndex3 = rand.nextInt(photoCount);
+            int randomPhotoIndex4 = rand.nextInt(photoCount);
+            int randomPhotoIndex5 = rand.nextInt(photoCount);
+            //make sure all the random numbers are different
+            while (randomPhotoIndex1 == randomPhotoIndex2 || randomPhotoIndex1 == randomPhotoIndex3 || randomPhotoIndex1 == randomPhotoIndex4 || randomPhotoIndex1 == randomPhotoIndex5){
+                randomPhotoIndex1 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex2 == randomPhotoIndex1 || randomPhotoIndex2 == randomPhotoIndex3 || randomPhotoIndex2 == randomPhotoIndex4 || randomPhotoIndex2 == randomPhotoIndex5){
+                randomPhotoIndex2 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex3 == randomPhotoIndex1 || randomPhotoIndex3 == randomPhotoIndex2 || randomPhotoIndex3 == randomPhotoIndex4 || randomPhotoIndex3 == randomPhotoIndex5){
+                randomPhotoIndex3 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex4 == randomPhotoIndex1 || randomPhotoIndex4 == randomPhotoIndex2 || randomPhotoIndex4 == randomPhotoIndex3 || randomPhotoIndex4 == randomPhotoIndex5){
+                randomPhotoIndex4 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex5 == randomPhotoIndex1 || randomPhotoIndex5 == randomPhotoIndex2 || randomPhotoIndex5 == randomPhotoIndex3 || randomPhotoIndex5 == randomPhotoIndex4){
+                randomPhotoIndex5 = rand.nextInt(photoCount);
+            }
+
+            File fileImage = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex1));
+            File fileImage2 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex2));
+            File fileImage3 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex3));
+            File fileImage4 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex4));
+            File fileImage5 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex5));
+
+            Glide.with(getContext()).load(fileImage).into(binding.imageView);
+            Glide.with(getContext()).load(fileImage2).into(binding.imageView2);
+            Glide.with(getContext()).load(fileImage3).into(binding.imageView3);
+            Glide.with(getContext()).load(fileImage4).into(binding.imageView4);
+            Glide.with(getContext()).load(fileImage5).into(binding.imageView5);
+            binding.selectedImagePreview.setVisibility(View.VISIBLE);
+            binding.selectedImagePreviewText.setVisibility(View.VISIBLE);
+        }
+
 
         //binding.rulesRecyclerView.
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

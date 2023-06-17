@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Entity
@@ -54,6 +56,11 @@ public class Collection implements Serializable {
     private int selectedSubCollectionArrayIndex = -1;
     @ColumnInfo(name = "sub_collection_selected_image_index")
     private int subCollectionSelectedImageIndex = -1;
+
+//    @ColumnInfo(name = "sub_collection_selected_image_index_map")
+//    @TypeConverters(com.kf7mxe.dynamicwallpaper.database.Converters.class)
+//    private Map<Integer, Integer> subCollectionSelectedImageIndexMap = new HashMap<>();
+
     @ColumnInfo(name = "rules")
     @TypeConverters(com.kf7mxe.dynamicwallpaper.utilis.RulesTypeConverter.class)
     private ArrayList<Rule> rules;
@@ -152,6 +159,14 @@ public class Collection implements Serializable {
         this.subCollectionSelectedImageIndex = subCollectionSelectedImageIndex;
     }
 
+//    public void setSubCollectionSelectedImageIndexMap(int subCollectionIndex, int subCollectionSelectedImageIndex) {
+//        this.subCollectionSelectedImageIndexMap.put(subCollectionIndex, subCollectionSelectedImageIndex);
+//    }
+//
+//    public int getSubCollectionSelectedImageIndexMap(int subCollectionIndex) {
+//        return this.subCollectionSelectedImageIndexMap.get(subCollectionIndex);
+//    }
+
     public int getSubCollectionSelectedImageIndex() {
         return subCollectionSelectedImageIndex;
     }
@@ -181,6 +196,7 @@ public class Collection implements Serializable {
     public void startTriggers(Context context) {
         for (int i = 0; i < this.getRules().size(); i++) {
             Trigger trigger = this.getRules().get(i).getTrigger();
+            String test = trigger.getTriggerType();
             switch (trigger.getTriggerType()) {
                 case "triggerByTimeInterval":
                     if (trigger.isExact()) {
@@ -238,6 +254,9 @@ public class Collection implements Serializable {
             images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
             nextIndex = this.subCollectionSelectedImageIndex;
 
+//            nextIndex = this.getSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex);
+
+
         } else {
             images = this.getPhotoNames();
             nextIndex = this.getSelectedImageIndex();
@@ -245,7 +264,10 @@ public class Collection implements Serializable {
         if (nextIndex < images.size() - 1) {
             file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(nextIndex));
             if (this.selectedSubCollectionArrayIndex != -1) {
-                this.subCollectionSelectedImageIndex = this.selectedSubCollectionArrayIndex + 1;
+//                this.subCollectionSelectedImageIndex = this.selectedSubCollectionArrayIndex + 1;
+                this.setSubCollectionSelectedImageIndex(this.subCollectionSelectedImageIndex +1 );
+
+//                this.setSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex, this.subCollectionSelectedImageIndex);
             } else {
                 int temp = this.getSelectedImageIndex() + 1;
                 this.setSelectedImageIndex(temp);
@@ -253,7 +275,8 @@ public class Collection implements Serializable {
         } else {
             file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(0));
             if (this.selectedSubCollectionArrayIndex != -1) {
-                this.selectedSubCollectionArrayIndex = 0;
+                this.setSubCollectionSelectedImageIndex(0);
+//                this.setSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex, this.selectedSubCollectionArrayIndex);
             } else {
                 this.setSelectedImageIndex(0);
             }
@@ -302,7 +325,7 @@ public class Collection implements Serializable {
             photos = this.getPhotoNames();
         }
         Random rand = new Random();
-        int index = rand.nextInt(this.getPhotoNames().size());
+        int index = rand.nextInt(photos.size());
 
         file = new File(context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + this.getName() + "/" + photos.get(index));
         int temp = this.getSelectedImageIndex() + 1;
@@ -334,10 +357,15 @@ public class Collection implements Serializable {
             images = subCollectionArray.get(this.selectedSubCollectionArrayIndex).getFileNames();
             if (this.subCollectionSelectedImageIndex != -1) {
                 nextIndex = this.subCollectionSelectedImageIndex;
+                //               nextIndex = this.getSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex);
                 this.subCollectionSelectedImageIndex = this.subCollectionSelectedImageIndex + 1;
+                this.setSubCollectionSelectedImageIndex(this.subCollectionSelectedImageIndex);
+                //                this.setSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex, this.subCollectionSelectedImageIndex);
             } else {
                 nextIndex = 0;
                 this.subCollectionSelectedImageIndex = 0;
+                this.setSubCollectionSelectedImageIndex(this.subCollectionSelectedImageIndex);
+                //                this.setSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex, this.subCollectionSelectedImageIndex);
             }
         } else {
             images = this.getPhotoNames();
@@ -551,6 +579,7 @@ public class Collection implements Serializable {
                 .setRequestId(Integer.toString(triggerIndex))
                 .setCircularRegion(latitude, longitude, radius)
                 .setTransitionTypes(triggerByLocation.getEndEnterTrigger())
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .build();
 
 

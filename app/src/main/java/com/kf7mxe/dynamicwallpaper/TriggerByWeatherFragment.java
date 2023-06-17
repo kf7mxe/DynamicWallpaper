@@ -152,7 +152,7 @@ public class TriggerByWeatherFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (requiredFieldsFilled()) {
-                    Bundle bundle = new Bundle();
+                    Bundle bundle = getArguments();
                     if (bindings.whenTempretureIsRadio.isChecked()) {
                         triggerByWeather.setWhenTempretureIs(bindings.whenTempretureIsEditText.getText().toString());
                     } else if (bindings.whenTempretureIsLessThan.isChecked()) {
