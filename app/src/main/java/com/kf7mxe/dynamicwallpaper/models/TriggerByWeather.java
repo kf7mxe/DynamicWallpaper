@@ -57,7 +57,7 @@ public class TriggerByWeather extends Trigger implements Serializable {
     private String latLocation;
     private String longLocation;
 
-    private String weatherTriggersAmount ="";
+    private String weatherTriggersAmount ="0";
 
     public TriggerByWeather(){
 
@@ -141,7 +141,7 @@ public class TriggerByWeather extends Trigger implements Serializable {
                 this.longLocation = triggerDateTimeSplit[9];
             }
         }
-        if (triggerDateTimeSplit.length>2) {
+        if (triggerDateTimeSplit.length>2 && triggerDateTimeSplit.length<10) {
             if (!triggerDateTimeSplit[10].equals("null")) {
                 this.weatherTriggersAmount = triggerDateTimeSplit[10];
             }
@@ -149,7 +149,7 @@ public class TriggerByWeather extends Trigger implements Serializable {
     }
 
     public String getUpdateForcastEvery () {
-        return updateForcastEvery;
+        return this.updateForcastEvery;
     }
 
     public ArrayList<String> getUpdateForcastEveryOptions () {
@@ -281,24 +281,34 @@ public class TriggerByWeather extends Trigger implements Serializable {
         }
         returnString = returnString + "~triggerByWeather~";
         if (this.updateForcastEvery != null) {
-            returnString = returnString + "~triggerByWeather~" + this.updateForcastEvery;
+            returnString = returnString + this.updateForcastEvery;
         } else {
-            returnString = returnString + "~triggerByWeather~" + "null";
+            returnString = returnString + "null";
         }
         returnString = returnString + "~triggerByWeather~";
         if (this.locationType != null) {
             returnString = returnString + "~triggerByWeather~" + this.locationType;
         } else {
-            returnString = returnString + "~triggerByWeather~" + "null";
+            returnString = returnString + "null";
         }
         returnString = returnString + "~triggerByWeather~";
         if (this.latLocation != null) {
             returnString = returnString + "~triggerByWeather~" + this.latLocation;
-        } else if (this.weatherTriggersAmount != null){
+        } else {
+            returnString = returnString +"null";
+        }
+        returnString = returnString + "~triggerByWeather~";
+        if (this.longLocation != null) {
+            returnString = returnString + "~triggerByWeather~" + this.longLocation;
+        } else {
+            returnString = returnString + "null";
+        }
+        returnString = returnString + "~triggerByWeather~";
+        if (this.weatherTriggersAmount != null){
             returnString = returnString + "~triggerByWeather~" + this.weatherTriggersAmount;
         }
         else {
-            returnString = returnString + "~triggerByWeather~" + "null";
+            returnString = returnString + "null";
         }
         return returnString;
     }
@@ -336,11 +346,13 @@ public class TriggerByWeather extends Trigger implements Serializable {
         if (locationType.equals("specificLocation")) {
             String url = getWeatherUrl(new Pair<>(latLocation,longLocation));
             JSONArray weatherJsonArray = getWeatherForcast(url);
+            setUpWeatherPredictionTriggers(weatherJsonArray, context, actionIndex,collection);
         }
         if (locationType.equals("currentLocation")) {
             Pair<String,String> latLong = getLatLonLocationFromGps(context);
             String url = getWeatherUrl(latLong);
             JSONArray weatherJsonArray = getWeatherForcast(url);
+            setUpWeatherPredictionTriggers(weatherJsonArray, context, actionIndex,collection);
         }
 
 

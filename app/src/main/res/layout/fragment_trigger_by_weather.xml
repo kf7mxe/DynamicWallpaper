@@ -8,13 +8,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/textView15"
@@ -54,6 +54,13 @@
                     android:minHeight="48dp"
                     android:visibility="gone" />
 
+
+
+                <RadioButton
+                    android:id="@+id/whenTempretureIsLessThan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="when Tempreture is less than:" />
                 <EditText
                     android:id="@+id/whenTempretureIsLessThanEditText"
                     android:layout_width="match_parent"
@@ -62,12 +69,6 @@
                     android:inputType="number"
                     android:minHeight="48dp"
                     android:visibility="gone" />
-
-                <RadioButton
-                    android:id="@+id/whenTempretureIsLessThan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="when Tempreture is less than:" />
 
                 <RadioButton
                     android:id="@+id/whenTempretureIsGreaterThanRadio"

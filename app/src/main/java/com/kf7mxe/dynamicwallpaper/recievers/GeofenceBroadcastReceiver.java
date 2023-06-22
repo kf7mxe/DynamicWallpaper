@@ -28,29 +28,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             int geofenceTransition = geofencingEvent.getGeofenceTransition();
             if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
-                // send notification
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                        .setSmallIcon(android.R.drawable.ic_dialog_info)
-                        .setContentTitle("Geofence Triggered")
-                        .setContentText("Geofence Triggered")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                NotificationManagerCompat notifcationManager =
-                        NotificationManagerCompat.from(context);
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                notifcationManager.notify(200, builder.build());
-
-
-
                 Toast.makeText(context, "In reciever", Toast.LENGTH_SHORT).show();
                 database = RoomDB.getInstance(context.getApplicationContext());
                 if(intent.getLongExtra("selectedCollection", (long) 0.0)==0){

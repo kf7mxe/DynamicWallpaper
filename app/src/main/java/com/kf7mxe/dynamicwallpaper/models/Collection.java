@@ -27,7 +27,6 @@ import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.kf7mxe.dynamicwallpaper.recievers.AlarmActionReciever;
-import com.kf7mxe.dynamicwallpaper.recievers.AlarmUpdateWeatherActionReciever;
 import com.kf7mxe.dynamicwallpaper.recievers.GeofenceBroadcastReceiver;
 
 import java.io.File;
@@ -519,7 +518,7 @@ public class Collection implements Serializable {
 
     public void createAlarmForWeatherTrigger(Context context, Trigger trigger, int triggerIndex) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context.getApplicationContext(), AlarmUpdateWeatherActionReciever.class);
+        Intent intent = new Intent(context.getApplicationContext(), AlarmActionReciever.class);
         PendingIntent pi = null;
         intent.putExtra("selectedCollection", id);
         intent.putExtra("actionIndex", triggerIndex);

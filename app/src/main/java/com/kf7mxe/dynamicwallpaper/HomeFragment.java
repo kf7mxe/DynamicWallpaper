@@ -23,8 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.HomeCollectionRecyclerViewAdapter;
+import com.kf7mxe.dynamicwallpaper.database.RoomDB;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentHomeBinding;
+import com.kf7mxe.dynamicwallpaper.models.Trigger;
+import com.kf7mxe.dynamicwallpaper.models.TriggerByWeather;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 import java.util.List;
@@ -143,6 +146,27 @@ public class HomeFragment extends Fragment {
                 navController.navigate(R.id.action_homeFragment_to_addCollectionFragment);
             }
         });
+
+
+//        boolean debug = true;
+//        if (debug) {
+//            RoomDB database = RoomDB.getInstance(getContext().getApplicationContext());
+//            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPrefrences", Context.MODE_PRIVATE);
+//
+//            String test = sharedPreferences.getString("selectedCollection", "0.0");
+//
+//            Collection selectedCollection = database.mainDao().getCollectionById(Long.parseLong(test));
+//            TriggerByWeather trigger = (TriggerByWeather) selectedCollection.getSpecificRule(3).getTrigger();
+//
+//
+//            trigger.removeWeatherTriggersToUpdate(getContext(),3,1);
+//            trigger.setWeatherTriggersToUpdate(getContext(),3,1);
+//            int pause = 1;
+//        }
+
+
+
+
 
         return binding.getRoot();
     }

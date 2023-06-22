@@ -30,7 +30,8 @@ public class TriggerByWeatherFragment extends Fragment {
     private String tempretureUpdateEveryTime;
     private String tempretureItIsWeatherType;
 
-    private String weatherTypeIs;
+    private String weatherLocationTypeIs;
+
 
     private FragmentTriggerByWeatherBinding bindings;
     private NavController navController;
@@ -108,13 +109,13 @@ public class TriggerByWeatherFragment extends Fragment {
         bindings.locationTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.ipAddress:
-                    weatherTypeIs = "ipAddress";
+                    weatherLocationTypeIs = "ipAddress";
                     break;
                 case R.id.currentLocation:
-                    weatherTypeIs = "currentLocation";
+                    weatherLocationTypeIs = "currentLocation";
                     break;
                 case R.id.specificSetLocation:
-                    weatherTypeIs = "specificSetLocation";
+                    weatherLocationTypeIs = "specificSetLocation";
                     break;
             }
         });
@@ -164,12 +165,16 @@ public class TriggerByWeatherFragment extends Fragment {
                         triggerByWeather.setBetweenLowEndTempreture(bindings.lowEndTempretureEditText.getText().toString());
                     } else if (bindings.whenWeatherConditionsRadio.isChecked()) {
                         triggerByWeather.setWeatherCondition(bindings.whenItIsWeatherCondition.getSelectedItem().toString());
-                    } else if (weatherTypeIs != null) {
-                        triggerByWeather.setLocationType(weatherTypeIs);
-                        if (bindings.specificSetLocationEditText.getText().toString().isEmpty()!=true) {
+                    }
+                    if (weatherLocationTypeIs != null) {
+                        triggerByWeather.setLocationType(weatherLocationTypeIs);
+                        if (weatherTypes.equals("specificSetLocation")) {
                             triggerByWeather.setSpecificLocation(bindings.specificSetLocationEditText.getText().toString());
                         }
                     }
+
+                    triggerByWeather.setUpdateForcastEvery(bindings.updateForcasdEverySpinner.getSelectedItem().toString());
+
                     bundle.putString("Trigger",triggerByWeather.myToString());
                     bundle.putString("TriggerType","triggerByWeather");
                     navController.navigate(R.id.action_triggerByWeatherFragment_to_selectActionsFragment,bundle);

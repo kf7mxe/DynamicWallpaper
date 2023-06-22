@@ -10,8 +10,8 @@ android {
         applicationId "com.kf7mxe.dynamicwallpaper"
         minSdk 30
         targetSdk 33
-        versionCode 5
-        versionName "1.1.2"
+        versionCode 7
+        versionName "1.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
