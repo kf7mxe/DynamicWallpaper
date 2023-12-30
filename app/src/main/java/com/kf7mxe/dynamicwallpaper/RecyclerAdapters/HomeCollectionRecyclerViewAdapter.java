@@ -1,6 +1,6 @@
 package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.kf7mxe.dynamicwallpaper.R;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
+import com.kf7mxe.dynamicwallpaper.models.Trigger;
 
 import java.io.File;
 import java.util.List;
@@ -131,13 +133,20 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
             viewHolder.actions.removeAllViews();
             TextView triggerTitle =new TextView(m_context);
             TextView actionTitle = new TextView(m_context);
+            triggerTitle.setTextSize(16);
+            triggerTitle.setTypeface(null, Typeface.BOLD);
+
+            actionTitle.setTextSize(16);
+            actionTitle.setTypeface(null, Typeface.BOLD);
+
             triggerTitle.setText("Triggers");
             actionTitle.setText("Actions");
             viewHolder.triggers.addView(triggerTitle);
             viewHolder.actions.addView(actionTitle);
             for(int i=0;i<m_collections.get(position).getRules().size();i++){
-                String trigger = m_collections.get(position).getRules().get(i).getTrigger().getDisplayType();
-                String action = m_collections.get(position).getRules().get(i).getAction().getDisplayType();
+                Trigger test = m_collections.get(position).getRules().get(i).getTrigger();
+                String trigger = m_collections.get(position).getRules().get(i).getTrigger().getTriggerTypeAsHumanReadableString();
+                String action = m_collections.get(position).getRules().get(i).getAction().getHumanReadableType();
                 TextView newTriggerTextView =new TextView(m_context);
                 newTriggerTextView.setText(trigger);
                 TextView newActionTextView = new TextView(m_context);
@@ -163,18 +172,18 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.drawable.placeholder);
-            File fileGlidePrivew1 = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+m_collections.get(position).getName()+"/"+m_collections.get(position).getPhotoNames().get(0));
+            File fileGlidePrivew1 = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath()+"/"+m_collections.get(position).getName()+"/"+m_collections.get(position).getPhotoNames().get(0));
             if(fileGlidePrivew1.isFile()){
                 Glide.with(m_context).load(fileGlidePrivew1.getAbsolutePath()).apply(options).into(viewHolder.imagePreview1);
             }
             if(m_collections.get(position).getPhotoNames().size()>1) {
-                File fileGlidePrivew2 = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + m_collections.get(position).getName() + "/" + m_collections.get(position).getPhotoNames().get(1));
+                File fileGlidePrivew2 = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + m_collections.get(position).getName() + "/" + m_collections.get(position).getPhotoNames().get(1));
                 if (fileGlidePrivew2.isFile()) {
                     Glide.with(m_context).load(fileGlidePrivew2.getAbsolutePath()).apply(options).into(viewHolder.imagePreview2);
                 }
             }
             if(m_collections.get(position).getPhotoNames().size()>2) {
-                File fileGlidePrivew3 = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + m_collections.get(position).getName() + "/" + m_collections.get(position).getPhotoNames().get(2));
+                File fileGlidePrivew3 = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + m_collections.get(position).getName() + "/" + m_collections.get(position).getPhotoNames().get(2));
                 if (fileGlidePrivew3.isFile()) {
                     Glide.with(m_context).load(fileGlidePrivew3.getAbsolutePath()).apply(options).into(viewHolder.imagePreview3);
                 }

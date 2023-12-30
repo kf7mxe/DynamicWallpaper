@@ -10,6 +10,16 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Check the checkboxes you want to set up the trigger for. Such as if you want to witch to a winter sub collections when winter starts just select Winter. You can also adjust the seasonal dates by tapping the calendar icon."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="wrap_content"
@@ -194,6 +204,8 @@
         android:layout_height="wrap_content"
         android:text="Change on season"
         android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -224,7 +236,7 @@
         android:text="Winter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
     <CheckBox
         android:id="@+id/springCheckBox"

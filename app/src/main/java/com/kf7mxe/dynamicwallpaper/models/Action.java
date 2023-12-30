@@ -21,6 +21,25 @@ public class Action implements Serializable {
         return type;
     }
 
+    public String getHumanReadableType(){
+        String type = "";
+        switch (this.type){
+            case "selectActionNextInCollection":
+                type = "Go to Next Wallpaper in Colection";
+                break;
+            case "selectActionSwitchToDiffSubColRadio":
+                type="Switch To Different Sub Collection";
+                break;
+            case "selectActionRandomInCollSubRadio":
+                type="Go to Random Wallpaper in Collection or subcollection";
+                break;
+            case "selectActionSpecificWallpaperRadio":
+                type="Go to Specific Wallpaper";
+                break;
+        }
+        return type;
+    }
+
     public String getDisplayType(){
         String type = "";
         switch (this.type){

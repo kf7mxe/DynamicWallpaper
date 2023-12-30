@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TriggerBySeason extends Trigger implements Serializable {
-    private String triggerType="triggerBySeason";
+    private final String triggerType="triggerBySeason";
     private ArrayList<Season> seasons = new ArrayList<>();
     public TriggerBySeason(){
 
@@ -224,6 +224,27 @@ public class TriggerBySeason extends Trigger implements Serializable {
             }
         }
         return temp;
+    }
+
+
+    @Override
+    public String getTriggerTypeAsHumanReadableString(){
+        // split the string on camel case
+        String[] words = triggerType.split("(?=[A-Z])");
+        // remove the first word if it is "trigger"
+        if (words[0].equals("trigger")) {
+            String[] temp = new String[words.length - 1];
+            for (int i = 1; i < words.length; i++) {
+                temp[i - 1] = words[i];
+            }
+            words = temp;
+        }
+        String humanReadableString = "";
+        for (String word : words) {
+            humanReadableString += word + " ";
+        }
+
+        return humanReadableString;
     }
 
 }

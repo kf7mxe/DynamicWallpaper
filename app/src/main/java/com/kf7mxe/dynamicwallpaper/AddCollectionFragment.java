@@ -1,7 +1,7 @@
 package com.kf7mxe.dynamicwallpaper;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -12,23 +12,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import android.os.Environment;
-import android.os.FileUtils;
-import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -46,26 +38,23 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.RulesRecyclerAdapter;
 import com.kf7mxe.dynamicwallpaper.RecyclerAdapters.SubcollectionRecyclerViewAdapter;
-import com.kf7mxe.dynamicwallpaper.database.RoomDB;
 import com.kf7mxe.dynamicwallpaper.databinding.FragmentAddCollectionBinding;
 import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.view.CropImageView;
+import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.room.Room;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -175,7 +164,7 @@ public class AddCollectionFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             collectionViewModel.deleteFromDatabase(collection);
                             if (collection.getPhotoNames().size() != 0 && collection.getName().length() != 0) {
-                                deleteRecursive(new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName()));
+                                deleteRecursive(new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName()));
                             }
                             navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
                         }
@@ -200,58 +189,30 @@ public class AddCollectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAddCollectionBinding.inflate(getLayoutInflater());
-        fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager = requireActivity().getSupportFragmentManager();
         navController = NavHostFragment.findNavController(this);
         wallpaperManager = WallpaperManager.getInstance(getContext());
         setHasOptionsMenu(true);
 
 
 
-        sharedPreferences = getActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("testing",Context.MODE_PRIVATE);
 
         binding.enterCollectionName.setText(collection.getName());
 
 
-        if (collection.getPhotoNames().size() > 0){
-            int photoCount = collection.getPhotoNames().size();
-            Random rand = new Random();
-            int randomPhotoIndex1 = rand.nextInt(photoCount);
-            int randomPhotoIndex2 = rand.nextInt(photoCount);
-            int randomPhotoIndex3 = rand.nextInt(photoCount);
-            int randomPhotoIndex4 = rand.nextInt(photoCount);
-            int randomPhotoIndex5 = rand.nextInt(photoCount);
-            //make sure all the random numbers are different
-            while (randomPhotoIndex1 == randomPhotoIndex2 || randomPhotoIndex1 == randomPhotoIndex3 || randomPhotoIndex1 == randomPhotoIndex4 || randomPhotoIndex1 == randomPhotoIndex5){
-                randomPhotoIndex1 = rand.nextInt(photoCount);
-            }
-            while (randomPhotoIndex2 == randomPhotoIndex1 || randomPhotoIndex2 == randomPhotoIndex3 || randomPhotoIndex2 == randomPhotoIndex4 || randomPhotoIndex2 == randomPhotoIndex5){
-                randomPhotoIndex2 = rand.nextInt(photoCount);
-            }
-            while (randomPhotoIndex3 == randomPhotoIndex1 || randomPhotoIndex3 == randomPhotoIndex2 || randomPhotoIndex3 == randomPhotoIndex4 || randomPhotoIndex3 == randomPhotoIndex5){
-                randomPhotoIndex3 = rand.nextInt(photoCount);
-            }
-            while (randomPhotoIndex4 == randomPhotoIndex1 || randomPhotoIndex4 == randomPhotoIndex2 || randomPhotoIndex4 == randomPhotoIndex3 || randomPhotoIndex4 == randomPhotoIndex5){
-                randomPhotoIndex4 = rand.nextInt(photoCount);
-            }
-            while (randomPhotoIndex5 == randomPhotoIndex1 || randomPhotoIndex5 == randomPhotoIndex2 || randomPhotoIndex5 == randomPhotoIndex3 || randomPhotoIndex5 == randomPhotoIndex4){
-                randomPhotoIndex5 = rand.nextInt(photoCount);
-            }
+        setRandomImagesForPreview();
 
-            File fileImage = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex1));
-            File fileImage2 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex2));
-            File fileImage3 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex3));
-            File fileImage4 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex4));
-            File fileImage5 = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex5));
-
-            Glide.with(getContext()).load(fileImage).into(binding.imageView);
-            Glide.with(getContext()).load(fileImage2).into(binding.imageView2);
-            Glide.with(getContext()).load(fileImage3).into(binding.imageView3);
-            Glide.with(getContext()).load(fileImage4).into(binding.imageView4);
-            Glide.with(getContext()).load(fileImage5).into(binding.imageView5);
-            binding.selectedImagePreview.setVisibility(View.VISIBLE);
-            binding.selectedImagePreviewText.setVisibility(View.VISIBLE);
-        }
-
+        binding.selectedImagePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("collectionId",collectionId);
+                bundle.putBoolean("update",updateCollection);
+                bundle.putBoolean("fromAddOptionFragment",true);
+                navController.navigate(R.id.action_addCollectionFragment_to_viewChangePhotoOrderFragment,bundle);
+            }
+        });
 
         //binding.rulesRecyclerView.
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -366,7 +327,7 @@ public class AddCollectionFragment extends Fragment {
         });
 
 
-        ActivityResultLauncher launcher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
+        ActivityResultLauncher<String> launcher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->{
             if(isGranted){
                 //getAndDisplayLocation();
 
@@ -375,10 +336,10 @@ public class AddCollectionFragment extends Fragment {
             }
         });
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
 
         }
-        else if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+        else if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
             launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
         else {
@@ -417,71 +378,125 @@ public class AddCollectionFragment extends Fragment {
 
         // pass the constant to compare it
         // with the returned requestCode
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+//        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+//        mGetContent.launch(Intent.createChooser(i, "Select Picture"));
+        //registerForActivityResult
+//        mGetContent.launch(Intent.createChooser(i, "Select Picture"));
+        mGetContent.launch(i);
 
 
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        assert data != null;
+                        if (data.getClipData() != null) {
+                            Toast.makeText(getContext(), "In the get clip data", Toast.LENGTH_SHORT).show();
+                            ClipData mClipData = data.getClipData();
+                            int cout = data.getClipData().getItemCount();
+                            for (int i = 0; i < cout; i++) {
+                                // adding imageuri in array
+                                Uri imageurl = data.getClipData().getItemAt(i).getUri();
+                                cropImage(imageurl);
+                            }
 
-        if (resultCode == getActivity().RESULT_OK) {
+                        }
+                        else if (data.getData() != null) {
+                            cropImage(data.getData());
+                        }
+                }
+            });
 
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
-            if (requestCode == SELECT_PICTURE) {
-                // Get the url of the image from data
+    ActivityResultLauncher<Intent> cropLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                        Toast.makeText(getActivity(), "In the call uCrop", Toast.LENGTH_SHORT).show();
+                    assert result.getData() != null;
+                    final Uri resultUri = UCrop.getOutput(result.getData());
 
-                if (data.getClipData() != null) {
-                    Toast.makeText(getContext(), "In the get clip data", Toast.LENGTH_SHORT).show();
-                    ClipData mClipData = data.getClipData();
-                    int cout = data.getClipData().getItemCount();
-                    for (int i = 0; i < cout; i++) {
-                        // adding imageuri in array
-                        Uri imageurl = data.getClipData().getItemAt(i).getUri();
-                        cropImage(imageurl);
-                    }
+
 
                 }
-                else if (data.getData() != null) {
-                    cropImage(data.getData());
-                }
-            }
-
-
-        }
-
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            Toast.makeText(getActivity(), "In the call uCrop", Toast.LENGTH_SHORT).show();
-            final Uri resultUri = UCrop.getOutput(data);
-            ;
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            final Throwable cropError = UCrop.getError(data);
-            Toast.makeText(getActivity(), "Error calling uCrop", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-
-
+            });
 
 
     private File getImageFile() throws IOException {
         String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        File folderCollection = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(),binding.enterCollectionName.getText().toString());
+        File folderCollection = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(),binding.enterCollectionName.getText().toString());
         folderCollection.mkdir();
-        File file = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
+        File file = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
         file.createNewFile();
 
         collection.getPhotoNames().add(imageFileName+".jpg");
 
         SharedPreferences.Editor myEditor = sharedPreferences.edit();
-        myEditor.putString("testImage",getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
-        myEditor.commit();
+        myEditor.putString("testImage", Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
+        myEditor.apply();
 
         return file;
 
+    }
+
+    private void setRandomImagesForPreview() {
+        if (collection.getPhotoNames().size() > 0){
+            int photoCount = collection.getPhotoNames().size();
+            Random rand = new Random();
+            int randomPhotoIndex1 = rand.nextInt(photoCount);
+            int randomPhotoIndex2 = rand.nextInt(photoCount);
+            int randomPhotoIndex3 = rand.nextInt(photoCount);
+            int randomPhotoIndex4 = rand.nextInt(photoCount);
+            int randomPhotoIndex5 = rand.nextInt(photoCount);
+            //make sure all the random numbers are different
+            while (randomPhotoIndex1 == randomPhotoIndex2 || randomPhotoIndex1 == randomPhotoIndex3 || randomPhotoIndex1 == randomPhotoIndex4 || randomPhotoIndex1 == randomPhotoIndex5){
+                randomPhotoIndex1 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex2 == randomPhotoIndex1 || randomPhotoIndex2 == randomPhotoIndex3 || randomPhotoIndex2 == randomPhotoIndex4 || randomPhotoIndex2 == randomPhotoIndex5){
+                randomPhotoIndex2 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex3 == randomPhotoIndex1 || randomPhotoIndex3 == randomPhotoIndex2 || randomPhotoIndex3 == randomPhotoIndex4 || randomPhotoIndex3 == randomPhotoIndex5){
+                randomPhotoIndex3 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex4 == randomPhotoIndex1 || randomPhotoIndex4 == randomPhotoIndex2 || randomPhotoIndex4 == randomPhotoIndex3 || randomPhotoIndex4 == randomPhotoIndex5){
+                randomPhotoIndex4 = rand.nextInt(photoCount);
+            }
+            while (randomPhotoIndex5 == randomPhotoIndex1 || randomPhotoIndex5 == randomPhotoIndex2 || randomPhotoIndex5 == randomPhotoIndex3 || randomPhotoIndex5 == randomPhotoIndex4){
+                randomPhotoIndex5 = rand.nextInt(photoCount);
+            }
+
+            File fileImage = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex1));
+            File fileImage2 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex2));
+            File fileImage3 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex3));
+            File fileImage4 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex4));
+            File fileImage5 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex5));
+
+            Glide.with(requireContext()).load(fileImage).into(binding.imageView);
+            Glide.with(requireContext()).load(fileImage2).into(binding.imageView2);
+            Glide.with(requireContext()).load(fileImage3).into(binding.imageView3);
+            Glide.with(requireContext()).load(fileImage4).into(binding.imageView4);
+            Glide.with(requireContext()).load(fileImage5).into(binding.imageView5);
+            binding.selectedImagePreview.setVisibility(View.VISIBLE);
+            binding.selectedImagePreviewText.setVisibility(View.VISIBLE);
+            // show subcollection checkbox and button
+            binding.useSubcollectionCheckbox.setVisibility(View.VISIBLE);
+            binding.addSubcollectionButton.setVisibility(View.VISIBLE);
+            binding.viewChangeCollectionImagesButton.setVisibility(View.VISIBLE);
+            binding.collectionImageCountTextView.setVisibility(View.VISIBLE);
+            binding.subcollectionsTitleTextview.setVisibility(View.VISIBLE);
+        } else {
+            binding.selectedImagePreview.setVisibility(View.GONE);
+            binding.selectedImagePreviewText.setVisibility(View.GONE);
+
+            binding.viewChangeCollectionImagesButton.setVisibility(View.GONE);
+            binding.collectionImageCountTextView.setVisibility(View.GONE);
+            // hide subcollection checkbox and button
+            binding.useSubcollectionCheckbox.setVisibility(View.GONE);
+            binding.addSubcollectionButton.setVisibility(View.GONE);
+
+            binding.subcollectionsTitleTextview.setVisibility(View.GONE);
+        }
     }
 
 
@@ -507,7 +522,7 @@ public class AddCollectionFragment extends Fragment {
         UCrop.of(sourceUri, destinationUri)
                 .withAspectRatio((Integer)aspectRatio.first, (Integer)aspectRatio.second)
                 .withMaxResultSize((Integer)screenResolution.first, (Integer)screenResolution.second)
-                .start(getActivity());
+                .start(getContext(),cropLauncher);
 
         collectionViewModel.saveCollectionToCache(collection);
         binding.collectionImageCountTextView.setText("Collection Images:"+collection.getPhotoNames().size());
@@ -517,7 +532,7 @@ public class AddCollectionFragment extends Fragment {
 
     private Pair getScreenResolution(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getContext().getDisplay().getRealMetrics(displayMetrics);
+        requireContext().getDisplay().getRealMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         return new Pair<Integer,Integer>(width,height);
@@ -540,7 +555,7 @@ public class AddCollectionFragment extends Fragment {
 
     public void deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory()) {
-            for (File child : fileOrDirectory.listFiles()) {
+            for (File child : Objects.requireNonNull(fileOrDirectory.listFiles())) {
                 deleteRecursive(child);
             }
         }
@@ -554,6 +569,8 @@ public class AddCollectionFragment extends Fragment {
         super.onResume();
         // set the title of the toolbar
        // ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Collection");
+        setRandomImagesForPreview();
+
     }
 
     // onpause

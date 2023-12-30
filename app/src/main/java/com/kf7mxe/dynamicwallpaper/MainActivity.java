@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -94,7 +95,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
 
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.round_arrow_back_24);
+
+
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+
 
 
 

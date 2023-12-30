@@ -3,9 +3,10 @@ package com.kf7mxe.dynamicwallpaper.models;
 import java.io.Serializable;
 
 public class TriggerByDate extends Trigger implements Serializable {
-    private String triggerType = "triggerByDate";
     private String m_month = "none";
     private String m_date = "none";
+
+    private final String triggerType="triggerByDate";
 
     public TriggerByDate(){
 
@@ -40,9 +41,9 @@ public class TriggerByDate extends Trigger implements Serializable {
     }
 
     public String myToString(){
-        return this.triggerType + "~triggerTypeDeliminator~"+this.m_date+"~triggerDate~"+this.m_month;
+        String triggerType = "triggerByDate";
+        return triggerType + "~triggerTypeDeliminator~"+this.m_date+"~triggerDate~"+this.m_month;
     }
-
 
     private int getMonthInt(String month) {
         switch (month) {
@@ -72,5 +73,28 @@ public class TriggerByDate extends Trigger implements Serializable {
                 return 11;
         }
         return -1;
+    }
+
+    @Override
+    public String getTriggerTypeAsHumanReadableString(){
+        // split the string on camel case
+        if (triggerType == null) {
+            return "Error";
+        }
+        String[] words = triggerType.split("(?=[A-Z])");
+        // remove the first word if it is "trigger"
+        if (words[0].equals("trigger")) {
+            String[] temp = new String[words.length - 1];
+            for (int i = 1; i < words.length; i++) {
+                temp[i - 1] = words[i];
+            }
+            words = temp;
+        }
+        String humanReadableString = "";
+        for (String word : words) {
+            humanReadableString += word + " ";
+        }
+
+        return humanReadableString;
     }
 }

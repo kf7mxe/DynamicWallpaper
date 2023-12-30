@@ -83,8 +83,8 @@ public class RulesRecyclerAdapter extends RecyclerView.Adapter<RulesRecyclerAdap
         // contents of the view with that element
         int item = position;
 
-        viewHolder.setTriggerTextView(m_collections.get(position).getTrigger().getTriggerType());
-        viewHolder.setActionTextView(m_collections.get(position).getAction().getType());
+        viewHolder.setTriggerTextView(m_collections.get(position).getTrigger().getTriggerTypeAsHumanReadableString());
+        viewHolder.setActionTextView(m_collections.get(position).getAction().getHumanReadableType());
         viewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -41,7 +41,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class TriggerByWeather extends Trigger implements Serializable {
-    private String triggerType="triggerByWeather";
+    private final String triggerType="triggerByWeather";
     private String whenTempretureIs;
     private String whenTempretureIsLessThan;
     private String whenTempretureIsGreaterThan;
@@ -643,5 +643,25 @@ public JSONArray getWeatherForcast(String weatherUrl){
             }
         }
         return new Pair(latLocation,longLocation);
+    }
+
+    @Override
+    public String getTriggerTypeAsHumanReadableString(){
+        // split the string on camel case
+        String[] words = triggerType.split("(?=[A-Z])");
+        // remove the first word if it is "trigger"
+        if (words[0].equals("trigger")) {
+            String[] temp = new String[words.length - 1];
+            for (int i = 1; i < words.length; i++) {
+                temp[i - 1] = words[i];
+            }
+            words = temp;
+        }
+        String humanReadableString = "";
+        for (String word : words) {
+            humanReadableString += word + " ";
+        }
+
+        return humanReadableString;
     }
 }

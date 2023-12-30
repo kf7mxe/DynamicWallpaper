@@ -22,6 +22,7 @@ import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,7 +76,7 @@ public class ViewChangePhotoOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionViewModel =new CollectionViewModel(getActivity().getApplication(),getContext());
+        collectionViewModel =new CollectionViewModel(requireActivity().getApplication(),getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

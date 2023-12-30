@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="5sp"
     android:background="@color/md_theme_light_background"
     tools:context=".SelectTriggersFragment">
 
@@ -13,7 +14,7 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:text="Select Trigger (Event)"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -23,13 +24,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/triggersRadioGroup"
-        app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpFromSeasonTriggerButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <RadioButton
             android:id="@+id/selectDateTriggerRadio"
@@ -37,11 +39,25 @@
             android:layout_height="wrap_content"
             android:text="Date" />
 
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Change when specific date happens" />
+
         <RadioButton
             android:id="@+id/selectTriggersDateTimeRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time Interval" />
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Change every so many minutes, hours, time intervals" />
 
         <RadioButton
             android:id="@+id/selectLocationTriggerRadio"
@@ -50,11 +66,25 @@
             android:text="Location Event"
             android:visibility="visible" />
 
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Change when you Enter or leave a specific location" />
+
         <RadioButton
             android:id="@+id/selectBySeasonTriggerRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="By Season" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Change based on the 4 season winter, spring, summer and fall" />
 
         <RadioButton
             android:id="@+id/selectCalendarEventTriggerRadio"
@@ -63,12 +93,25 @@
             android:text="Calendar Event"
             android:visibility="visible" />
 
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Change based on events on your calendar" />
+
         <RadioButton
             android:id="@+id/selectTempretureTriggerRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tempreture / Weather"
             android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change based on specific weather condition or tempreture" />
     </RadioGroup>
 
     <Button
@@ -90,5 +133,18 @@
         app:layout_constraintBottom_toTopOf="@+id/goToTriggerSetUpFromSeasonTriggerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Here you can set what causes your wallpaper to change or other action to happen."
+        app:layout_constraintBottom_toTopOf="@+id/triggersRadioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

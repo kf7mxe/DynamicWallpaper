@@ -1,6 +1,6 @@
 package com.kf7mxe.dynamicwallpaper.viewmodels;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import android.app.Application;
 import android.content.Context;
@@ -100,7 +100,7 @@ public class CollectionViewModel extends AndroidViewModel {
             }
             if(!inCollection){
                 if (cacheCollections.get(i).getPhotoNames().size() != 0 && cacheCollections.get(i).getName().length() != 0) {
-                    deleteRecursive(new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), cacheCollections.get(i).getName()));
+                    deleteRecursive(new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath(), cacheCollections.get(i).getName()));
                 }
             }
         }

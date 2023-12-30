@@ -16,28 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Weather Triggers"
-                />
 
             <TextView
-                android:id="@+id/textView17"
-                android:layout_width="235dp"
-                android:layout_height="16dp"
-                android:layout_margin="16dp"
-                android:layout_marginStart="16dp"
-                android:text="Update Forecase in background every:"
-                 />
+                android:id="@+id/textView27"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Select trigger or event to do action. Such as When the tempreture is less than 32 switch to a frozen subcollection." />
 
             <RadioGroup
                 android:id="@+id/weatherRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                >
+                android:padding="16dp">
 
                 <RadioButton
                     android:id="@+id/whenTempretureIsRadio"
@@ -55,12 +46,12 @@
                     android:visibility="gone" />
 
 
-
                 <RadioButton
                     android:id="@+id/whenTempretureIsLessThan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="when Tempreture is less than:" />
+
                 <EditText
                     android:id="@+id/whenTempretureIsLessThanEditText"
                     android:layout_width="match_parent"
@@ -137,36 +128,24 @@
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
                     android:visibility="gone" />
+
             </RadioGroup>
-            <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Update Interval" />
-
-            <Spinner
-                android:id="@+id/updateForcasdEverySpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:minHeight="48dp" />
-
-
 
             <TextView
                 android:id="@+id/textView16"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Weather Location" />
+                android:padding="12dp"
+                android:text="Weather Location"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/locationTypeRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
->
+                android:layout_marginEnd="16dp">
 
                 <RadioButton
                     android:id="@+id/ipAddress"
@@ -198,14 +177,45 @@
                     android:layout_height="match_parent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/specificSetLocationEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/specificSetLocationEditText"
-                        android:hint="Please input a latitude (latitude first) and longitude coordinate seperated by a comma ie:38.8894,-77.0352" />
+                        android:hint="Input Latitude and longitude" />
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Please input a latitude (latitude first) and longitude coordinate seperated by a comma ie:38.8894,-77.0352" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </RadioGroup>
 
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Update Interval"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:text="Update Forecase in background every:" />
+
+            <Spinner
+                android:id="@+id/updateForcasdEverySpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:minHeight="48dp" />
 
 
         </LinearLayout>

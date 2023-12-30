@@ -1,6 +1,6 @@
 package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -87,7 +87,7 @@ public class SelectSubCollectionsImagesAdapter extends RecyclerView.Adapter<Sele
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.placeholder);
-        File fileGlide = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+m_collection.getName()+"/"+m_data.get(position));
+        File fileGlide = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath()+"/"+m_collection.getName()+"/"+m_data.get(position));
         if(fileGlide.isFile()){
             Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
         }

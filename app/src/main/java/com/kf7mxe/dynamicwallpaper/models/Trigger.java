@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public class Trigger implements Serializable {
-    String triggerType="none";
+    String triggerType;
 
     public Trigger(){
 
@@ -13,6 +13,19 @@ public class Trigger implements Serializable {
 
     public String getTriggerType() {
         return triggerType;
+    }
+    public String getTriggerTypeAsHumanReadableString(){
+        // split the string on camel case
+        if (triggerType == null) {
+            return "";
+        }
+        String[] words = triggerType.split("(?=[A-Z])");
+        String humanReadableString = "";
+        for (String word : words) {
+            humanReadableString += word + " ";
+        }
+
+        return humanReadableString;
     }
 
     public String getDisplayType(){

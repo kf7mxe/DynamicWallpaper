@@ -16,6 +16,7 @@ import com.kf7mxe.dynamicwallpaper.databinding.FragmentTriggerByWeatherBinding;
 import com.kf7mxe.dynamicwallpaper.models.TriggerByWeather;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TriggerByWeatherFragment extends Fragment {
 
@@ -32,6 +33,7 @@ public class TriggerByWeatherFragment extends Fragment {
 
     private String weatherLocationTypeIs;
 
+    private ArrayList<String> weatherTypes = new ArrayList<>();
 
     private FragmentTriggerByWeatherBinding bindings;
     private NavController navController;
@@ -126,7 +128,7 @@ public class TriggerByWeatherFragment extends Fragment {
         bindings.lowEndTempretureEditText.getText().toString();
         bindings.highEndTempretureEditText.getText().toString();
 
-        ArrayList<String> weatherTypes = new ArrayList<>();
+
         weatherTypes.add("Clear");
         weatherTypes.add("Mostly Clear");
         weatherTypes.add("Clouds");
@@ -143,11 +145,11 @@ public class TriggerByWeatherFragment extends Fragment {
         weatherTypes.add("Windy");
 
 
-        bindings.whenItIsWeatherCondition.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, weatherTypes));
+        bindings.whenItIsWeatherCondition.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, weatherTypes));
 
         ArrayList<String> updateEveryTime =  triggerByWeather.getUpdateForcastEveryOptions();
 
-        bindings.updateForcasdEverySpinner.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, updateEveryTime));
+        bindings.updateForcasdEverySpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, updateEveryTime));
 
         bindings.goToActionsFromDateTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +177,7 @@ public class TriggerByWeatherFragment extends Fragment {
 
                     triggerByWeather.setUpdateForcastEvery(bindings.updateForcasdEverySpinner.getSelectedItem().toString());
 
+                    assert bundle != null;
                     bundle.putString("Trigger",triggerByWeather.myToString());
                     bundle.putString("TriggerType","triggerByWeather");
                     navController.navigate(R.id.action_triggerByWeatherFragment_to_selectActionsFragment,bundle);
@@ -190,6 +193,16 @@ public class TriggerByWeatherFragment extends Fragment {
         if (bindings.whenTempretureIsEditText.getText().toString().isEmpty() && bindings.whenTempretureIsLessThanEditText.getText().toString().isEmpty() && bindings.whenTempretureIsGreaterThanEditText.getText().toString().isEmpty() && bindings.lowEndTempretureEditText.getText().toString().isEmpty() && bindings.highEndTempretureEditText.getText().toString().isEmpty() && bindings.whenItIsWeatherCondition.getSelectedItem().toString().isEmpty()){
             Toast.makeText(getContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
             return false;
+        }
+        if (weatherTypes.equals("specificSetLocation")) {
+            if (bindings.specificSetLocationEditText.getText().toString().isEmpty()) {
+                Toast.makeText(getContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (bindings.specificSetLocationEditText.getText().toString().split(",").length != 2) {
+                Toast.makeText(getContext(), "Please enter a valid location", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         return true;
     }

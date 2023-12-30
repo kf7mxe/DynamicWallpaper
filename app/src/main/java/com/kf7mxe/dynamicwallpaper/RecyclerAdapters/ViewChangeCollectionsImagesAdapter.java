@@ -1,6 +1,6 @@
 package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,6 +29,7 @@ import com.kf7mxe.dynamicwallpaper.models.SubCollection;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<ViewChangeCollectionsImagesAdapter.ViewHolder> {
     private ArrayList<String> m_data;
@@ -131,7 +132,7 @@ public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<Vie
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.drawable.placeholder);
-            File fileGlide = new File(m_context.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + m_collection.getName() + "/" + m_data.get(position));
+            File fileGlide = new File(Objects.requireNonNull(m_context.getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath() + "/" + m_collection.getName() + "/" + m_data.get(position));
             if (fileGlide.isFile()) {
                 Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
             }

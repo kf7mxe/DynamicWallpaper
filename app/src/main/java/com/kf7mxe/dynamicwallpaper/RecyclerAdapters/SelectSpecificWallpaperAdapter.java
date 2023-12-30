@@ -1,6 +1,6 @@
 package com.kf7mxe.dynamicwallpaper.RecyclerAdapters;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -60,7 +60,7 @@ public class SelectSpecificWallpaperAdapter extends RecyclerView.Adapter<SelectS
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.drawable.placeholder);
-            File fileGlidePrivew1 = new File(mContext.getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath()+"/"+mCollection.getName()+"/"+m_photos.get(position));
+            File fileGlidePrivew1 = new File(mContext.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath()+"/"+mCollection.getName()+"/"+m_photos.get(position));
             if(fileGlidePrivew1.isFile()){
                 Glide.with(mContext).load(fileGlidePrivew1.getAbsolutePath()).apply(options).into(holder.imageView);
             }

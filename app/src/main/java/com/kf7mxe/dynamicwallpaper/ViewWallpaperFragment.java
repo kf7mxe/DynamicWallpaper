@@ -1,6 +1,6 @@
 package com.kf7mxe.dynamicwallpaper;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -92,7 +92,7 @@ public class ViewWallpaperFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             if(subCollectionId==-1){
                                 collection.getPhotoNames().remove(wallpaperFileName);
-                                new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath(), collection.getName()).delete();
+                                new File(getContext().getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath(), collection.getName()).delete();
                                 collectionViewModel.saveCollectionToCache(collection);
                             } else {
                                 collection.getSubCollectionArray().get(subCollectionId).getFileNames().remove(wallpaperFileName);
@@ -147,7 +147,7 @@ public class ViewWallpaperFragment extends Fragment {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.placeholder);
-        File fileGlide = new File(getContext().getExternalFilesDir(ACTION_OPEN_DOCUMENT).getAbsolutePath() + "/" + collection.getName() + "/" + wallpaperFileName);
+        File fileGlide = new File(getContext().getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + collection.getName() + "/" + wallpaperFileName);
         if (fileGlide.isFile()) {
             Glide.with(getContext()).load(fileGlide.getAbsolutePath()).apply(options).into(binding.wallpaperImageView);
         }

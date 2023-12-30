@@ -58,7 +58,7 @@
     <fragment
         android:id="@+id/triggerByDateTimeFragment"
         android:name="com.kf7mxe.dynamicwallpaper.TriggerByTimeIntervalFragment"
-        android:label="Trigger By Date"
+        android:label="Trigger By Time Interval"
         tools:layout="@layout/fragment_trigger_by_time_interval">
         <action
             android:id="@+id/action_triggerByDateTimeFragment_to_selectActionsFragment"
@@ -109,8 +109,8 @@
     <fragment
         android:id="@+id/triggerByDateFragment"
         android:name="com.kf7mxe.dynamicwallpaper.TriggerByDateFragment"
-        android:label="fragment_trigger_by_date"
-        tools:layout="@layout/fragment_trigger_by_date" >
+        android:label="Trigger By Date"
+        tools:layout="@layout/fragment_trigger_by_date">
         <action
             android:id="@+id/action_triggerByDateFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
@@ -127,8 +127,8 @@
     <fragment
         android:id="@+id/triggerCalendarEventFragment"
         android:name="com.kf7mxe.dynamicwallpaper.TriggerCalendarEventFragment"
-        android:label="fragment_trigger_calendar_event"
-        tools:layout="@layout/fragment_trigger_calendar_event" >
+        android:label="Trigger by Calendar Event"
+        tools:layout="@layout/fragment_trigger_calendar_event">
         <action
             android:id="@+id/action_triggerCalendarEventFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
@@ -136,8 +136,8 @@
     <fragment
         android:id="@+id/triggerLocationFragment"
         android:name="com.kf7mxe.dynamicwallpaper.TriggerLocationFragment"
-        android:label="fragment_trigger_location"
-        tools:layout="@layout/fragment_trigger_location" >
+        android:label="Trigger by Location"
+        tools:layout="@layout/fragment_trigger_location">
         <action
             android:id="@+id/action_triggerLocationFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
@@ -145,7 +145,7 @@
     <fragment
         android:id="@+id/triggerByWeatherFragment"
         android:name="com.kf7mxe.dynamicwallpaper.TriggerByWeatherFragment"
-        android:label="TriggerByWeatherFragment" >
+        android:label="Trigger By Weather">
         <action
             android:id="@+id/action_triggerByWeatherFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
