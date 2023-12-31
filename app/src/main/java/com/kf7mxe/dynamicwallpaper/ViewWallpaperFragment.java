@@ -92,7 +92,7 @@ public class ViewWallpaperFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             if(subCollectionId==-1){
                                 collection.getPhotoNames().remove(wallpaperFileName);
-                                new File(getContext().getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath(), collection.getName()).delete();
+                                new File(getContext().getFilesDir().getAbsolutePath(), Long.toString(collection.getId())).delete();
                                 collectionViewModel.saveCollectionToCache(collection);
                             } else {
                                 collection.getSubCollectionArray().get(subCollectionId).getFileNames().remove(wallpaperFileName);
@@ -147,7 +147,7 @@ public class ViewWallpaperFragment extends Fragment {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.placeholder);
-        File fileGlide = new File(getContext().getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + collection.getName() + "/" + wallpaperFileName);
+        File fileGlide = new File(getContext().getFilesDir().getAbsolutePath() + "/" + collection.getId() + "/" + wallpaperFileName);
         if (fileGlide.isFile()) {
             Glide.with(getContext()).load(fileGlide.getAbsolutePath()).apply(options).into(binding.wallpaperImageView);
         }

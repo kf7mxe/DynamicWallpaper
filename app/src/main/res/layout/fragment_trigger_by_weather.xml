@@ -35,15 +35,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="When tempreture is:" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/whenTempretureIsEditText"
+                    style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
-                    android:minHeight="48dp"
                     android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <RadioButton
@@ -52,7 +58,13 @@
                     android:layout_height="wrap_content"
                     android:text="when Tempreture is less than:" />
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/whenTempretureIsLessThanEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -60,21 +72,28 @@
                     android:inputType="number"
                     android:minHeight="48dp"
                     android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <RadioButton
                     android:id="@+id/whenTempretureIsGreaterThanRadio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="When tempreture is greater than:" />
-
-                <EditText
-                    android:id="@+id/whenTempretureIsGreaterThanEditText"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/whenTempretureIsGreaterThanEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:ems="10"
                     android:inputType="number"
                     android:minHeight="48dp"
                     android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <RadioButton
                     android:id="@+id/whenTempretureIsBetweenRadio"
@@ -90,13 +109,18 @@
                     android:visibility="gone">
                     >
 
-                    <EditText
-                        android:id="@+id/lowEndTempretureEditText"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lowEndTempretureEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:ems="10"
                         android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/textView12"
@@ -106,13 +130,19 @@
                         android:text="And"
                         android:textAlignment="center" />
 
-                    <EditText
-                        android:id="@+id/highEndTempretureEditText"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/highEndTempretureEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -120,14 +150,22 @@
                     android:id="@+id/whenWeatherConditionsRadio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:text="When it is:" />
-
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
                 <Spinner
                     android:id="@+id/whenItIsWeatherCondition"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
+                    android:spinnerMode="dropdown"
+                    style="@android:style/Widget.Material.Spinner.Underlined"
+                    android:pointerIcon="arrow"
+                    android:foregroundTint="@color/cardview_dark_background"
                     android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </RadioGroup>
 
@@ -205,17 +243,22 @@
                 android:id="@+id/textView17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:layout_marginStart="16dp"
                 android:text="Update Forecase in background every:" />
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <Spinner
                 android:id="@+id/updateForcasdEverySpinner"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                style="@android:style/Widget.Material.Spinner.Underlined"
+                android:pointerIcon="arrow"
+                android:foregroundTint="@color/cardview_dark_background"
                 android:minHeight="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
         </LinearLayout>

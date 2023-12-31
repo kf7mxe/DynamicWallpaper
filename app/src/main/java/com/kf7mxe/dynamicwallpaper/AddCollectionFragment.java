@@ -17,6 +17,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -43,7 +44,6 @@ import com.kf7mxe.dynamicwallpaper.models.Collection;
 import com.kf7mxe.dynamicwallpaper.models.Rule;
 import com.kf7mxe.dynamicwallpaper.viewmodels.CollectionViewModel;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -147,6 +147,11 @@ public class AddCollectionFragment extends Fragment {
         }
 
     }
+
+
+
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
@@ -163,8 +168,8 @@ public class AddCollectionFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             collectionViewModel.deleteFromDatabase(collection);
-                            if (collection.getPhotoNames().size() != 0 && collection.getName().length() != 0) {
-                                deleteRecursive(new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName()));
+                            if (collection.getPhotoNames().size() != 0 ) {
+                                deleteRecursive(new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(), Long.toString(collection.getId())));
                             }
                             navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
                         }
@@ -297,9 +302,7 @@ public class AddCollectionFragment extends Fragment {
         binding.cancelNewCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(collection.getName().length()==0) {
                     collectionViewModel.deleteFromDatabase(collection);
-                }
                 navController.navigate(R.id.action_addCollectionFragment_to_homeFragment);
             }
         });
@@ -336,16 +339,16 @@ public class AddCollectionFragment extends Fragment {
             }
         });
 
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
-
-        }
-        else if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
-            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
-        else {
-            launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
+//        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+//
+//        }
+//        else if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+//            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+//        }
+//        else {
+//            launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+//        }
 
 
 
@@ -425,15 +428,15 @@ public class AddCollectionFragment extends Fragment {
 
     private File getImageFile() throws IOException {
         String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        File folderCollection = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(),binding.enterCollectionName.getText().toString());
+        File folderCollection = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(),Long.toString(collection.getId()));
         folderCollection.mkdir();
-        File file = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
+        File file = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath()+"/"+ collection.getId() +"/"+imageFileName+".jpg");
         file.createNewFile();
 
         collection.getPhotoNames().add(imageFileName+".jpg");
 
         SharedPreferences.Editor myEditor = sharedPreferences.edit();
-        myEditor.putString("testImage", Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath()+"/"+binding.enterCollectionName.getText().toString()+"/"+imageFileName+".jpg");
+        myEditor.putString("testImage", Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath()+"/"+ collection.getId() +"/"+imageFileName+".jpg");
         myEditor.apply();
 
         return file;
@@ -443,6 +446,7 @@ public class AddCollectionFragment extends Fragment {
     private void setRandomImagesForPreview() {
         if (collection.getPhotoNames().size() > 0){
             int photoCount = collection.getPhotoNames().size();
+            if (photoCount <5 ) {photoCount = 5;}
             Random rand = new Random();
             int randomPhotoIndex1 = rand.nextInt(photoCount);
             int randomPhotoIndex2 = rand.nextInt(photoCount);
@@ -465,18 +469,27 @@ public class AddCollectionFragment extends Fragment {
             while (randomPhotoIndex5 == randomPhotoIndex1 || randomPhotoIndex5 == randomPhotoIndex2 || randomPhotoIndex5 == randomPhotoIndex3 || randomPhotoIndex5 == randomPhotoIndex4){
                 randomPhotoIndex5 = rand.nextInt(photoCount);
             }
+            if (collection.getPhotoNames().size() > randomPhotoIndex1){
+                File fileImage = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(), collection.getId()+ "/" + collection.getPhotoNames().get(randomPhotoIndex1));
+                Glide.with(requireContext()).load(fileImage).into(binding.imageView);
+            }
+            if (collection.getPhotoNames().size() > randomPhotoIndex2){
+                File fileImage2 = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(), collection.getId()+ "/" + collection.getPhotoNames().get(randomPhotoIndex2));
+                Glide.with(requireContext()).load(fileImage2).into(binding.imageView2);
+            }
+            if (collection.getPhotoNames().size() > randomPhotoIndex3){
+                File fileImage3 = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(), collection.getId() + "/" + collection.getPhotoNames().get(randomPhotoIndex3));
+                Glide.with(requireContext()).load(fileImage3).into(binding.imageView3);
+            }
+            if (collection.getPhotoNames().size() > randomPhotoIndex4){
+                File fileImage4 = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(), collection.getId() + "/" + collection.getPhotoNames().get(randomPhotoIndex4));
+                Glide.with(requireContext()).load(fileImage4).into(binding.imageView4);
+            }
+            if (collection.getPhotoNames().size() > randomPhotoIndex5){
+                File fileImage5 = new File(Objects.requireNonNull(requireContext().getFilesDir()).getAbsolutePath(), collection.getId() + "/" + collection.getPhotoNames().get(randomPhotoIndex5));
+                Glide.with(requireContext()).load(fileImage5).into(binding.imageView5);
+            }
 
-            File fileImage = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex1));
-            File fileImage2 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex2));
-            File fileImage3 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex3));
-            File fileImage4 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex4));
-            File fileImage5 = new File(Objects.requireNonNull(requireContext().getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath(), collection.getName() + "/" + collection.getPhotoNames().get(randomPhotoIndex5));
-
-            Glide.with(requireContext()).load(fileImage).into(binding.imageView);
-            Glide.with(requireContext()).load(fileImage2).into(binding.imageView2);
-            Glide.with(requireContext()).load(fileImage3).into(binding.imageView3);
-            Glide.with(requireContext()).load(fileImage4).into(binding.imageView4);
-            Glide.with(requireContext()).load(fileImage5).into(binding.imageView5);
             binding.selectedImagePreview.setVisibility(View.VISIBLE);
             binding.selectedImagePreviewText.setVisibility(View.VISIBLE);
             // show subcollection checkbox and button

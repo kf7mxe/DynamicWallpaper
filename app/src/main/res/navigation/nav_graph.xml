@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_homeFragment_to_addCollectionFragment"
             app:destination="@id/addCollectionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_debugFragment2"
+            app:destination="@id/debugFragment2" />
     </fragment>
     <fragment
         android:id="@+id/addCollectionFragment"
@@ -150,4 +153,9 @@
             android:id="@+id/action_triggerByWeatherFragment_to_selectActionsFragment"
             app:destination="@id/selectActionsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/debugFragment2"
+        android:name="com.kf7mxe.dynamicwallpaper.DebugFragment"
+        android:label="fragment_debug"
+        tools:layout="@layout/fragment_debug" />
 </navigation>

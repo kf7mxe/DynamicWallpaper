@@ -117,9 +117,12 @@ public class HomeFragment extends Fragment {
             //int pause = 0;
         }
 
-//        if(!selectedCollectionString.equals("")){
-//            startRunningCollections();
-//        }
+        binding.selectedCollectionCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_homeFragment_to_debugFragment2);
+            }
+        });
 
         // Set the adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

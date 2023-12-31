@@ -10,6 +10,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -38,6 +40,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -194,47 +197,128 @@ public class TriggerLocationFragment extends Fragment {
         return distance;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++) {
-            permissionsToRequest.add(permissions[i]);
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    getActivity(),
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        ArrayList<String> permissionsToRequest = new ArrayList<>();
+//        for (int i = 0; i < grantResults.length; i++) {
+//            permissionsToRequest.add(permissions[i]);
+//        }
+//        if (permissionsToRequest.size() > 0) {
+//            ActivityCompat.requestPermissions(
+//                    getActivity(),
+//                    permissionsToRequest.toArray(new String[0]),
+//                    REQUEST_PERMISSIONS_REQUEST_CODE);
+//        }
+//    }
+
+
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+                    isGranted -> {
+                        if (isGranted) {
+                            // Permission granted, access location
+                            // ... your location-related code
+                        } else {
+                            // Permission denied, handle the denial
+                            // ... inform the user or disable location features
+                        }
+                    });
+
 
     private void requestPermissionsIfNecessary(String[] permissions) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(getContext(), permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
-                permissionsToRequest.add(permission);
-            }
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    getActivity(),
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
-        if (permissionsToRequest.size()==0){
-            // get current location
-            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                getLocation();
-                Toast.makeText(getContext(), "latitude"+latitude, Toast.LENGTH_SHORT).show();
-            GeoPoint currentLocation = new GeoPoint(latitude, longitude);
 
-            mapController = binding.map.getController();
-            mapController.setCenter(currentLocation);
-            mapController.setZoom(15);
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            Toast.makeText(getContext(), "Location permission is required to use this app", Toast.LENGTH_SHORT).show();
+            // Permission already granted, access location
+            // ... your location-related code
+                        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
+            getLocation();
+                        GeoPoint currentLocation = new GeoPoint(latitude, longitude);
+                        mapController = binding.map.getController();
+                        mapController.setCenter(currentLocation);
+                        mapController.setZoom(15);
         }
+
+        // request permissions
+//        registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+//                result -> {
+//                    if (result == null) {
+//                        return;
+//                    } else {
+//                        if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) && result.get(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+//                            // Permission is granted
+////                        getLocation();
+////                        GeoPoint currentLocation = new GeoPoint(latitude, longitude);
+////                        mapController = binding.map.getController();
+////                        mapController.setCenter(currentLocation);
+////                        mapController.setZoom(15);
+//                        } else {
+//                            // Permission is denied
+//                            Toast.makeText(getContext(), "Location permission is required to use this app", Toast.LENGTH_SHORT).show();
+//                            OnGPS();
+//                        }
+//                    }
+//                }
+//        ).launch(permissions);
+
+
+
+//        ArrayList<String> permissionsToRequest = new ArrayList<>();
+//        for (String permission : permissions) {
+//            if (ContextCompat.checkSelfPermission(getContext(), permission)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                // Permission is not granted
+//                permissionsToRequest.add(permission);
+//            }
+//        }
+//        if (permissionsToRequest.size() > 0) {
+//            String[] permissionsToRequestArray = new String[permissionsToRequest.size()];
+//            permissionsToRequestArray = permissionsToRequest.toArray(permissionsToRequestArray);
+//                registerForActivityResult(
+//                        new ActivityResultContracts.RequestMultiplePermissions(),
+//                        result -> {
+//                            if (result.get(Manifest.permission.ACCESS_FINE_LOCATION) && result.get(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+//                                // Permission is granted
+//                                getLocation();
+//                                GeoPoint currentLocation = new GeoPoint(latitude, longitude);
+//                                mapController = binding.map.getController();
+//                                mapController.setCenter(currentLocation);
+//                                mapController.setZoom(15);
+//                            } else {
+//                                // Permission is denied
+//                                Toast.makeText(getContext(), "Location permission is required to use this app", Toast.LENGTH_SHORT).show();
+//                                OnGPS();
+//                            }
+//                        }
+//                ).launch(permissionsToRequestArray);
+//
+//
+
+
+//        }
+
+
+
+
+
+
+
+//        if (permissionsToRequest.size()==0){
+//            // get current location
+//            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//                getLocation();
+//                Toast.makeText(getContext(), "latitude"+latitude, Toast.LENGTH_SHORT).show();
+//            GeoPoint currentLocation = new GeoPoint(latitude, longitude);
+//
+//            mapController = binding.map.getController();
+//            mapController.setCenter(currentLocation);
+//            mapController.setZoom(15);
+//
+//        }
     }
 
     private void OnGPS() {
@@ -242,8 +326,8 @@ public class TriggerLocationFragment extends Fragment {
     }
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(
-                getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+                requireActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
 
         } else {
             try {

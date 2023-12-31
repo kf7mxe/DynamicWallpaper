@@ -132,7 +132,7 @@ public class ViewChangeCollectionsImagesAdapter extends RecyclerView.Adapter<Vie
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.drawable.placeholder);
-            File fileGlide = new File(Objects.requireNonNull(m_context.getExternalFilesDir(ACTION_GET_CONTENT)).getAbsolutePath() + "/" + m_collection.getName() + "/" + m_data.get(position));
+            File fileGlide = new File(Objects.requireNonNull(m_context.getFilesDir()).getAbsolutePath() + "/" + m_collection.getId() + "/" + m_data.get(position));
             if (fileGlide.isFile()) {
                 Glide.with(m_context).load(fileGlide.getAbsolutePath()).apply(options).into(viewHolder.image);
             }

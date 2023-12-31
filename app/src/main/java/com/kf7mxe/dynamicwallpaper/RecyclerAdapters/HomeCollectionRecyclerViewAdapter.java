@@ -172,18 +172,18 @@ public class HomeCollectionRecyclerViewAdapter extends RecyclerView.Adapter<Home
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.drawable.placeholder);
-            File fileGlidePrivew1 = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath()+"/"+m_collections.get(position).getName()+"/"+m_collections.get(position).getPhotoNames().get(0));
+            File fileGlidePrivew1 = new File(m_context.getFilesDir().getAbsolutePath()+"/"+m_collections.get(position).getId()+"/"+m_collections.get(position).getPhotoNames().get(0));
             if(fileGlidePrivew1.isFile()){
                 Glide.with(m_context).load(fileGlidePrivew1.getAbsolutePath()).apply(options).into(viewHolder.imagePreview1);
             }
             if(m_collections.get(position).getPhotoNames().size()>1) {
-                File fileGlidePrivew2 = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + m_collections.get(position).getName() + "/" + m_collections.get(position).getPhotoNames().get(1));
+                File fileGlidePrivew2 = new File(m_context.getFilesDir().getAbsolutePath() + "/" + m_collections.get(position).getId() + "/" + m_collections.get(position).getPhotoNames().get(1));
                 if (fileGlidePrivew2.isFile()) {
                     Glide.with(m_context).load(fileGlidePrivew2.getAbsolutePath()).apply(options).into(viewHolder.imagePreview2);
                 }
             }
             if(m_collections.get(position).getPhotoNames().size()>2) {
-                File fileGlidePrivew3 = new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + m_collections.get(position).getName() + "/" + m_collections.get(position).getPhotoNames().get(2));
+                File fileGlidePrivew3 = new File(m_context.getFilesDir().getAbsolutePath() + "/" + m_collections.get(position).getId() + "/" + m_collections.get(position).getPhotoNames().get(2));
                 if (fileGlidePrivew3.isFile()) {
                     Glide.with(m_context).load(fileGlidePrivew3.getAbsolutePath()).apply(options).into(viewHolder.imagePreview3);
                 }

@@ -629,7 +629,7 @@ public JSONArray getWeatherForcast(String weatherUrl){
         return "";
     }
 
-    public Pair getLatLonLocationFromGps(Context context){
+    public Pair<String,String> getLatLonLocationFromGps(Context context){
         final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
         if (ActivityCompat.checkSelfPermission(
                 context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(

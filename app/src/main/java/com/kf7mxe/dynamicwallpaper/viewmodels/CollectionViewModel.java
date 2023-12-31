@@ -99,8 +99,8 @@ public class CollectionViewModel extends AndroidViewModel {
                 }
             }
             if(!inCollection){
-                if (cacheCollections.get(i).getPhotoNames().size() != 0 && cacheCollections.get(i).getName().length() != 0) {
-                    deleteRecursive(new File(m_context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath(), cacheCollections.get(i).getName()));
+                if (cacheCollections.get(i).getPhotoNames().size() != 0) {
+                    deleteRecursive(new File(m_context.getFilesDir().getAbsolutePath(), Long.toString(cacheCollections.get(i).getId())));
                 }
             }
         }

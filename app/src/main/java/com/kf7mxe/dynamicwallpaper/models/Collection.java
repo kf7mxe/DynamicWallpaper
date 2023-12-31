@@ -261,7 +261,7 @@ public class Collection implements Serializable {
             nextIndex = this.getSelectedImageIndex();
         }
         if (nextIndex < images.size() - 1) {
-            file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(nextIndex));
+            file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + images.get(nextIndex));
             if (this.selectedSubCollectionArrayIndex != -1) {
 //                this.subCollectionSelectedImageIndex = this.selectedSubCollectionArrayIndex + 1;
                 this.setSubCollectionSelectedImageIndex(this.subCollectionSelectedImageIndex +1 );
@@ -272,7 +272,7 @@ public class Collection implements Serializable {
                 this.setSelectedImageIndex(temp);
             }
         } else {
-            file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(0));
+            file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + images.get(0));
             if (this.selectedSubCollectionArrayIndex != -1) {
                 this.setSubCollectionSelectedImageIndex(0);
 //                this.setSubCollectionSelectedImageIndexMap(selectedSubCollectionArrayIndex, this.selectedSubCollectionArrayIndex);
@@ -297,7 +297,7 @@ public class Collection implements Serializable {
             nextIndex = this.getSelectedImageIndex();
         }
         if (nextIndex < images.size() - 1 && nextIndex > -1) {
-            file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(nextIndex));
+            file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + images.get(nextIndex));
             if (this.selectedSubCollectionArrayIndex != -1) {
                 this.subCollectionSelectedImageIndex = this.selectedSubCollectionArrayIndex - 1;
             } else {
@@ -305,7 +305,7 @@ public class Collection implements Serializable {
                 this.setSelectedImageIndex(temp);
             }
         } else {
-            file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(0));
+            file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + images.get(0));
             if (this.selectedSubCollectionArrayIndex != -1) {
                 this.selectedSubCollectionArrayIndex = 0;
             } else {
@@ -326,7 +326,7 @@ public class Collection implements Serializable {
         Random rand = new Random();
         int index = rand.nextInt(photos.size());
 
-        file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + photos.get(index));
+        file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + photos.get(index));
         int temp = this.getSelectedImageIndex() + 1;
         this.setSelectedImageIndex(temp);
         setWallpaper(context, file);
@@ -335,7 +335,7 @@ public class Collection implements Serializable {
     public void goToSpecificWallpaper(Context context, String specificWallpaperUnEdited) {
         String specificWallpaper = specificWallpaperUnEdited.replace("Selected Specific Wallpaper:", "");
         File file;
-        file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + specificWallpaper);
+        file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + specificWallpaper);
         int temp = this.getSelectedImageIndex() + 1;
         this.setSelectedImageIndex(temp);
         setWallpaper(context, file);
@@ -371,11 +371,11 @@ public class Collection implements Serializable {
             nextIndex = this.getSelectedImageIndex();
         }
         if (nextIndex < images.size() - 1) {
-            file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(nextIndex));
+            file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + images.get(nextIndex));
             int temp = this.getSelectedImageIndex() + 1;
             this.setSelectedImageIndex(temp);
         } else {
-            file = new File(context.getExternalFilesDir(ACTION_GET_CONTENT).getAbsolutePath() + "/" + this.getName() + "/" + images.get(0));
+            file = new File(context.getFilesDir().getAbsolutePath() + "/" + this.getId() + "/" + images.get(0));
             this.setSelectedImageIndex(0);
         }
         setWallpaper(context, file);
@@ -525,7 +525,7 @@ public class Collection implements Serializable {
 
         pi = PendingIntent.getBroadcast(context, getIdAsInt() + 1001 + triggerIndex, intent
                 , PendingIntent.FLAG_MUTABLE);
-        TriggerByWeather triggerByWeather = TriggerByWeather.class.cast(trigger);
+        TriggerByWeather triggerByWeather = (TriggerByWeather) trigger;
 
         String updateEvery = triggerByWeather.getUpdateForcastEvery();
         switch (updateEvery) {
