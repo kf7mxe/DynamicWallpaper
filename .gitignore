@@ -1,15 +1,41 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+local.properties
+/.idea/
 .DS_Store
 /build
+*/build
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+*.hprof
+
+# Kotlin
+.kotlin/
+
+# Server
+/server/local.properties
+/server/build/
+/server/data/
+
+# Apps
+/apps/build/
+/apps/kotlin-js-store/
+
+# Shared
+/shared/build/
+
+# Web
+/apps/node_modules/
+
+# iOS
+*.xcworkspace
+*.xcodeproj
+Pods/
+DerivedData/
+
+# Generated SDK
+/apps/src/commonMain/kotlin/com/dynamicwallpaper/sdk/Api.kt
+/apps/src/commonMain/kotlin/com/dynamicwallpaper/sdk/LiveApi.kt
+/apps/src/commonMain/kotlin/com/dynamicwallpaper/sdk/CachedApi.kt
