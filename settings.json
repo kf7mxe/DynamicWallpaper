@@ -1,0 +1,41 @@
+{
+    "cache": "ram",
+    "cors": {
+        "limitToDomains": [],
+        "limitToHeaders": [],
+        "limitToMethods": [],
+        "exposedHeaders": [],
+        "allowCredentials": false,
+        "cacheLength": null,
+        "forbidOnMatchFail": true
+    },
+    "database": "ram",
+    "email": "console",
+    "files": "file://local/files?serveUrl=files",
+    "forceWebSocketPubSub": false,
+    "general": {
+        "projectName": "My Project",
+        "publicUrl": "http://localhost:8080",
+        "wsUrl": "ws://localhost:8080",
+        "debug": false,
+        "emergencyContact": null
+    },
+    "ktorRunConfig": {
+        "host": "0.0.0.0",
+        "port": 8080,
+        "realIpHeader": null
+    },
+    "logging": {
+        "default": {
+            "filePattern": null,
+            "toConsole": true,
+            "level": "INFO",
+            "additive": false
+        },
+        "logger": null
+    },
+    "pubSub": "local",
+    "secretBasis": "knWWshj9R5tQTtETV3yfTXp8UWA72w0EVVZLzBpXIDOtN/ZstrP6kLYtVOZGlnhloPouGzr72v5NW/JzGTlTWAFX4sdLSSjGp+DqKSDU8NGG42HJvZplHjtE1R1L7OWy1LfcLRa5gA14H0DWA579ADXFuI1Vh/Ae8XEgsEHJuDo=",
+    "telemetry": null,
+    "webUrl": "http://localhost:8080"
+}
