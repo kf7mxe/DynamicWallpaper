@@ -26,11 +26,12 @@ class BrowsePacksPage : Page {
 
     override fun ViewWriter.render() {
         val api = createUnauthApi()
+        val isLoading = Signal(true)
 
         val packs = rememberSuspending {
             try {
                 val q = searchQuery()
-                if (q.isBlank()) {
+                val result = if (q.isBlank()) {
                     api.pack.query(Query<Pack>(limit = 50))
                 } else {
                     api.pack.query(Query<Pack>(
@@ -38,7 +39,11 @@ class BrowsePacksPage : Page {
                         limit = 50
                     ))
                 }
+                isLoading.value = false
+                result
             } catch (e: Exception) {
+                isLoading.value = false
+                toast("Failed to load packs: ${e.message}")
                 emptyList()
             }
         }
@@ -61,6 +66,20 @@ class BrowsePacksPage : Page {
             }
 
             space()
+
+            // Loading indicator
+            shownWhen { isLoading() }.centered.activityIndicator { }
+
+            // Empty state
+            shownWhen { packs().isEmpty() && !isLoading() }.centered.col {
+                icon(Icon.search.copy(width = 4.rem, height = 4.rem), "No results")
+                space()
+                h3 { content = "No Packs Found" }
+                subtext { ::content {
+                    if (searchQuery().isNotBlank()) "No packs match \"${searchQuery()}\""
+                    else "No wallpaper packs available yet"
+                } }
+            }
 
             forEach(packs) { pack ->
                 packCard(pack)

@@ -30,11 +30,15 @@ class ExplorePage : Page {
 
     override fun ViewWriter.render() {
         val api = createUnauthApi()
+        val isLoading = Signal(true)
+        val errorMessage = Signal<String?>(null)
 
         val featuredPacks = rememberSuspending {
             try {
                 api.pack.query(Query<Pack>(condition = condition<Pack> { it.isFeatured eq true }, limit = 5))
             } catch (e: Exception) {
+                errorMessage.value = "Failed to load featured packs: ${e.message}"
+                toast("Failed to load explore data")
                 emptyList()
             }
         }
@@ -43,14 +47,19 @@ class ExplorePage : Page {
             try {
                 api.playlist.query(Query<Playlist>(condition = condition<Playlist> { it.isPublic eq true }, limit = 10))
             } catch (e: Exception) {
+                errorMessage.value = "Failed to load playlists: ${e.message}"
                 emptyList()
             }
         }
 
         val allPacks = rememberSuspending {
             try {
-                api.pack.query(Query<Pack>(limit = 20))
+                val result = api.pack.query(Query<Pack>(limit = 20))
+                isLoading.value = false
+                result
             } catch (e: Exception) {
+                isLoading.value = false
+                errorMessage.value = "Failed to load packs: ${e.message}"
                 emptyList()
             }
         }
@@ -74,8 +83,11 @@ class ExplorePage : Page {
 
             space()
 
+            // Loading indicator
+            shownWhen { isLoading() }.centered.activityIndicator { }
+
             // Tag filter chips
-            row {
+            shownWhen { !isLoading() }.row {
                 button {
                     text { ::content { if (selectedTag() == null) "All" else "All" } }
                     onClick { selectedTag.value = null }
@@ -91,43 +103,64 @@ class ExplorePage : Page {
             space()
 
             // Featured section
-            h3 { content = "Featured" }
-            subtext { content = "Hand-picked wallpaper packs" }
-            col {
-                forEach(featuredPacks) { pack ->
-                    featuredPackCard(pack)
+            shownWhen { !isLoading() }.col {
+                h3 { content = "Featured" }
+                subtext { content = "Hand-picked wallpaper packs" }
+
+                shownWhen { featuredPacks().isEmpty() && !isLoading() }.centered.col {
+                    subtext { content = "No featured packs available" }
+                }
+
+                col {
+                    forEach(featuredPacks) { pack ->
+                        featuredPackCard(pack)
+                    }
                 }
             }
 
             space()
 
             // Packs section
-            row {
-                expanding.h3 { content = "Wallpaper Packs" }
-                button {
-                    text { content = "See All" }
-                    onClick { pageNavigator.navigate(BrowsePacksPage()) }
+            shownWhen { !isLoading() }.col {
+                row {
+                    expanding.h3 { content = "Wallpaper Packs" }
+                    button {
+                        text { content = "See All" }
+                        onClick { pageNavigator.navigate(BrowsePacksPage()) }
+                    }
                 }
-            }
-            col {
-                forEach(allPacks) { pack ->
-                    packCard(pack)
+
+                shownWhen { allPacks().isEmpty() && !isLoading() }.centered.col {
+                    subtext { content = "No packs found" }
+                }
+
+                col {
+                    forEach(allPacks) { pack ->
+                        packCard(pack)
+                    }
                 }
             }
 
             space()
 
             // Playlists section
-            row {
-                expanding.h3 { content = "Shared Playlists" }
-                button {
-                    text { content = "See All" }
-                    onClick { pageNavigator.navigate(BrowsePlaylistsPage()) }
+            shownWhen { !isLoading() }.col {
+                row {
+                    expanding.h3 { content = "Shared Playlists" }
+                    button {
+                        text { content = "See All" }
+                        onClick { pageNavigator.navigate(BrowsePlaylistsPage()) }
+                    }
                 }
-            }
-            col {
-                forEach(publicPlaylists) { playlist ->
-                    playlistCard(playlist)
+
+                shownWhen { publicPlaylists().isEmpty() && !isLoading() }.centered.col {
+                    subtext { content = "No shared playlists found" }
+                }
+
+                col {
+                    forEach(publicPlaylists) { playlist ->
+                        playlistCard(playlist)
+                    }
                 }
             }
         }

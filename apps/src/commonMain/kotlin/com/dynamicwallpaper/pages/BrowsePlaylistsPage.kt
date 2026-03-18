@@ -28,11 +28,12 @@ class BrowsePlaylistsPage : Page {
 
     override fun ViewWriter.render() {
         val api = createUnauthApi()
+        val isLoading = Signal(true)
 
         val playlists = rememberSuspending {
             try {
                 val q = searchQuery()
-                if (q.isBlank()) {
+                val result = if (q.isBlank()) {
                     api.playlist.query(Query<Playlist>(
                         condition = condition<Playlist> { it.isPublic eq true },
                         limit = 50
@@ -43,7 +44,11 @@ class BrowsePlaylistsPage : Page {
                         limit = 50
                     ))
                 }
+                isLoading.value = false
+                result
             } catch (e: Exception) {
+                isLoading.value = false
+                toast("Failed to load playlists: ${e.message}")
                 emptyList()
             }
         }
@@ -66,6 +71,20 @@ class BrowsePlaylistsPage : Page {
             }
 
             space()
+
+            // Loading indicator
+            shownWhen { isLoading() }.centered.activityIndicator { }
+
+            // Empty state
+            shownWhen { playlists().isEmpty() && !isLoading() }.centered.col {
+                icon(Icon.search.copy(width = 4.rem, height = 4.rem), "No results")
+                space()
+                h3 { content = "No Playlists Found" }
+                subtext { ::content {
+                    if (searchQuery().isNotBlank()) "No playlists match \"${searchQuery()}\""
+                    else "No shared playlists available yet"
+                } }
+            }
 
             forEach(playlists) { playlist ->
                 playlistCard(playlist)
