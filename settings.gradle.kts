@@ -1,4 +1,4 @@
-rootProject.name = "DynamicWallpaper"
+rootProject.name = "AutoWall"
 
 pluginManagement {
     repositories {

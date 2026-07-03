@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-group = "com.dynamicwallpaper"
+group = "com.kf7mxe.autowall"
 version = "1.0-SNAPSHOT"
 
 kotlin {
@@ -51,7 +51,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.dynamicwallpaper.shared"
+    namespace = "com.kf7mxe.autowall.shared"
     compileSdk = 36
 
     defaultConfig {

@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.kfc)
 }
 
-group = "com.dynamicwallpaper"
+group = "com.kf7mxe.autowall"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -76,8 +76,8 @@ kotlin {
 
     cocoapods {
         version = "1.0"
-        summary = "Dynamic Wallpaper KMP App"
-        homepage = "https://github.com/dynamicwallpaper"
+        summary = "AutoWall KMP App"
+        homepage = "https://github.com/kf7mxe/autowall"
         ios.deploymentTarget = "14.0"
         name = "apps"
 
@@ -97,11 +97,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.dynamicwallpaper"
+    namespace = "com.kf7mxe.autowall"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.dynamicwallpaper"
+        applicationId = "com.kf7mxe.autowall"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -132,6 +132,13 @@ rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlu
 }
 
 configure<KiteUiPluginExtension> {
-    this.packageName = "com.dynamicwallpaper"
+    this.packageName = "com.kf7mxe.autowall"
     this.iosProjectRoot = project.file("./ios/app")
+}
+
+tasks.named("jsViteDev") {
+    doFirst {
+        val packageDir = project.rootProject.layout.buildDirectory.file("js/packages/AutoWall-apps/vite.config.mjs").get().asFile
+        project.file("vite.config.mjs").copyTo(packageDir, overwrite = true)
+    }
 }

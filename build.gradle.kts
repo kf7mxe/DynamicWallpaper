@@ -18,7 +18,7 @@ buildscript {
 }
 
 allprojects {
-    group = "com.dynamicwallpaper"
+    group = "com.kf7mxe.autowall"
     repositories {
         mavenLocal()
         maven("https://lightningkite-maven.s3.us-west-2.amazonaws.com")

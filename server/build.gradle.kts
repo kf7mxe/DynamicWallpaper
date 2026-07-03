@@ -5,11 +5,11 @@ plugins {
     application
 }
 
-group = "com.dynamicwallpaper"
+group = "com.kf7mxe.autowall"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClass.set("com.dynamicwallpaper.MainKt")
+    mainClass.set("com.kf7mxe.autowall.MainKt")
 }
 
 dependencies {
@@ -59,7 +59,7 @@ tasks.getByName<Zip>("distZip") {
 tasks.create("generateSdk", JavaExec::class.java) {
     group = "deploy"
     classpath(sourceSets.main.get().runtimeClasspath)
-    mainClass.set("com.dynamicwallpaper.MainKt")
+    mainClass.set("com.kf7mxe.autowall.MainKt")
     args("sdk")
     workingDir(project.rootDir)
 }
@@ -67,7 +67,7 @@ tasks.create("generateSdk", JavaExec::class.java) {
 tasks.create("serve", JavaExec::class.java) {
     group = "application"
     classpath(sourceSets.main.get().runtimeClasspath)
-    mainClass.set("com.dynamicwallpaper.MainKt")
+    mainClass.set("com.kf7mxe.autowall.MainKt")
     args("serve")
     workingDir(project.rootDir)
 }
