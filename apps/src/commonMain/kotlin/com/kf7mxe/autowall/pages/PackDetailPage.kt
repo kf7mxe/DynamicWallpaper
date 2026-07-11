@@ -1,10 +1,8 @@
 package com.kf7mxe.autowall.pages
 
 import com.kf7mxe.autowall.Playlist
-import com.kf7mxe.autowall.sdk.createUnauthApi
 import com.kf7mxe.autowall.storage.ImageDownloader
 import com.kf7mxe.autowall.storage.LocalPlaylistStore
-import com.kf7mxe.autowall.storage.packPreviewUrl
 import com.kf7mxe.autowall.storage.serverFileUrl
 import com.lightningkite.kiteui.Routable
 import com.lightningkite.kiteui.models.*
@@ -23,25 +21,24 @@ import kotlin.uuid.Uuid
 class PackDetailPage(val packId: Uuid) : Page {
 
     override fun ElementWriter.CanAddTheme.render() {
-        val api = createUnauthApi()
         val isLoading = Signal(true)
         val loadError = Signal(false)
 
         val packData = rememberSuspending {
-            try {
-                val result = api.pack.detail(packId)
-                isLoading.value = false
-                result
-            } catch (e: Exception) {
-                isLoading.value = false
-                loadError.value = true
-                toast("Failed to load pack: ${e.message}")
-                null
-            }
+//            try {
+//                val result = api.pack.detail(packId)
+//                isLoading.value = false
+//                result
+//            } catch (e: Exception) {
+//                isLoading.value = false
+//                loadError.value = true
+//                toast("Failed to load pack: ${e.message}")
+//                null
+//            }
         }
 
         val imageUrls = rememberSuspending {
-            packData()?.imageFileNames?.map { serverFileUrl(it) } ?: emptyList()
+//            packData()?.imageFileNames?.map { serverFileUrl(it) } ?: emptyList()
         }
 
         val downloadProgress = Signal<ImageDownloader.DownloadProgress?>(null)
@@ -78,33 +75,33 @@ class PackDetailPage(val packId: Uuid) : Page {
             shownWhen { !isLoading() && !loadError() }.col {
                 // Hero image
                 col {
-                    val previewUrl = rememberSuspending { packData()?.let { packPreviewUrl(it) } }
-                    shownWhen { previewUrl() != null }.sizeConstraints(height = 14.rem).image {
-                        ::source { previewUrl()?.let { ImageRemote(it) } ?: ImageRemote("") }
-                        scaleType = ImageScaleType.Crop
-                    }
+//                    val previewUrl = rememberSuspending { packData()?.let { packPreviewUrl(it) } }
+//                    shownWhen { previewUrl() != null }.sizeConstraints(height = 14.rem).image {
+//                        ::source { previewUrl()?.let { ImageRemote(it) } ?: ImageRemote("") }
+//                        scaleType = ImageScaleType.Crop
+//                    }
                 }
 
                 space()
 
-                h2 { ::content { packData()?.name ?: "" } }
+//                h2 { ::content { packData()?.name ?: "" } }
 
-                subtext { ::content { packData()?.description ?: "" } }
+//                subtext { ::content { packData()?.description ?: "" } }
 
                 space()
 
                 // Stats row
                 row {
-                    subtext { ::content { "${packData()?.imageFileNames?.size ?: 0} images" } }
-                    subtext { ::content { "${packData()?.downloadCount ?: 0} downloads" } }
-                    shownWhen { packData()?.isFree == true }.subtext { content = "Free" }
+//                    subtext { ::content { "${packData()?.imageFileNames?.size ?: 0} images" } }
+//                    subtext { ::content { "${packData()?.downloadCount ?: 0} downloads" } }
+//                    shownWhen { packData()?.isFree == true }.subtext { content = "Free" }
                 }
 
                 // Tags
                 row {
-                    forEach(rememberSuspending { packData()?.tags ?: emptyList() }) { tag ->
-                        subtext { content = tag }
-                    }
+//                    forEach(rememberSuspending { packData()?.tags ?: emptyList() }) { tag ->
+//                        subtext { content = tag }
+//                    }
                 }
 
                 space()
@@ -125,19 +122,19 @@ class PackDetailPage(val packId: Uuid) : Page {
                         val p = packData() ?: return@Action
                         isDownloading.value = true
                         try {
-                            val newPlaylist = Playlist(
-                                name = p.name,
-                                description = p.description,
-                                tags = p.tags,
-                            )
-                            LocalPlaylistStore.save(newPlaylist)
-                            val imageIds = ImageDownloader.downloadPackImages(
-                                wallpaperPack = p,
-                                targetPlaylistId = newPlaylist._id.toString(),
-                                onProgress = { downloadProgress.value = it },
-                            )
-                            LocalPlaylistStore.save(newPlaylist.copy(photoFileNames = imageIds))
-                            toast("Downloaded '${p.name}' with ${imageIds.size} images")
+//                            val newPlaylist = Playlist(
+//                                name = p.name,
+//                                description = p.description,
+//                                tags = p.tags,
+//                            )
+//                            LocalPlaylistStore.save(newPlaylist)
+//                            val imageIds = ImageDownloader.downloadPackImages(
+//                                wallpaperPack = p,
+//                                targetPlaylistId = newPlaylist._id.toString(),
+//                                onProgress = { downloadProgress.value = it },
+//                            )
+//                            LocalPlaylistStore.save(newPlaylist.copy(photoFileNames = imageIds))
+//                            toast("Downloaded '${p.name}' with ${imageIds.size} images")
                             pageNavigator.goBack()
                         } catch (e: Exception) {
                             toast("Download failed: ${e.message}")
@@ -152,19 +149,19 @@ class PackDetailPage(val packId: Uuid) : Page {
 
                 // Image grid
                 h3 { content = "Images" }
-                col {
-                    forEach(imageUrls) { url ->
-                        sizeConstraints(height = 10.rem).button {
-                            image {
-                                source = ImageRemote(url)
-                                scaleType = ImageScaleType.Crop
-                            }
-                            onClick {
-                                pageNavigator.navigate(ImagePreviewPage(url))
-                            }
-                        }
-                    }
-                }
+//                col {
+//                    forEach(imageUrls) { url ->
+//                        sizeConstraints(height = 10.rem).button {
+//                            image {
+//                                source = ImageRemote(url)
+//                                scaleType = ImageScaleType.Crop
+//                            }
+//                            onClick {
+//                                pageNavigator.navigate(ImagePreviewPage(url))
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }

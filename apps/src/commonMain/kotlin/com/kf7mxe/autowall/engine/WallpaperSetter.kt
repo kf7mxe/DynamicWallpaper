@@ -1,3 +1,5 @@
 package com.kf7mxe.autowall.engine
 
-expect suspend fun setWallpaper(playlistId: String, imageId: String)
+import kotlin.uuid.Uuid
+
+expect suspend fun setWallpaper(playlistId: String, imageId: Uuid)

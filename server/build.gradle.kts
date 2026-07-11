@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.services.database.mongodb)
     implementation(libs.services.email.javasmtp)
     implementation(libs.services.files.s3)
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
 
     ksp(libs.services.database.processor)
 

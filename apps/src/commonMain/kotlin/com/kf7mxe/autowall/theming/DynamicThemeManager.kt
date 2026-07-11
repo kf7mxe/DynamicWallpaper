@@ -15,21 +15,21 @@ object DynamicThemeManager {
 
     val isEnabled: Signal<Boolean> = Signal(loadEnabled())
 
-    suspend fun updateThemeFromCurrentWallpaper() {
-        val playlistId = LocalPlaylistStore.activePlaylistId.value ?: return
-        val playlist = LocalPlaylistStore.getById(playlistId) ?: return
-        val imageId = PlaylistEngine.getCurrentImageId(playlist) ?: return
-
-        val pixels = loadImagePixels(playlistId.toString(), imageId) ?: return
-        val colors = ColorQuantizer.quantize(pixels.pixels, pixels.width, pixels.height, 5)
-        if (colors.isEmpty()) return
-
-        val theme = DynamicThemeGenerator.generateTheme(colors)
-        appTheme.value = theme
-
-        // Persist extracted colors
-        persistColors(colors)
-    }
+//    suspend fun updateThemeFromCurrentWallpaper() {
+//        val playlistId = LocalPlaylistStore.activePlaylistId.value ?: return
+//        val playlist = LocalPlaylistStore.getById(playlistId) ?: return
+//        val imageId = PlaylistEngine.getCurrentImageId(playlist) ?: return
+//
+//        val pixels = loadImagePixels(playlistId.toString(), imageId) ?: return
+//        val colors = ColorQuantizer.quantize(pixels.pixels, pixels.width, pixels.height, 5)
+//        if (colors.isEmpty()) return
+//
+//        val theme = DynamicThemeGenerator.generateTheme(colors)
+//        appTheme.value = theme
+//
+//        // Persist extracted colors
+//        persistColors(colors)
+//    }
 
     fun applyTheme() {
         if (!isEnabled.value) return

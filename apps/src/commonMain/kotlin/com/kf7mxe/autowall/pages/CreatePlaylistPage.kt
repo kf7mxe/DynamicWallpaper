@@ -132,7 +132,7 @@ class CreatePlaylistPage : Page {
                     }
                     onClick {
                         // Save temp playlist so the rule wizard can add rules to it
-                        saveTempPlaylist()
+//                        saveTempPlaylist()
                         pageNavigator.navigate(SelectTriggerPage(playlistId.toString()))
                     }
                 }
@@ -151,7 +151,7 @@ class CreatePlaylistPage : Page {
                     row {
                         expanding.col {
                             text { content = sub.name }
-                            subtext { content = "${sub.fileNames.size} images" }
+                            subtext { content = "${sub.wallpapers.size} images" }
                         }
                         danger.button {
                             icon(Icon.close, "Delete")
@@ -169,7 +169,7 @@ class CreatePlaylistPage : Page {
                         text { content = "Add Sub-Playlist" }
                     }
                     onClick {
-                        saveTempPlaylist()
+//                        saveTempPlaylist()
                         pageNavigator.navigate(EditSubPlaylistPage(playlistId.toString(), "-1"))
                     }
                 }
@@ -203,14 +203,14 @@ class CreatePlaylistPage : Page {
                             saveImage(playlistId.toString(), img.imageId, img.file)
                         }
 
-                        val playlist = Playlist(
-                            _id = playlistId,
-                            name = name,
-                            photoFileNames = images.map { it.imageId },
-                            rules = rules.await(),
-                            subPlaylists = subPlaylists.await(),
-                        )
-                        LocalPlaylistStore.save(playlist)
+//                        val playlist = Playlist(
+//                            _id = playlistId,
+//                            name = name,
+//                            photoFileNames = images.map { it.imageId },
+//                            rules = rules.await(),
+//                            subPlaylists = subPlaylists.await(),
+//                        )
+//                        LocalPlaylistStore.save(playlist)
                         pageNavigator.goBack()
                     }
                 }
@@ -218,14 +218,14 @@ class CreatePlaylistPage : Page {
         }
     }
 
-    private fun saveTempPlaylist() {
-        val playlist = Playlist(
-            _id = playlistId,
-            name = playlistName.value.ifBlank { "Untitled" },
-            photoFileNames = pickedImages.value.map { it.imageId },
-            rules = rules.value,
-            subPlaylists = subPlaylists.value,
-        )
-        LocalPlaylistStore.save(playlist)
-    }
+//    private fun saveTempPlaylist() {
+//        val playlist = Playlist(
+//            _id = playlistId,
+//            name = playlistName.value.ifBlank { "Untitled" },
+//            photoFileNames = pickedImages.value.map { it.imageId },
+//            rules = rules.value,
+//            subPlaylists = subPlaylists.value,
+//        )
+//        LocalPlaylistStore.save(playlist)
+//    }
 }

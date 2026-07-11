@@ -4,8 +4,9 @@ import android.app.WallpaperManager
 import android.graphics.BitmapFactory
 import com.kf7mxe.autowall.storage.AndroidContext
 import java.io.File
+import kotlin.uuid.Uuid
 
-actual suspend fun setWallpaper(playlistId: String, imageId: String) {
+actual suspend fun setWallpaper(playlistId: String, imageId: Uuid) {
     val context = AndroidContext.appContext
     val file = File(context.filesDir, "images/$playlistId/$imageId.jpg")
     if (!file.exists()) return

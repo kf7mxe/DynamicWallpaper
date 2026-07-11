@@ -1,8 +1,8 @@
 package com.kf7mxe.autowall.pages
 
+import com.foodecision.sdk.session
 import com.kf7mxe.autowall.WallpaperPack
 import com.kf7mxe.autowall.name
-import com.kf7mxe.autowall.sdk.createUnauthApi
 import com.lightningkite.kiteui.Routable
 import com.lightningkite.kiteui.models.*
 import com.lightningkite.kiteui.navigation.Page
@@ -14,10 +14,14 @@ import com.lightningkite.kiteui.views.direct.*
 import com.lightningkite.kiteui.views.direct.icon
 import com.lightningkite.kiteui.views.l2.*
 import com.lightningkite.reactive.core.Signal
+import com.lightningkite.reactive.core.remember
 import com.lightningkite.reactive.core.rememberSuspending
+import com.lightningkite.services.database.Condition
 import com.lightningkite.services.database.Query
 import com.lightningkite.services.database.condition
 import com.lightningkite.services.database.contains
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 @Routable("/browse-packs")
 class BrowsePacksPage : Page {
@@ -25,28 +29,17 @@ class BrowsePacksPage : Page {
     val searchQuery = Signal("")
 
     override fun ElementWriter.CanAddTheme.render() {
-        val api = createUnauthApi()
-        val isLoading = Signal(true)
 
         val packs = rememberSuspending {
-            try {
-                val q = searchQuery()
-                val result = if (q.isBlank()) {
-                    api.pack.query(Query<WallpaperPack>(limit = 50))
-                } else {
-                    api.pack.query(Query<WallpaperPack>(
-                        condition = condition<WallpaperPack> { it.name.contains(q, ignoreCase = true) },
-                        limit = 50
-                    ))
-                }
-                isLoading.value = false
-                result
-            } catch (e: Exception) {
-                isLoading.value = false
-                toast("Failed to load packs: ${e.message}")
-                emptyList()
+                session().serverCached?.storeWallpaperPacks?.query(Query(condition {
+                    Condition.And(
+                        listOfNotNull(
+                            searchQuery().takeUnless { it.isBlank() }?.let { Condition.FullTextSearch(it)}
+                        )
+                    )
+                }))
+
             }
-        }
 
         scrolling.col {
             button {
@@ -68,10 +61,10 @@ class BrowsePacksPage : Page {
             space()
 
             // Loading indicator
-            centered.shownWhen { isLoading() }.activityIndicator { }
+            centered.shownWhen { !packs.state.ready }.activityIndicator { }
 
             // Empty state
-            centered.shownWhen { packs().isEmpty() && !isLoading() }.col {
+            centered.shownWhen { packs()?.invoke()?.isEmpty() == true }.col {
                 icon(Icon.search.copy(width = 4.rem, height = 4.rem), "No results")
                 space()
                 h3 { content = "No Packs Found" }
@@ -81,9 +74,40 @@ class BrowsePacksPage : Page {
                 } }
             }
 
-            forEach(packs) { pack ->
-                packCard(pack)
-            }
+            lazyColumn(
+                items = remember { packs()?.invoke() ?: emptyList() },
+                id = {it._id},
+                loadMore = { packs()?.invoke()?.let { packs()?.limit = packs()!!.invoke().size + 20; delay(3.seconds)}},
+                render = {pack ->
+                    card.col {
+                        button {
+                            row {
+//                                val previewUrl = packPreviewUrl(wallpaperPack)
+//                                if (previewUrl != null) {
+//                                    sizeConstraints(width = 5.rem, height = 5.rem).image {
+//                                        source = ImageRemote(previewUrl)
+//                                        scaleType = ImageScaleType.Crop
+//                                    }
+//                                }
+//                                expanding.col {
+//                                    text { content = wallpaperPack.name.ifBlank { "Untitled Pack" } }
+//                                    if (wallpaperPack.description.isNotBlank()) {
+//                                        subtext { content = wallpaperPack.description.take(80) }
+//                                    }
+//                                    row {
+//                                        subtext { content = "${wallpaperPack.wallpapers.size} images" }
+////                        if (wallpaperPack.isFree) {
+////                            subtext { content = "Free" }
+////                        }
+//                                    }
+//                                }
+                            }
+//                            onClick { pageNavigator.navigate(PackDetailPage(wallpaperPack._id)) }
+                        }
+                    }
+
+                }
+            )
         }
     }
 }

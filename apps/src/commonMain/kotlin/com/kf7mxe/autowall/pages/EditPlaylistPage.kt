@@ -43,16 +43,16 @@ class EditPlaylistPage(val playlistId: String) : Page {
 
     private fun loadImages() {
         if (existing == null || imagesLoaded.value) return
-        GlobalScope.launch {
-            val loaded = existing.photoFileNames.map { imageId ->
-                EditImage(
-                    imageId = imageId,
-                    source = loadImageSource(playlistId, imageId),
-                )
-            }
-            images.value = loaded
-            imagesLoaded.value = true
-        }
+//        GlobalScope.launch {
+//            val loaded = existing.photoFileNames.map { imageId ->
+//                EditImage(
+//                    imageId = imageId,
+//                    source = loadImageSource(playlistId, imageId),
+//                )
+//            }
+//            images.value = loaded
+//            imagesLoaded.value = true
+//        }
     }
 
     override fun ElementWriter.CanAddTheme.render() {
@@ -145,7 +145,7 @@ class EditPlaylistPage(val playlistId: String) : Page {
                         }
                         onClick {
                             // Save current state first so reorder page can read it
-                            saveCurrentState()
+//                            saveCurrentState()
                             pageNavigator.navigate(ReorderImagesPage(playlistId))
                         }
                     }
@@ -201,7 +201,7 @@ class EditPlaylistPage(val playlistId: String) : Page {
                         text { content = "Add Rule" }
                     }
                     onClick {
-                        saveCurrentState()
+//                        saveCurrentState()
                         pageNavigator.navigate(SelectTriggerPage(playlistId))
                     }
                 }
@@ -219,15 +219,15 @@ class EditPlaylistPage(val playlistId: String) : Page {
                 forEach(subPlaylists) { sub ->
                     row {
                         expanding.col {
-                            text { content = sub.name }
-                            subtext { content = "${sub.fileNames.size} images" }
+//                            text { content = sub.name }
+//                            subtext { content = "${sub.fileNames.size} images" }
                         }
                         button {
                             icon(Icon.chevronRight, "Edit")
                             onClick {
                                 val idx = subPlaylists.value.indexOf(sub)
                                 if (idx >= 0) {
-                                    saveCurrentState()
+//                                    saveCurrentState()
                                     pageNavigator.navigate(EditSubPlaylistPage(playlistId, idx.toString()))
                                 }
                             }
@@ -248,7 +248,7 @@ class EditPlaylistPage(val playlistId: String) : Page {
                         text { content = "Add Sub-Playlist" }
                     }
                     onClick {
-                        saveCurrentState()
+//                        saveCurrentState()
                         pageNavigator.navigate(EditSubPlaylistPage(playlistId, "-1"))
                     }
                 }
@@ -280,13 +280,13 @@ class EditPlaylistPage(val playlistId: String) : Page {
                             }
                         }
 
-                        val updated = existing.copy(
-                            name = name,
-                            photoFileNames = currentImages.map { it.imageId },
-                            rules = rules.await(),
-                            subPlaylists = subPlaylists.await(),
-                        )
-                        LocalPlaylistStore.save(updated)
+//                        val updated = existing.copy(
+//                            name = name,
+//                            photoFileNames = currentImages.map { it.imageId },
+//                            rules = rules.await(),
+//                            subPlaylists = subPlaylists.await(),
+//                        )
+//                        LocalPlaylistStore.save(updated)
                         pageNavigator.goBack()
                     }
                 }
@@ -294,13 +294,13 @@ class EditPlaylistPage(val playlistId: String) : Page {
         }
     }
 
-    private fun saveCurrentState() {
-        val updated = existing?.copy(
-            name = playlistName.value,
-            photoFileNames = images.value.map { it.imageId },
-            rules = rules.value,
-            subPlaylists = subPlaylists.value,
-        ) ?: return
-        LocalPlaylistStore.save(updated)
-    }
+//    private fun saveCurrentState() {
+//        val updated = existing?.copy(
+//            name = playlistName.value,
+//            photoFileNames = images.value.map { it.imageId },
+//            rules = rules.value,
+//            subPlaylists = subPlaylists.value,
+//        ) ?: return
+//        LocalPlaylistStore.save(updated)
+//    }
 }

@@ -5,25 +5,39 @@ package com.kf7mxe.autowall.sdk
 interface Api {
 	fun withHeaderCalculator(calculator: suspend () -> List<Pair<String, String>>): Api
 
-	interface UploadEarlyEndpointApi {
+	interface GoogleIAPApi {
 		/**
-		 * Upload File for Request
+		 * Google IAP Environment
 		 * 
-		 * Upload a file to make a request later.  Times out in around 10 minutes.
+		 * Returns the servers Google Environment
 		 * 
-		 * **Auth Requirements:** No Requirements
+		 * **Auth Requirements:** User with root access
 		 * */
-		suspend fun uploadFileForRequest(): com.lightningkite.lightningserver.files.UploadInformation
+		suspend fun googleIAPEnvironment(): com.kf7mxe.autowall.GoogleIAPEnvironment
 		/**
-		 * Verify uploaded file
+		 * Validate Google Receipt
 		 * 
-		 * Checks out a file and moves it out of jail if it's safe.  Makes for significantly faster subsequent requests.
+		 * Validates a users Google IAP store receipt
 		 * 
-		 * **Auth Requirements:** No Requirements
+		 * **Auth Requirements:** User with root access
 		 * */
-		suspend fun verifyUploadedFile(input: kotlin.String): kotlin.String
+		suspend fun validateGoogleReceipt(input: List<com.kf7mxe.autowall.GoogleReceiptValidationRequest>)
+		/**
+		 * Restore Google Purchases
+		 * 
+		 * Validates a users Google IAP store receipt and will move subscription to authenticated User
+		 * 
+		 * **Auth Requirements:** User with root access
+		 * */
+		suspend fun restoreGooglePurchases(input: List<com.kf7mxe.autowall.GoogleReceiptValidationRequest>)
 	}
-	val uploadEarlyEndpoint: UploadEarlyEndpointApi
+	val googleIAP: GoogleIAPApi
+
+	val product: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.Product, kotlin.String>
+
+	val subscription: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.Subscription, kotlin.uuid.Uuid>
+
+	val uploadEarlyEndpoint: com.lightningkite.lightningserver.files.ClientUploadEarlyEndpoints
 
 	val user: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.User, kotlin.uuid.Uuid>
 
@@ -39,7 +53,13 @@ interface Api {
 
 	val playlist: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.Playlist, kotlin.uuid.Uuid>
 
+	val subPlaylist: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.SubPlaylist, kotlin.uuid.Uuid>
+
+	val storeWallpaperPack: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.StoreWallpaperPack, kotlin.uuid.Uuid>
+
 	val wallpaperPack: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.WallpaperPack, kotlin.uuid.Uuid>
+
+	val wallpaper: com.lightningkite.lightningserver.typed.ClientModelRestEndpoints<com.kf7mxe.autowall.Wallpaper, kotlin.uuid.Uuid>
 
 	interface MetaApi {
 		/**

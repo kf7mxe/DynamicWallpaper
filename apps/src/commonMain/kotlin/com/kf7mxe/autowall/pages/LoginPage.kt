@@ -53,21 +53,21 @@ class LoginPage : Page {
                     important.button {
                         text { content = "Send Login Code" }
                         action = Action("Send Code") {
-                            val emailValue = email.await()
-                            if (emailValue.isBlank() || !emailValue.contains("@")) {
-                                throw PlainTextException("Please enter a valid email address.", "Invalid Email")
-                            }
-                            isLoading.value = true
-                            errorMsg.value = null
-                            try {
-                                val api = createUnauthApi()
-                                val key = api.userAuth.email.beginEmailOwnershipProof(emailValue)
-                                proofKey.value = key
-                            } catch (e: Exception) {
-                                errorMsg.value = e.message ?: "Failed to send login code"
-                            } finally {
-                                isLoading.value = false
-                            }
+//                            val emailValue = email.await()
+//                            if (emailValue.isBlank() || !emailValue.contains("@")) {
+//                                throw PlainTextException("Please enter a valid email address.", "Invalid Email")
+//                            }
+//                            isLoading.value = true
+//                            errorMsg.value = null
+//                            try {
+//                                val api = createUnauthApi()
+//                                val key = api.userAuth.email.beginEmailOwnershipProof(emailValue)
+//                                proofKey.value = key
+//                            } catch (e: Exception) {
+//                                errorMsg.value = e.message ?: "Failed to send login code"
+//                            } finally {
+//                                isLoading.value = false
+//                            }
                         }
                     }
                 }
@@ -93,29 +93,29 @@ class LoginPage : Page {
                     important.button {
                         text { content = "Verify Code" }
                         action = Action("Verify") {
-                            val pinValue = pin.await()
-                            val key = proofKey.await() ?: return@Action
-                            if (pinValue.isBlank()) {
-                                throw PlainTextException("Please enter the code.", "Missing Code")
-                            }
-                            isLoading.value = true
-                            errorMsg.value = null
-                            try {
-                                val api = createUnauthApi()
-                                // Step 1: Prove email ownership with the PIN
-                                val proof = api.userAuth.email.proveEmailOwnership(FinishProof(key, pinValue))
-                                // Step 2: Log in with the proof to get a refresh token
-                                val result = api.userAuth.logIn(listOf(proof))
-                                val token = result.refreshToken
-                                    ?: throw Exception("Login failed - no session token received")
-                                // Step 3: Save token and navigate back
-                                saveSessionToken(token)
-                                pageNavigator.goBack()
-                            } catch (e: Exception) {
-                                errorMsg.value = e.message ?: "Verification failed"
-                            } finally {
-                                isLoading.value = false
-                            }
+//                            val pinValue = pin.await()
+//                            val key = proofKey.await() ?: return@Action
+//                            if (pinValue.isBlank()) {
+//                                throw PlainTextException("Please enter the code.", "Missing Code")
+//                            }
+//                            isLoading.value = true
+//                            errorMsg.value = null
+//                            try {
+//                                val api = createUnauthApi()
+//                                // Step 1: Prove email ownership with the PIN
+//                                val proof = api.userAuth.email.proveEmailOwnership(FinishProof(key, pinValue))
+//                                // Step 2: Log in with the proof to get a refresh token
+//                                val result = api.userAuth.logIn(listOf(proof))
+//                                val token = result.refreshToken
+//                                    ?: throw Exception("Login failed - no session token received")
+//                                // Step 3: Save token and navigate back
+//                                saveSessionToken(token)
+//                                pageNavigator.goBack()
+//                            } catch (e: Exception) {
+//                                errorMsg.value = e.message ?: "Verification failed"
+//                            } finally {
+//                                isLoading.value = false
+//                            }
                         }
                     }
 

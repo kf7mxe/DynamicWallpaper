@@ -111,29 +111,29 @@ class SelectActionPage(val playlistId: String, val encodedTrigger: String) : Pag
                         val actionType = selectedAction.value
                             ?: throw PlainTextException("Please select an action.", "Validation Error")
 
-                        val ruleAction: com.kf7mxe.autowall.Action = when (actionType) {
-                            ActionType.Next -> NextInPlaylistAction
-                            ActionType.Previous -> PreviousInPlaylistAction
-                            ActionType.Random -> RandomInPlaylistAction
-                            ActionType.SwitchSubPlaylist -> {
-                                val name = subPlaylistName.value.trim()
-                                if (name.isBlank()) throw PlainTextException("Please enter a sub-playlist name.", "Validation Error")
-                                SwitchToSubPlaylistAction(name)
-                            }
-                            ActionType.SpecificWallpaper -> {
-                                val fileName = imageFileName.value.trim()
-                                if (fileName.isBlank()) throw PlainTextException("Please enter an image filename.", "Validation Error")
-                                SpecificWallpaperAction(fileName)
-                            }
-                        }
+//                        val ruleAction: com.kf7mxe.autowall.Action = when (actionType) {
+//                            ActionType.Next -> NextInPlaylistAction
+//                            ActionType.Previous -> PreviousInPlaylistAction
+//                            ActionType.Random -> RandomInPlaylistAction
+//                            ActionType.SwitchSubPlaylist -> {
+//                                val name = subPlaylistName.value.trim()
+//                                if (name.isBlank()) throw PlainTextException("Please enter a sub-playlist name.", "Validation Error")
+//                                SwitchToSubPlaylistAction(name)
+//                            }
+//                            ActionType.SpecificWallpaper -> {
+//                                val fileName = imageFileName.value.trim()
+//                                if (fileName.isBlank()) throw PlainTextException("Please enter an image filename.", "Validation Error")
+//                                SpecificWallpaperAction(fileName)
+//                            }
+//                        }
 
-                        val rule = Rule(trigger = trigger, action = ruleAction)
+//                        val rule = Rule(trigger = trigger, action = ruleAction)
 
                         // Save rule to playlist in store
                         val playlist = LocalPlaylistStore.getById(Uuid.parse(playlistId))
                         if (playlist != null) {
-                            val updated = playlist.copy(rules = playlist.rules + rule)
-                            LocalPlaylistStore.save(updated)
+//                            val updated = playlist.copy(rules = playlist.rules + rule)
+//                            LocalPlaylistStore.save(updated)
                         }
 
                         // Navigate back to edit playlist (skip trigger config + trigger select pages)

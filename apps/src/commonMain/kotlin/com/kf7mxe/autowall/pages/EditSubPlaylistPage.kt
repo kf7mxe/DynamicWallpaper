@@ -31,23 +31,23 @@ class EditSubPlaylistPage(val playlistId: String, val subIndex: String) : Page {
     val index = subIndex.toIntOrNull() ?: -1
     val existingSub = if (index >= 0) playlist?.subPlaylists?.getOrNull(index) else null
 
-    val subName = Signal(existingSub?.name ?: "")
+//    val subName = Signal(existingSub?.name ?: "")
     val selectableImages = Signal<List<SelectableImage>>(emptyList())
     val loaded = Signal(false)
 
     private fun loadImages() {
         if (playlist == null || loaded.value) return
-        val selectedFileNames = existingSub?.fileNames?.toSet() ?: emptySet()
+//        val selectedFileNames = existingSub?.fileNames?.toSet() ?: emptySet()
         GlobalScope.launch {
-            val loadedImages = playlist.photoFileNames.map { imageId ->
-                SelectableImage(
-                    imageId = imageId,
-                    source = loadImageSource(playlistId, imageId),
-                    selected = imageId in selectedFileNames,
-                )
-            }
-            selectableImages.value = loadedImages
-            loaded.value = true
+//            val loadedImages = playlist.photoFileNames.map { imageId ->
+//                SelectableImage(
+//                    imageId = imageId,
+//                    source = loadImageSource(playlistId, imageId),
+//                    selected = imageId in selectedFileNames,
+//                )
+//            }
+//            selectableImages.value = loadedImages
+//            loaded.value = true
         }
     }
 
@@ -75,7 +75,7 @@ class EditSubPlaylistPage(val playlistId: String, val subIndex: String) : Page {
                 fieldTheme.textInput {
                     hint = "Enter a name"
                     keyboardHints = KeyboardHints.title
-                    content bind subName
+//                    content bind subName
                 }
             }
 
@@ -123,22 +123,22 @@ class EditSubPlaylistPage(val playlistId: String, val subIndex: String) : Page {
                 expanding.important.button {
                     text { content = "Save" }
                     action = Action("Save") {
-                        val name = subName.await()
-                        if (name.isBlank()) {
-                            throw PlainTextException("Please enter a sub-playlist name.", "Validation Error")
-                        }
-                        val selectedIds = selectableImages.await().filter { it.selected }.map { it.imageId }
-                        val sub = SubPlaylist(name = name, fileNames = selectedIds)
-
-                        val subs = playlist.subPlaylists.toMutableList()
-                        if (index >= 0 && index < subs.size) {
-                            subs[index] = sub
-                        } else {
-                            subs.add(sub)
-                        }
-                        val updated = playlist.copy(subPlaylists = subs)
-                        LocalPlaylistStore.save(updated)
-                        pageNavigator.goBack()
+//                        val name = subName.await()
+//                        if (name.isBlank()) {
+//                            throw PlainTextException("Please enter a sub-playlist name.", "Validation Error")
+//                        }
+//                        val selectedIds = selectableImages.await().filter { it.selected }.map { it.imageId }
+//                        val sub = SubPlaylist(name = name, fileNames = selectedIds)
+//
+//                        val subs = playlist.subPlaylists.toMutableList()
+//                        if (index >= 0 && index < subs.size) {
+//                            subs[index] = sub
+//                        } else {
+//                            subs.add(sub)
+//                        }
+//                        val updated = playlist.copy(subPlaylists = subs)
+//                        LocalPlaylistStore.save(updated)
+//                        pageNavigator.goBack()
                     }
                 }
             }

@@ -30,13 +30,13 @@ class ReorderImagesPage(val playlistId: String) : Page {
     private fun loadImages() {
         if (playlist == null || loaded.value) return
         GlobalScope.launch {
-            val loadedItems = playlist.photoFileNames.map { imageId ->
-                ReorderItem(
-                    imageId = imageId,
-                    source = loadImageSource(playlistId, imageId),
-                )
-            }
-            items.value = loadedItems
+//            val loadedItems = playlist.photoFileNames.map { imageId ->
+//                ReorderItem(
+//                    imageId = imageId,
+//                    source = loadImageSource(playlistId, imageId),
+//                )
+//            }
+//            items.value = loadedItems
             loaded.value = true
         }
     }
@@ -117,8 +117,8 @@ class ReorderImagesPage(val playlistId: String) : Page {
                     text { content = "Save Order" }
                     onClick {
                         val newOrder = items.value.map { it.imageId }
-                        val updated = playlist.copy(photoFileNames = newOrder)
-                        LocalPlaylistStore.save(updated)
+//                        val updated = playlist.copy(photoFileNames = newOrder)
+//                        LocalPlaylistStore.save(updated)
                         pageNavigator.goBack()
                     }
                 }

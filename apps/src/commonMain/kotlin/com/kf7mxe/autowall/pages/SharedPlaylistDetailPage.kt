@@ -1,10 +1,8 @@
 package com.kf7mxe.autowall.pages
 
 import com.kf7mxe.autowall.Playlist
-import com.kf7mxe.autowall.sdk.createUnauthApi
 import com.kf7mxe.autowall.storage.ImageDownloader
 import com.kf7mxe.autowall.storage.LocalPlaylistStore
-import com.kf7mxe.autowall.storage.playlistPreviewUrl
 import com.kf7mxe.autowall.storage.serverFileUrl
 import com.lightningkite.kiteui.Routable
 import com.lightningkite.kiteui.models.*
@@ -23,25 +21,24 @@ import kotlin.uuid.Uuid
 class SharedPlaylistDetailPage(val playlistId: Uuid) : Page {
 
     override fun ElementWriter.CanAddTheme.render() {
-        val api = createUnauthApi()
         val isLoading = Signal(true)
         val loadError = Signal(false)
 
         val playlistData = rememberSuspending {
-            try {
-                val result = api.playlist.detail(playlistId)
-                isLoading.value = false
-                result
-            } catch (e: Exception) {
-                isLoading.value = false
-                loadError.value = true
-                toast("Failed to load playlist: ${e.message}")
-                null
-            }
+//            try {
+//                val result = api.playlist.detail(playlistId)
+//                isLoading.value = false
+//                result
+//            } catch (e: Exception) {
+//                isLoading.value = false
+//                loadError.value = true
+//                toast("Failed to load playlist: ${e.message}")
+//                null
+//            }
         }
 
         val imageUrls = rememberSuspending {
-            playlistData()?.photoFileNames?.map { serverFileUrl(it) } ?: emptyList()
+//            playlistData()?.photoFileNames?.map { serverFileUrl(it) } ?: emptyList()
         }
 
         val downloadProgress = Signal<ImageDownloader.DownloadProgress?>(null)
@@ -78,32 +75,32 @@ class SharedPlaylistDetailPage(val playlistId: Uuid) : Page {
             shownWhen { !isLoading() && !loadError() }.col {
                 // Hero image
                 col {
-                    val previewUrl = rememberSuspending { playlistData()?.let { playlistPreviewUrl(it) } }
-                    shownWhen { previewUrl() != null }.sizeConstraints(height = 14.rem).image {
-                        ::source { previewUrl()?.let { ImageRemote(it) } ?: ImageRemote("") }
-                        scaleType = ImageScaleType.Crop
-                    }
+//                    val previewUrl = rememberSuspending { playlistData()?.let { playlistPreviewUrl(it) } }
+//                    shownWhen { previewUrl() != null }.sizeConstraints(height = 14.rem).image {
+//                        ::source { previewUrl()?.let { ImageRemote(it) } ?: ImageRemote("") }
+//                        scaleType = ImageScaleType.Crop
+//                    }
                 }
 
                 space()
 
-                h2 { ::content { playlistData()?.name ?: "" } }
+//                h2 { ::content { playlistData()?.name ?: "" } }
 
-                subtext { ::content { playlistData()?.description ?: "" } }
+//                subtext { ::content { playlistData()?.description ?: "" } }
 
                 space()
 
                 // Stats row
                 row {
-                    subtext { ::content { "${playlistData()?.photoFileNames?.size ?: 0} images" } }
-                    subtext { ::content { "${playlistData()?.downloadCount ?: 0} downloads" } }
+//                    subtext { ::content { "${playlistData()?.photoFileNames?.size ?: 0} images" } }
+//                    subtext { ::content { "${playlistData()?.downloadCount ?: 0} downloads" } }
                 }
 
                 // Tags
                 row {
-                    forEach(rememberSuspending { playlistData()?.tags ?: emptyList() }) { tag ->
-                        subtext { content = tag }
-                    }
+//                    forEach(rememberSuspending { playlistData()?.tags ?: emptyList() }) { tag ->
+//                        subtext { content = tag }
+//                    }
                 }
 
                 space()
@@ -123,29 +120,29 @@ class SharedPlaylistDetailPage(val playlistId: Uuid) : Page {
                     action = Action("Download") {
                         val p = playlistData() ?: return@Action
                         isDownloading.value = true
-                        try {
-                            val newPlaylist = Playlist(
-                                name = p.name,
-                                description = p.description,
-                                tags = p.tags,
-                                rules = p.rules,
-                                subPlaylists = p.subPlaylists,
-                            )
-                            LocalPlaylistStore.save(newPlaylist)
-                            val imageIds = ImageDownloader.downloadPlaylistImages(
-                                playlist = p,
-                                targetPlaylistId = newPlaylist._id.toString(),
-                                onProgress = { downloadProgress.value = it },
-                            )
-                            LocalPlaylistStore.save(newPlaylist.copy(photoFileNames = imageIds))
-                            toast("Downloaded '${p.name}' with ${imageIds.size} images")
+//                        try {
+//                            val newPlaylist = Playlist(
+//                                name = p.name,
+//                                description = p.description,
+//                                tags = p.tags,
+//                                rules = p.rules,
+//                                subPlaylists = p.subPlaylists,
+//                            )
+//                            LocalPlaylistStore.save(newPlaylist)
+//                            val imageIds = ImageDownloader.downloadPlaylistImages(
+//                                playlist = p,
+//                                targetPlaylistId = newPlaylist._id.toString(),
+//                                onProgress = { downloadProgress.value = it },
+//                            )
+//                            LocalPlaylistStore.save(newPlaylist.copy(photoFileNames = imageIds))
+//                            toast("Downloaded '${p.name}' with ${imageIds.size} images")
                             pageNavigator.goBack()
-                        } catch (e: Exception) {
-                            toast("Download failed: ${e.message}")
-                        } finally {
-                            isDownloading.value = false
-                            downloadProgress.value = null
-                        }
+//                        } catch (e: Exception) {
+//                            toast("Download failed: ${e.message}")
+//                        } finally {
+//                            isDownloading.value = false
+//                            downloadProgress.value = null
+//                        }
                     }
                 }
 
@@ -153,25 +150,25 @@ class SharedPlaylistDetailPage(val playlistId: Uuid) : Page {
 
                 // Rules summary
                 col {
-                    forEach(rememberSuspending { playlistData()?.rules ?: emptyList() }) { rule ->
-                        card.row {
-                            expanding.col {
-                                text { content = "${rule.trigger.displayName} → ${rule.action.displayName}" }
-                            }
-                        }
-                    }
+//                    forEach(rememberSuspending { playlistData()?.rules ?: emptyList() }) { rule ->
+//                        card.row {
+//                            expanding.col {
+//                                text { content = "${rule.trigger.displayName} → ${rule.action.displayName}" }
+//                            }
+//                        }
+//                    }
                 }
 
                 // Sub-playlists
                 col {
-                    forEach(rememberSuspending { playlistData()?.subPlaylists ?: emptyList() }) { sub ->
-                        card.row {
-                            expanding.col {
-                                text { content = sub.name.ifBlank { "Untitled" } }
-                                subtext { content = "${sub.fileNames.size} images" }
-                            }
-                        }
-                    }
+//                    forEach(rememberSuspending { playlistData()?.subPlaylists ?: emptyList() }) { sub ->
+//                        card.row {
+//                            expanding.col {
+//                                text { content = sub.name.ifBlank { "Untitled" } }
+//                                subtext { content = "${sub.fileNames.size} images" }
+//                            }
+//                        }
+//                    }
                 }
 
                 space()
@@ -179,17 +176,17 @@ class SharedPlaylistDetailPage(val playlistId: Uuid) : Page {
                 // Image previews
                 h3 { content = "Images" }
                 col {
-                    forEach(imageUrls) { url ->
-                        sizeConstraints(height = 10.rem).button {
-                            image {
-                                source = ImageRemote(url)
-                                scaleType = ImageScaleType.Crop
-                            }
-                            onClick {
-                                pageNavigator.navigate(ImagePreviewPage(url))
-                            }
-                        }
-                    }
+//                    forEach(imageUrls) { url ->
+//                        sizeConstraints(height = 10.rem).button {
+//                            image {
+//                                source = ImageRemote(url)
+//                                scaleType = ImageScaleType.Crop
+//                            }
+//                            onClick {
+//                                pageNavigator.navigate(ImagePreviewPage(url))
+//                            }
+//                        }
+//                    }
                 }
             }
         }

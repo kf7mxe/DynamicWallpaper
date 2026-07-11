@@ -1,7 +1,13 @@
 package com.kf7mxe.autowall.sdk
 
 
+import com.foodecision.sdk.API_TIMEOUT
+import com.foodecision.sdk.hasSubscription
+import com.foodecision.sdk.session
+import com.foodecision.storage.getFileByteArray
+import com.foodecision.storage.saveFile
 import com.kf7mxe.autowall.MaybeHasUser
+import com.kf7mxe.autowall.ModelTableVersionContainer
 import com.lightningkite.kiteui.reactive.*
 
 import com.lightningkite.lightningserver.db.ModelCache
@@ -18,6 +24,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 
 class ModelOfflineSyncStoreApi<T, ID, UID>(
     val remote: ModelCache<T, ID>?,
@@ -153,8 +160,8 @@ class ModelOfflineSyncStoreApi<T, ID, UID>(
         return try {
             getFileByteArray(localStorageFileName)?.let { byteArray ->
                 val decodedString = byteArray.decodeToString()
-                val container = jsonWithServerFileSerializar.decodeFromString(ModelTableVersionContainer.serializer(), decodedString)
-                jsonWithServerFileSerializar.decodeFromString(ListSerializer(serializer), container.table)
+                val container = Json.decodeFromString(ModelTableVersionContainer.serializer(), decodedString)
+                Json.decodeFromString(ListSerializer(serializer), container.table)
             }
         } catch (e: Exception) {
             // Log error if needed
@@ -176,9 +183,9 @@ class ModelOfflineSyncStoreApi<T, ID, UID>(
      * Serializes the current list of items and saves it to a local file.
      */
     suspend fun persistItems() {
-        val jsonStringTable = jsonWithServerFileSerializar.encodeToString(ListSerializer(serializer), items.value)
+        val jsonStringTable = Json.encodeToString(ListSerializer(serializer), items.value)
         val container = ModelTableVersionContainer(table = jsonStringTable)
-        val jsonContainerString = jsonWithServerFileSerializar.encodeToString(ModelTableVersionContainer.serializer(), container)
+        val jsonContainerString = Json.encodeToString(ModelTableVersionContainer.serializer(), container)
         println("DEBUG jsonContainerString ${jsonContainerString}")
         saveFile(jsonContainerString.encodeToByteArray(), localStorageFileName)
     }

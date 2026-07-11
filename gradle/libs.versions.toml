@@ -14,6 +14,7 @@ lightningServer = "5.0.3-13"
 lightningServerKiteui = "9.0.0-prerelease-182"
 serviceAbstractions = "1.0.2-11"
 shadow = "8.1.1"
+indexdDbVersion= "0.9.0"
 
 [libraries]
 csvDurable = { module = "com.lightningkite:kotlinx-serialization-csv-durable", version = { ref = "kotlinxSerializationCsvDurable" } }
@@ -46,6 +47,7 @@ services-notifications-firebase = { module = "com.lightningkite.services:notific
 desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version = { ref = "desugar_jdk_libsVersion" } }
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version = { ref = "firebaseMessagingKtx" } }
 kotliner-cli = { module = "com.lightningkite:kotliner-cli", version = { ref = "kotlinerCli" } }
+indexedDb = {module ="com.juul.indexeddb:core", version = { ref = "indexdDbVersion"}}
 
 [plugins]
 androidApp = { id = "com.android.application", version = { ref = "agp" } }

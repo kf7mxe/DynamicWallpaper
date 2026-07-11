@@ -29,12 +29,12 @@ import com.lightningkite.services.database.modification
 class ProfilePage : Page {
     override fun ElementWriter.CanAddTheme.render() {
         val userData = rememberSuspending {
-            val s = rawSession() ?: return@rememberSuspending null
-            try {
-                s.api.user.detail(s.userId)
-            } catch (e: Exception) {
-                null
-            }
+//            val s = rawSession() ?: return@rememberSuspending null
+//            try {
+//                s.api.user.detail(s.userId)
+//            } catch (e: Exception) {
+//                null
+//            }
         }
 
         val editingName = Signal(false)
@@ -50,78 +50,78 @@ class ProfilePage : Page {
                 h3 { content = "Account" }
 
                 // Signed in state
-                shownWhen { sessionToken() != null }.col {
-                    // Email
-                    row {
-                        expanding.text { ::content { userData()?.email?.toString() ?: "Loading..." } }
-                    }
-
-                    space()
-
-                    // Name display (not editing)
-                    shownWhen { !editingName() }.row {
-                        expanding.col {
-                            subtext { content = "Name" }
-                            text { ::content { userData()?.name?.ifBlank { "No name set" } ?: "..." } }
-                        }
-                        button {
-                            text { content = "Edit" }
-                            onClick {
-                                nameInput.value = userData()?.name ?: ""
-                                editingName.value = true
-                            }
-                        }
-                    }
-
-                    // Name editing
-                    shownWhen { editingName() }.col {
-                        subtext { content = "Name" }
-                        row {
-                            expanding.fieldTheme.textInput {
-                                hint = "Your name"
-                                content bind nameInput
-                            }
-                            button {
-                                text { content = "Save" }
-                                action = Action("Save") {
-                                    val s = rawSession() ?: return@Action
-                                    s.api.user.modify(s.userId, modification<User> {
-                                        it.name assign nameInput()
-                                    })
-                                    editingName.value = false
-                                    toast("Name updated")
-                                }
-                            }
-                            button {
-                                text { content = "Cancel" }
-                                onClick { editingName.value = false }
-                            }
-                        }
-                    }
-
-                    space()
-
-                    danger.button {
-                        text { content = "Sign Out" }
-                        onClick { logout() }
-                    }
-                }
+//                shownWhen { sessionToken() != null }.col {
+//                    // Email
+//                    row {
+//                        expanding.text { ::content { userData()?.email?.toString() ?: "Loading..." } }
+//                    }
+//
+//                    space()
+//
+//                    // Name display (not editing)
+//                    shownWhen { !editingName() }.row {
+//                        expanding.col {
+//                            subtext { content = "Name" }
+//                            text { ::content { userData()?.name?.ifBlank { "No name set" } ?: "..." } }
+//                        }
+//                        button {
+//                            text { content = "Edit" }
+//                            onClick {
+//                                nameInput.value = userData()?.name ?: ""
+//                                editingName.value = true
+//                            }
+//                        }
+//                    }
+//
+//                    // Name editing
+//                    shownWhen { editingName() }.col {
+//                        subtext { content = "Name" }
+//                        row {
+//                            expanding.fieldTheme.textInput {
+//                                hint = "Your name"
+//                                content bind nameInput
+//                            }
+//                            button {
+//                                text { content = "Save" }
+//                                action = Action("Save") {
+//                                    val s = rawSession() ?: return@Action
+//                                    s.api.user.modify(s.userId, modification<User> {
+//                                        it.name assign nameInput()
+//                                    })
+//                                    editingName.value = false
+//                                    toast("Name updated")
+//                                }
+//                            }
+//                            button {
+//                                text { content = "Cancel" }
+//                                onClick { editingName.value = false }
+//                            }
+//                        }
+//                    }
+//
+//                    space()
+//
+//                    danger.button {
+//                        text { content = "Sign Out" }
+//                        onClick { logout() }
+//                    }
+//                }
 
                 // Signed out state
-                shownWhen { sessionToken() == null }.col {
-                    subtext {
-                        content = "Create an account to sync your playlists across devices."
-                    }
-                    space()
-                    important.button {
-                        text { content = "Create Account" }
-                        onClick { pageNavigator.navigate(LoginPage()) }
-                    }
-                    button {
-                        text { content = "Sign In" }
-                        onClick { pageNavigator.navigate(LoginPage()) }
-                    }
-                }
+//                shownWhen { sessionToken() == null }.col {
+//                    subtext {
+//                        content = "Create an account to sync your playlists across devices."
+//                    }
+//                    space()
+//                    important.button {
+//                        text { content = "Create Account" }
+//                        onClick { pageNavigator.navigate(LoginPage()) }
+//                    }
+//                    button {
+//                        text { content = "Sign In" }
+//                        onClick { pageNavigator.navigate(LoginPage()) }
+//                    }
+//                }
             }
 
             space()
@@ -213,7 +213,7 @@ class ProfilePage : Page {
                     text { content = "Apply Dynamic Theme" }
                     onClick {
                         DynamicThemeManager.setEnabled(true)
-                        DynamicThemeManager.updateThemeFromCurrentWallpaper()
+//                        DynamicThemeManager.updateThemeFromCurrentWallpaper()
                     }
                 }
                 button {
@@ -280,7 +280,7 @@ class ProfilePage : Page {
                                     expanding.text { content = option.apiName }
                                     shownWhen { selectedApi() == option }.icon(Icon.done, "Selected")
                                 }
-                                onClick { saveSelectedApi(option) }
+//                                onClick { saveSelectedApi(option) }
                             }
                         }
                     }

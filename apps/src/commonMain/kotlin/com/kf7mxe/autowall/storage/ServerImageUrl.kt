@@ -9,11 +9,11 @@ fun serverFileUrl(fileName: String): String {
     return "$base/files/$fileName"
 }
 
-fun packPreviewUrl(wallpaperPack: WallpaperPack, index: Int = 0): String? {
-    return wallpaperPack.previewImageUrls.getOrNull(index)
-        ?: wallpaperPack.imageFileNames.getOrNull(index)?.let { serverFileUrl(it) }
-}
-
-fun playlistPreviewUrl(playlist: Playlist, index: Int = 0): String? {
-    return playlist.photoFileNames.getOrNull(index)?.let { serverFileUrl(it) }
-}
+//fun packPreviewUrl(wallpaperPack: WallpaperPack, index: Int = 0): String? {
+//    return wallpaperPack.wallpapers.getOrNull(index)
+//        ?: wallpaperPack.wallpapers.getOrNull(index)?.let { serverFileUrl(it) }
+//}
+//
+//fun playlistPreviewUrl(playlist: Playlist, index: Int = 0): String? {
+//    return playlist.wallpapers.getOrNull(index)?.let { serverFileUrl(it) }
+//}

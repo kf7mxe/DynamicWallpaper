@@ -23,15 +23,14 @@ object WallpaperPackEndpoints : ServerBuilder() {
         auth = UserAuth.require(),
         permissions = {
             val admin = if (this.auth.userRole() >= UserRole.ADMIN) Condition.Always else Condition.Never
-            val mine = condition { it.creatorId.eq(this.auth.id) }
+            val mine: Condition<WallpaperPack> = condition { it.user.eq(this.auth.id) }
 
             ModelPermissions(
                 create = mine or admin,
                 read = Condition.Always,
                 update = mine or admin,
                 updateRestrictions = updateRestrictions {
-                    it.creatorId.cannotBeModified()
-                    it.downloadCount.cannotBeModified()
+                    it.user.cannotBeModified()
                 },
                 delete = mine or admin,
             )

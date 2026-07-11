@@ -42,12 +42,12 @@ fun sdk() = engine {
     println("Generating FetcherSdk...")
     FetcherSdk("com.kf7mxe.autowall.sdk").writeUsingDefaultSettings(
         Server,
-        KFile("apps/src/commonMain/kotlin/com/dynamicwallpaper/sdk")
+        KFile("apps/src/commonMain/kotlin/com/kf7mxe/autowall/sdk")
     )
     println("Generating CachingSdk...")
     CachingSdk("com.kf7mxe.autowall.sdk").writeUsingDefaultSettings(
         Server,
-        KFile("apps/src/commonMain/kotlin/com/dynamicwallpaper/sdk")
+        KFile("apps/src/commonMain/kotlin/com/kf7mxe/autowall/sdk")
     )
     println("SDK generation done.")
 }

@@ -14,49 +14,49 @@ object ImageDownloader {
         val totalBytes: Long,
     )
 
-    suspend fun downloadPackImages(
-        wallpaperPack: WallpaperPack,
-        targetPlaylistId: String,
-        onProgress: (DownloadProgress) -> Unit = {},
-    ): List<String> {
-        val imageIds = mutableListOf<String>()
-        val total = wallpaperPack.imageFileNames.size
-
-        wallpaperPack.imageFileNames.forEachIndexed { index, fileName ->
-            val imageId = Uuid.random().toString()
-            val url = serverFileUrl(fileName)
-            val response = fetch(
-                url = url,
-                onDownloadProgress = { done, expected ->
-                    onProgress(DownloadProgress(index, total, done, expected))
-                },
-            )
-            saveImageFromBlob(targetPlaylistId, imageId, response.blob())
-            imageIds.add(imageId)
-        }
-        return imageIds
-    }
-
-    suspend fun downloadPlaylistImages(
-        playlist: Playlist,
-        targetPlaylistId: String,
-        onProgress: (DownloadProgress) -> Unit = {},
-    ): List<String> {
-        val imageIds = mutableListOf<String>()
-        val total = playlist.photoFileNames.size
-
-        playlist.photoFileNames.forEachIndexed { index, fileName ->
-            val imageId = Uuid.random().toString()
-            val url = serverFileUrl(fileName)
-            val response = fetch(
-                url = url,
-                onDownloadProgress = { done, expected ->
-                    onProgress(DownloadProgress(index, total, done, expected))
-                },
-            )
-            saveImageFromBlob(targetPlaylistId, imageId, response.blob())
-            imageIds.add(imageId)
-        }
-        return imageIds
-    }
+//    suspend fun downloadPackImages(
+//        wallpaperPack: WallpaperPack,
+//        targetPlaylistId: String,
+//        onProgress: (DownloadProgress) -> Unit = {},
+//    ): List<String> {
+//        val imageIds = mutableListOf<String>()
+//        val total = wallpaperPack.imageFileNames.size
+//
+//        wallpaperPack.imageFileNames.forEachIndexed { index, fileName ->
+//            val imageId = Uuid.random().toString()
+//            val url = serverFileUrl(fileName)
+//            val response = fetch(
+//                url = url,
+//                onDownloadProgress = { done, expected ->
+//                    onProgress(DownloadProgress(index, total, done, expected))
+//                },
+//            )
+//            saveImageFromBlob(targetPlaylistId, imageId, response.blob())
+//            imageIds.add(imageId)
+//        }
+//        return imageIds
+//    }
+//
+//    suspend fun downloadPlaylistImages(
+//        playlist: Playlist,
+//        targetPlaylistId: String,
+//        onProgress: (DownloadProgress) -> Unit = {},
+//    ): List<String> {
+//        val imageIds = mutableListOf<String>()
+//        val total = playlist.photoFileNames.size
+//
+//        playlist.photoFileNames.forEachIndexed { index, fileName ->
+//            val imageId = Uuid.random().toString()
+//            val url = serverFileUrl(fileName)
+//            val response = fetch(
+//                url = url,
+//                onDownloadProgress = { done, expected ->
+//                    onProgress(DownloadProgress(index, total, done, expected))
+//                },
+//            )
+//            saveImageFromBlob(targetPlaylistId, imageId, response.blob())
+//            imageIds.add(imageId)
+//        }
+//        return imageIds
+//    }
 }

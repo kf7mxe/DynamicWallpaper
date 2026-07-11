@@ -22,23 +22,23 @@ class MyImagesPage : Page {
         val playlists = LocalPlaylistStore.playlists
 
         val allImages = rememberSuspending {
-            val result = mutableListOf<PlaylistImage>()
-            for (playlist in playlists()) {
-                for (imageId in playlist.photoFileNames) {
-                    val source = loadImageSource(playlist._id.toString(), imageId)
-                    if (source != null) {
-                        result.add(PlaylistImage(playlist.name, playlist._id.toString(), imageId, source))
-                    }
-                }
-            }
-            result.toList()
+//            val result = mutableListOf<PlaylistImage>()
+//            for (playlist in playlists()) {
+//                for (imageId in playlist.photoFileNames) {
+//                    val source = loadImageSource(playlist._id.toString(), imageId)
+//                    if (source != null) {
+//                        result.add(PlaylistImage(playlist.name, playlist._id.toString(), imageId, source))
+//                    }
+//                }
+//            }
+//            result.toList()
         }
 
         val isLoading = Signal(true)
         val groupedImages = rememberSuspending {
-            val images = allImages()
-            isLoading.value = false
-            images.groupBy { it.playlistName }
+//            val images = allImages()
+//            isLoading.value = false
+//            images.groupBy { it.playlistName }
         }
 
         scrolling.col {
@@ -65,9 +65,9 @@ class MyImagesPage : Page {
                             saveImage(target._id.toString(), imageId, file)
                             newIds.add(imageId)
                         }
-                        LocalPlaylistStore.save(target.copy(
-                            photoFileNames = target.photoFileNames + newIds
-                        ))
+//                        LocalPlaylistStore.save(target.copy(
+//                            photoFileNames = target.photoFileNames + newIds
+//                        ))
                         toast("Added ${files.size} images to '${target.name.ifBlank { "Untitled" }}'")
                     }
                 }
@@ -81,39 +81,39 @@ class MyImagesPage : Page {
             centered.shownWhen { isLoading() }.activityIndicator { }
 
             // Empty state
-            centered.shownWhen { allImages().isEmpty() && !isLoading() }.col {
-                icon(Icon.download.copy(width = 4.rem, height = 4.rem), "No images")
-                space()
-                h3 { content = "No Images Yet" }
-                subtext { content = "Import images from the gallery or download packs from the Explore tab." }
-            }
+//            centered.shownWhen { allImages().isEmpty() && !isLoading() }.col {
+//                icon(Icon.download.copy(width = 4.rem, height = 4.rem), "No images")
+//                space()
+//                h3 { content = "No Images Yet" }
+//                subtext { content = "Import images from the gallery or download packs from the Explore tab." }
+//            }
 
             // Grouped image grid
-            shownWhen { allImages().isNotEmpty() && !isLoading() }.col {
-                forEach(rememberSuspending { groupedImages().keys.toList() }) { playlistName ->
-                    h3 { content = playlistName.ifBlank { "Untitled" } }
-                    subtext { ::content {
-                        val count = groupedImages()[playlistName]?.size ?: 0
-                        "$count images"
-                    } }
-                    col {
-                        forEach(rememberSuspending { groupedImages()[playlistName] ?: emptyList() }) { img ->
-                            sizeConstraints(height = 10.rem).button {
-                                image {
-                                    source = img.source
-                                    scaleType = ImageScaleType.Crop
-                                }
-                                onClick {
-                                    // Show full-screen preview using a dialog-style approach
-                                    // since ImagePreviewPage expects a URL, not a local source
-                                    toast("Image: ${img.imageId}")
-                                }
-                            }
-                        }
-                    }
-                    space()
-                }
-            }
+//            shownWhen { allImages().isNotEmpty() && !isLoading() }.col {
+//                forEach(rememberSuspending { groupedImages().keys.toList() }) { playlistName ->
+//                    h3 { content = playlistName.ifBlank { "Untitled" } }
+//                    subtext { ::content {
+//                        val count = groupedImages()[playlistName]?.size ?: 0
+//                        "$count images"
+//                    } }
+//                    col {
+//                        forEach(rememberSuspending { groupedImages()[playlistName] ?: emptyList() }) { img ->
+//                            sizeConstraints(height = 10.rem).button {
+//                                image {
+//                                    source = img.source
+//                                    scaleType = ImageScaleType.Crop
+//                                }
+//                                onClick {
+//                                    // Show full-screen preview using a dialog-style approach
+//                                    // since ImagePreviewPage expects a URL, not a local source
+//                                    toast("Image: ${img.imageId}")
+//                                }
+//                            }
+//                        }
+//                    }
+//                    space()
+//                }
+//            }
         }
     }
 }

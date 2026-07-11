@@ -12,6 +12,8 @@
     "database": "ram",
     "email": "console",
     "files": "file://local/files?serveUrl=files",
+    "engine-cache": "ram",
+    "engine-pubSub": "local",
     "forceWebSocketPubSub": false,
     "general": {
         "projectName": "My Project",
@@ -19,6 +21,9 @@
         "wsUrl": "ws://localhost:8080",
         "debug": false,
         "emergencyContact": null
+    },
+    "googleIAP": {
+        "url": "mock"
     },
     "ktorRunConfig": {
         "host": "0.0.0.0",

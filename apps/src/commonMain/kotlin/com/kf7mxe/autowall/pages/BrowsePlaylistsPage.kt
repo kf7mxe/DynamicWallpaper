@@ -1,9 +1,7 @@
 package com.kf7mxe.autowall.pages
 
 import com.kf7mxe.autowall.Playlist
-import com.kf7mxe.autowall.isPublic
 import com.kf7mxe.autowall.name
-import com.kf7mxe.autowall.sdk.createUnauthApi
 import com.lightningkite.kiteui.Routable
 import com.lightningkite.kiteui.models.*
 import com.lightningkite.kiteui.navigation.Page
@@ -28,31 +26,30 @@ class BrowsePlaylistsPage : Page {
     val searchQuery = Signal("")
 
     override fun ElementWriter.CanAddTheme.render() {
-          val api = createUnauthApi()
         val isLoading = Signal(true)
 
-        val playlists = rememberSuspending {
-            try {
-                val q = searchQuery()
-                val result = if (q.isBlank()) {
-                    api.playlist.query(Query<Playlist>(
-                        condition = condition<Playlist> { it.isPublic eq true },
-                        limit = 50
-                    ))
-                } else {
-                    api.playlist.query(Query<Playlist>(
-                        condition = condition<Playlist> { it.isPublic eq true } and condition<Playlist> { it.name.contains(q, ignoreCase = true) },
-                        limit = 50
-                    ))
-                }
-                isLoading.value = false
-                result
-            } catch (e: Exception) {
-                isLoading.value = false
-                toast("Failed to load playlists: ${e.message}")
-                emptyList()
-            }
-        }
+//        val playlists = rememberSuspending {
+//            try {
+//                val q = searchQuery()
+//                val result = if (q.isBlank()) {
+//                    api.playlist.query(Query<Playlist>(
+//                        condition = condition<Playlist> { it.isPublic eq true },
+//                        limit = 50
+//                    ))
+//                } else {
+//                    api.playlist.query(Query<Playlist>(
+//                        condition = condition<Playlist> { it.isPublic eq true } and condition<Playlist> { it.name.contains(q, ignoreCase = true) },
+//                        limit = 50
+//                    ))
+//                }
+//                isLoading.value = false
+//                result
+//            } catch (e: Exception) {
+//                isLoading.value = false
+//                toast("Failed to load playlists: ${e.message}")
+//                emptyList()
+//            }
+//        }
 
         scrolling.col {
             button {
@@ -77,19 +74,19 @@ class BrowsePlaylistsPage : Page {
             centered.shownWhen { isLoading() }.activityIndicator { }
 
             // Empty state
-            centered.shownWhen { playlists().isEmpty() && !isLoading() }.col {
-                icon(Icon.search.copy(width = 4.rem, height = 4.rem), "No results")
-                space()
-                h3 { content = "No Playlists Found" }
-                subtext { ::content {
-                    if (searchQuery().isNotBlank()) "No playlists match \"${searchQuery()}\""
-                    else "No shared playlists available yet"
-                } }
-            }
-
-            forEach(playlists) { playlist ->
-                playlistCard(playlist)
-            }
+//            centered.shownWhen { playlists().isEmpty() && !isLoading() }.col {
+//                icon(Icon.search.copy(width = 4.rem, height = 4.rem), "No results")
+//                space()
+//                h3 { content = "No Playlists Found" }
+//                subtext { ::content {
+//                    if (searchQuery().isNotBlank()) "No playlists match \"${searchQuery()}\""
+//                    else "No shared playlists available yet"
+//                } }
+//            }
+//
+//            forEach(playlists) { playlist ->
+//                playlistCard(playlist)
+//            }
         }
     }
 }

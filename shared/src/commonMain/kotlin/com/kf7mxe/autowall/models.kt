@@ -13,6 +13,13 @@ import kotlin.uuid.Uuid
 // ── Enums ──
 
 
+
+const val databaseVersion = 1
+
+@Serializable
+data class ModelTableVersionContainer(val version: Int = databaseVersion, val table: String)
+
+
 @Serializable
 enum class UserRole {
     USER, TESTER, ADMIN, ROOT
@@ -192,7 +199,8 @@ data object RandomInPlaylistAction : PlaylistAction() {
 
 @Serializable
 data class SwitchToSubPlaylistAction(
-    val subPlaylistName: String,
+    val subPlaylistUuid: Uuid,
+    @Denormalized val subPlaylistName: String? = null,
 ) : PlaylistAction() {
     override val displayName: String get() = "Switch Sub-Playlist"
     override val displayDescription: String get() = "Switch to: $subPlaylistName"
@@ -200,10 +208,11 @@ data class SwitchToSubPlaylistAction(
 
 @Serializable
 data class SpecificWallpaperAction(
-    val wallpaper: Wallpaper,
+    val wallpaperId: Uuid,
+    @Denormalized val wallpaperName: String,
 ) : PlaylistAction() {
     override val displayName: String get() = "Specific Wallpaper"
-    override val displayDescription: String get() = "Set: ${wallpaper.name}"
+    override val displayDescription: String get() = "Set: ${wallpaperName}"
 }
 
 // ── Rule ──
@@ -216,15 +225,16 @@ data class Rule(
 
 // ── SubPlaylist ──
 
-@Serializable
-data class SubPlaylist(
-    val name: String,
-    val wallpapers: List<Uuid> = emptyList(),
-    @References(User::class) val user: Uuid? = null,
-)
-
 // ── Playlist (main entity) ──
 
+@GenerateDataClassPaths
+@Serializable
+data class SubPlaylist(
+    override val _id: Uuid = Uuid.random(), // Add the ID propert
+    val name: String,
+    @References(User::class) override val user: Uuid? = null,
+    val wallpapers: List<Uuid> = emptyList(),
+): HasId<Uuid>, MaybeHasUser<Uuid>
 @GenerateDataClassPaths
 @Serializable
 data class Playlist(

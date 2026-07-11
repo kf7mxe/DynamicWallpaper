@@ -16,6 +16,7 @@ import com.lightningkite.lightningserver.websockets.MultiplexWebSocketHandler
 import com.lightningkite.lightningserver.websockets.QueryParamWebSocketHandler
 import com.kf7mxe.autowall.UserAuth.RoleCache.userRole
 import com.kf7mxe.autowall.data.*
+import com.kf7mxe.autowall.iap.GoogleIAP
 import com.kf7mxe.autowall.iap.GoogleIAPSettings
 import com.lightningkite.services.cache.Cache
 import com.lightningkite.services.database.Database
@@ -37,6 +38,7 @@ object Server : ServerBuilder() {
     val files = setting("files", PublicFileSystem.Settings())
 
     val googleIAP = setting("googleIAP", GoogleIAPSettings("mock"))
+    val googleIAPEndpoints = path.path("iap") module com.kf7mxe.autowall.iap.GoogleIAP
 
     init {
         install(CorsInterceptor(cors))
@@ -71,6 +73,7 @@ object Server : ServerBuilder() {
     val users = path.path("users") module UserEndpoints
     val authEndpoints = path.path("auth") module UserAuth
     val playlists = path.path("playlists") module PlaylistEndpoints
+    val subPlaylist = path.path("sub-playlist") module SubPlaylistEndpoints
     val storeWallpaperPacks = path.path("store-wallpaper-packs") module StoreWallpaperPackEndpoints
     val wallpaperPacks = path.path("wallpaper-packs") module WallpaperPackEndpoints
     val wallpapers = path.path("wallpapers") module WallpaperEndpoints

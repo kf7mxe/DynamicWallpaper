@@ -65,6 +65,7 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
+                implementation(libs.indexedDb)
             }
         }
         val commonTest by getting {
