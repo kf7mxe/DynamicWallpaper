@@ -1,6 +1,8 @@
 package com.kf7mxe.autowall.pages
 
 import com.kf7mxe.autowall.attachFile
+import com.kf7mxe.autowall.skills.ChatPage
+import com.kf7mxe.autowall.skills.renderTool
 import com.lightningkite.kiteui.Routable
 import com.lightningkite.kiteui.models.Icon
 import com.lightningkite.kiteui.navigation.Page
@@ -20,10 +22,7 @@ import com.lightningkite.reactive.core.Signal
 class HomePage : Page {
     override fun ElementWriter.CanAddTheme.render() {
         col {
-            // Features
-
-            // Selected playlist
-
+            ChatPage.Welcome().renderTool( "")
         }
     }
 }

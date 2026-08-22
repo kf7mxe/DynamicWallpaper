@@ -1,7 +1,6 @@
 package com.kf7mxe.autowall
 
 import android.os.Bundle
-import com.kf7mxe.autowall.pages.AutoRoutes
 import com.lightningkite.kiteui.KiteUiActivity
 import com.lightningkite.kiteui.Throwable_report
 import com.lightningkite.kiteui.models.Theme

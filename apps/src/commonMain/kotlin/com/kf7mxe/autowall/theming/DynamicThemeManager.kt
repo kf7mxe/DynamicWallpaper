@@ -1,7 +1,6 @@
 package com.kf7mxe.autowall.theming
 
 import com.kf7mxe.autowall.appTheme
-import com.kf7mxe.autowall.defaultTheme
 import com.kf7mxe.autowall.engine.PlaylistEngine
 import com.kf7mxe.autowall.storage.LocalPlaylistStore
 import com.kf7mxe.autowall.storage.readLocalFile
@@ -40,7 +39,7 @@ object DynamicThemeManager {
     }
 
     fun resetToDefault() {
-        appTheme.value = defaultTheme
+        appTheme.value = autoWallTheme(false)
         writeLocalFile(COLORS_FILE, "")
     }
 

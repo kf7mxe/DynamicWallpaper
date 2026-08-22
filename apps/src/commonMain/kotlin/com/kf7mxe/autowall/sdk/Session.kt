@@ -51,7 +51,6 @@ val invalidateToken = BasicListenable()
 
 class UserSession(val api: Api?, val userId: Uuid?) {
     val serverCached = api?.let { CachedApi(api) }
-
     val playlists: ModelOfflineSyncStoreApi<Playlist, Uuid, Uuid> =
         ModelOfflineSyncStoreApi(
             serverCached?.playlists,
@@ -142,12 +141,13 @@ private suspend fun registerToken(authApi: Api) {
 var subscriptionChecked = false
 
 val loggedInOrNull = rememberSuspending {
+    println("DEBUG sessionToken ${sessionToken()}")
     val token = sessionToken() ?: return@rememberSuspending null
-    println("DEVUG 1")
+    println("DEBUG 1")
     val api = selectedApi().api
-
+    println("DEBUG 2")
     val authApi = api.withHeaderCalculator(api.userAuth.accessToken(token, invalidateToken))
-
+    println("DEBUG 3")
 
 //    val self =
 //        try {
@@ -165,19 +165,23 @@ val loggedInOrNull = rememberSuspending {
 //        }
 //    println("DEBUG 3")
 
+    println("DEBUG 4")
     if (!subscriptionChecked) {
+        println("DEBUG 5")
         subscriptionChecked = true
         AppScope.launch {  CommonSubscriptionManager.checkSubscriptions() }
     }
+    println("DEBUG 6")
 
     try {
         val self = authApi.userAuth.getSelf()
-
+        println("DEBUG 7")
         UserSession(
             api = authApi,
             userId = self._id,
         )
     } catch (e: Exception) {
+        println("DEBUG Exception 8")
         println("FAILED")
         e.printStackTrace()
         null
@@ -188,7 +192,7 @@ val loggedInOrNull = rememberSuspending {
 val currentSessionFailed = BasicListenable()
 
 val session= remember {
-    loggedInOrNull() ?: UserSession(api = selectedApi().api, userId = null)
+    loggedInOrNull() ?:UserSession(api = selectedApi().api, userId = null)
 
 }
 
@@ -198,4 +202,4 @@ class UnAuthSession(val api: LiveApi) {
 
 val unAuthSession = remember { UnAuthSession(selectedApi().api) }
 
-val sessionToken = PersistentProperty<String?>("sessionToken", null)
+val sessionToken = PersistentProperty<String?>("autoWallSessionToken", null)
